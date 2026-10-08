@@ -4,3 +4,9 @@
 אחרי כל משימה, הוסיפו בעצמכם שורה אחת: מה בדקתם, ומה שיניתם בעצמכם.
 
 <!-- הרשומות מתווספות מתחת לשורה הזאת -->
+
+## 2026-10-08
+
+**15:14 · claude**
+
+> Hi! Read AGENTS.md and tell me in one sentence what the main rules are.
