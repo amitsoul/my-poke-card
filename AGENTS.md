@@ -5,6 +5,7 @@
 ## היקף
 - JavaScript פשוט ו-React בלבד. בלי TypeScript, בלי Redux, בלי Next.js.
 - בלי ספריות נוספות אלא אם ביקשתי במפורש. `fetch` מובנה בדפדפן.
+- Approved exception: html-to-image (approved by the lecturer) for the PNG download.
 - בלי שרת, בלי בסיס נתונים, בלי הרשמה והתחברות.
 - CSS רגיל בקבצים שלנו. בלי ספריות UI.
 
