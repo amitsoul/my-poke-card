@@ -65,3 +65,34 @@
 **15:53 · claude**
 
 > Please commit and push these changes with the message "docs: write PRD".
+
+**15:56 · claude**
+
+> <ide_opened_file>The user opened the file c:\Users\TEST\FrontEnd\my-poke-card\AGENTS.md in the IDE. This may or may not be related to the current task.</ide_opened_file>
+> 
+> 
+> <pasted_content id="91c8">
+> Now fill in tasks.md based on PRD.md — still no code.
+> Keep the existing structure. Max 8 tasks, in build order, each with a "Done when:" line I can check by eye in the browser.
+> Follow this order:
+> 1. Pokémon list from a local JSON file (6–8 items), built with map + unique key. No API.
+> 2. Clicking a Pokémon shows its details panel. Selected state lives in App, data passed via props.
+> 3. Replace the local JSON with a real fetch from PokéAPI inside useEffect, with loading and error states.
+> 4. Search by name + filter by energy (type → energy mapping from the PRD).
+> 5. Create Card form with validation (English only, age 1–120, photo upload + resize).
+> 6. The card component: energy-themed design, user photo + Pokémon artwork, 2 attacks, weakness/resistance from the /type endpoint, retreat cost by weight, responsive.
+> 7. Download card as PNG (html-to-image) + save to localStorage with a fixed card number + "My Cards" screen.
+> 8. README.md, clean console, test on phone/tablet, final polish.
+> Keep each task small enough to finish in one session. When done, show me the result and wait.
+> </pasted_content id="91c8">
+
+**16:03 · claude**
+
+> <pasted_content id="91c8">
+> Thanks, my answers:
+> 1. Renaming to pokemon.json — approved.
+> 2. Change of plan: I want ALL Pokémon, not just 151. Include every species (all evolutions are separate entries anyway), but exclude special forms (ids 10001+). Don't hardcode the total — get the species count from the API (/pokemon-species). Show the list in pages of 50 with a "Load more" button so it stays fast; search and filter should work on the full list. Build image URLs from the Pokémon id instead of fetching each Pokémon's details.
+> 3. Filter via /type/{type} — approved. Some energies combine several types (e.g. Psychic = psychic + ghost + fairy), so fetch all types of the selected energy, merge the results, and keep only regular species (no forms).
+> 4. Weakness/resistance — keep it in task 6, but task 6 should add it to both the card and the details panel, using one shared helper. Update task 6's "Done when" accordingly.
+> Update PRD.md and tasks.md where needed, show me the changes, then commit and push with the message "docs: add tasks plan". Don't start task 1.
+> </pasted_content id="91c8">
