@@ -2,9 +2,9 @@
 
 export default function PokemonListItem({ pokemon }) {
   return (
-    <li>
+    <li className="pokemon-card">
       <img src={pokemon.image} alt={pokemon.name} width="120" height="120" />
-      <p>{pokemon.name}</p>
+      <p className="pokemon-name">{pokemon.name}</p>
     </li>
   )
 }

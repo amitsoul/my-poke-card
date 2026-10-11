@@ -125,3 +125,8 @@
 > App imports the JSON and passes it to PokemonList.
 > Keep it simple — no styling yet. Then explain: what map does here, why we need key, and how the data flows from App → PokemonList → PokemonListItem.
 > </pasted_content id="91c8">
+
+**11:50 · claude**
+
+> Step 3: add basic CSS of my own so the list is a responsive grid of cards: 2 columns on phone, 3–4 on tablet, 5+ on desktop. Each card: image on top, name below, capitalized.
+> Then explain how the responsive part works.
