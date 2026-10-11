@@ -130,3 +130,24 @@
 
 > Step 3: add basic CSS of my own so the list is a responsive grid of cards: 2 columns on phone, 3–4 on tablet, 5+ on desktop. Each card: image on top, name below, capitalized.
 > Then explain how the responsive part works.
+
+**12:02 · claude**
+
+> <pasted_content id="91c8">
+> Let's start task 2 from tasks.md. Small steps, wait for me after each one.
+> Step 1 only: in App, add a useState for the selected Pokémon (start with null).
+> Pass a function down via props so clicking a PokemonListItem updates that state in App.
+> Highlight the selected item in the list. Don't build the details panel yet — just show "Selected: <name>" in App so I can test the click.
+> Then explain simply: where the state lives, why it's in App and not in PokemonListItem, and what happens step by step when I click.
+> </pasted_content id="91c8">
+
+**12:09 · claude**
+
+> Step 2: create a PokemonDetails component in its own file. It receives the selected Pokémon via props and shows: large image, name, id number (#025 style), and types.
+> If nothing is selected, show a friendly message like "Pick a Pokémon to see its details".
+> Replace the "Selected:" text with this component. Then explain what props it gets and why it doesn't need its own state.
+
+**12:13 · claude**
+
+> Step 3: layout with my own CSS — on desktop/tablet the list is on the left and the details panel on the right (sticky while scrolling). On phone the details appear above the list.
+> Then explain how the layout changes between screen sizes.

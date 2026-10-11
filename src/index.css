@@ -15,49 +15,105 @@ body {
   padding: 2rem 1rem;
 }
 
-/* Pokémon grid: 2 columns on phone, more as the screen gets wider */
+/* Page layout.
+   Phone: one column, details above the list (the order in the HTML).
+   Tablet and desktop: list on the left, details on the right. */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .layout {
+    grid-template-columns: 1fr 280px;
+    grid-template-areas: "list details";
+    align-items: start;
+  }
+
+  .layout .pokemon-grid {
+    grid-area: list;
+  }
+
+  .layout .pokemon-details {
+    grid-area: details;
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+/* Pokémon grid: as many columns of at least 130px as fit in the space.
+   That gives 2 on phone, 3–4 on tablet and 5–6 on desktop. */
 .pokemon-grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
   gap: 1rem;
 }
 
-/* Tablet */
-@media (min-width: 600px) {
-  .pokemon-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 800px) {
-  .pokemon-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-/* Desktop */
-@media (min-width: 1024px) {
-  .pokemon-grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .pokemon-grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
+/* The card is a button, so we reset the browser's default button look */
 .pokemon-card {
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 12px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.pokemon-card:hover {
+  border-color: #888;
+}
+
+.pokemon-card.selected {
+  border-color: #e3350d;
+  box-shadow: 0 0 0 1px #e3350d;
+  background: rgba(227, 53, 13, 0.08);
+}
+
+/* Details panel */
+.pokemon-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.pokemon-details img {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  aspect-ratio: 1;
+}
+
+.pokemon-number {
+  margin: 0.25rem 0;
+  color: #888;
+}
+
+.pokemon-types {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pokemon-type {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  text-transform: capitalize;
 }
 
 .pokemon-card img {
