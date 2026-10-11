@@ -8,7 +8,7 @@ export default function PokemonListItem({ pokemon, isSelected, onSelect }) {
         className={isSelected ? 'pokemon-card selected' : 'pokemon-card'}
         onClick={() => onSelect(pokemon)}
       >
-        <img src={pokemon.image} alt={pokemon.name} width="120" height="120" />
+        <img src={pokemon.image} alt={pokemon.name} width="120" height="120" loading="lazy" />
         <p className="pokemon-name">{pokemon.name}</p>
       </button>
     </li>

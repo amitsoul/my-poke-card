@@ -15,6 +15,27 @@ body {
   padding: 2rem 1rem;
 }
 
+/* Loading and error messages */
+.status {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.button {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  background: #e3350d;
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #c22c0a;
+}
+
 /* Page layout.
    Phone: one column, details above the list (the order in the HTML).
    Tablet and desktop: list on the left, details on the right. */

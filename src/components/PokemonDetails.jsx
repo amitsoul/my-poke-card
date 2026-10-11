@@ -17,11 +17,14 @@ export default function PokemonDetails({ pokemon }) {
       <img src={pokemon.image} alt={pokemon.name} width="250" height="250" />
       <h2 className="pokemon-name">{pokemon.name}</h2>
       <p className="pokemon-number">{number}</p>
-      <ul className="pokemon-types">
-        {pokemon.types.map((type) => (
-          <li key={type} className="pokemon-type">{type}</li>
-        ))}
-      </ul>
+      {/* The list from the API has no types yet; they arrive with the details fetch */}
+      {pokemon.types && (
+        <ul className="pokemon-types">
+          {pokemon.types.map((type) => (
+            <li key={type} className="pokemon-type">{type}</li>
+          ))}
+        </ul>
+      )}
     </section>
   )
 }

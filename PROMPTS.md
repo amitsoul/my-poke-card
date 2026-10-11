@@ -151,3 +151,19 @@
 
 > Step 3: layout with my own CSS — on desktop/tablet the list is on the left and the details panel on the right (sticky while scrolling). On phone the details appear above the list.
 > Then explain how the layout changes between screen sizes.
+
+**16:15 · claude**
+
+> <pasted_content id="91c8">
+> Let's start task 3 from tasks.md. Small steps, wait for me after each one, and remind me to commit before we continue.
+> Step 1 only: in App, replace the local JSON with a fetch inside useEffect:
+> - Get the species count from /pokemon-species, then fetch /pokemon with that limit, keep only id < 10001.
+> - Get each Pokémon's id from its URL and build the image URL from the id.
+> - Three states on screen: loading ("Loading Pokémon..."), error (a friendly message + a "Try again" button), and the list.
+> - For now show all of them (no Load more yet).
+> Then explain simply: what useEffect does here, why the empty dependency array, and how the three states work.
+> </pasted_content id="91c8">
+
+**16:28 · claude**
+
+> task 1 and task 2 are commited manually by me. please chek.
