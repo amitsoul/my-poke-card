@@ -96,3 +96,19 @@
 > 4. Weakness/resistance — keep it in task 6, but task 6 should add it to both the card and the details panel, using one shared helper. Update task 6's "Done when" accordingly.
 > Update PRD.md and tasks.md where needed, show me the changes, then commit and push with the message "docs: add tasks plan". Don't start task 1.
 > </pasted_content id="91c8">
+
+**16:08 · claude**
+
+> Sounds good. One note: if the count doesn't match, don't show an error or log to the console — just use the filtered list and keep working.
+> Please confirm tasks.md and PRD.md are committed and pushed.
+
+## 2026-10-11
+
+**11:32 · claude**
+
+> <pasted_content id="91c8">
+> Let's start task 1 from tasks.md. Work in small steps and wait for me after each one.
+> Step 1 only: create src/data/pokemon.json with 8 Pokémon (e.g. Bulbasaur, Charmander, Squirtle, Pikachu, Eevee, Gengar, Snorlax, Dragonite).
+> For each: id, name, types (array), and image (the official artwork URL built from the id).
+> Don't create components yet. Then explain to me in simple words what's in the file and why each field is needed.
+> </pasted_content id="91c8">
