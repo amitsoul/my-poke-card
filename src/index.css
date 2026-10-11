@@ -36,6 +36,12 @@ body {
   background: #c22c0a;
 }
 
+/* "Load more" sits centered under the list */
+.load-more {
+  display: block;
+  margin: 1.5rem auto 0;
+}
+
 /* Page layout.
    Phone: one column, details above the list (the order in the HTML).
    Tablet and desktop: list on the left, details on the right. */
@@ -52,7 +58,7 @@ body {
     align-items: start;
   }
 
-  .layout .pokemon-grid {
+  .layout .list-column {
     grid-area: list;
   }
 

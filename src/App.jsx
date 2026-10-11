@@ -6,6 +6,7 @@ import PokemonDetails from './components/PokemonDetails.jsx'
 const API_URL = 'https://pokeapi.co/api/v2'
 const ARTWORK_URL =
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork'
+const PAGE_SIZE = 50
 
 // "https://pokeapi.co/api/v2/pokemon/25/" → 25
 function getIdFromUrl(url) {
@@ -18,6 +19,11 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
   const [selectedPokemon, setSelectedPokemon] = useState(null)
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+
+  // Only the first visibleCount Pokémon are drawn; the rest wait in pokemonList
+  const visiblePokemon = pokemonList.slice(0, visibleCount)
+  const hasMore = visibleCount < pokemonList.length
 
   async function loadPokemon() {
     setIsLoading(true)
@@ -73,11 +79,22 @@ export default function App() {
       {!isLoading && !hasError && (
         <div className="layout">
           <PokemonDetails pokemon={selectedPokemon} />
-          <PokemonList
-            pokemonList={pokemonList}
-            selectedPokemon={selectedPokemon}
-            onSelect={setSelectedPokemon}
-          />
+          <div className="list-column">
+            <PokemonList
+              pokemonList={visiblePokemon}
+              selectedPokemon={selectedPokemon}
+              onSelect={setSelectedPokemon}
+            />
+            {hasMore && (
+              <button
+                type="button"
+                className="button load-more"
+                onClick={() => setVisibleCount(visibleCount + PAGE_SIZE)}
+              >
+                Load more
+              </button>
+            )}
+          </div>
         </div>
       )}
     </main>

@@ -167,3 +167,8 @@
 **16:28 · claude**
 
 > task 1 and task 2 are commited manually by me. please chek.
+
+**16:40 · claude**
+
+> Im manually commited tsak 3 step 1. Step 2: show the list in pages of 50 with a "Load more" button at the bottom. Hide the button when everything is shown.
+> The data is already loaded — this only controls how many are displayed. Then explain how it works with state.
