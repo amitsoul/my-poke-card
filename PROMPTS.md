@@ -112,3 +112,16 @@
 > For each: id, name, types (array), and image (the official artwork URL built from the id).
 > Don't create components yet. Then explain to me in simple words what's in the file and why each field is needed.
 > </pasted_content id="91c8">
+
+**11:43 · claude**
+
+> <ide_opened_file>The user opened the file c:\Users\TEST\FrontEnd\my-poke-card\src\data\pokemon.json in the IDE. This may or may not be related to the current task.</ide_opened_file>
+> 
+> 
+> <pasted_content id="91c8">
+> Step 2: create two components, each in its own file:
+> - PokemonListItem — shows one Pokémon (image + name). Receives the Pokémon via props.
+> - PokemonList — receives the array via props and renders it with map, using the Pokémon id as key.
+> App imports the JSON and passes it to PokemonList.
+> Keep it simple — no styling yet. Then explain: what map does here, why we need key, and how the data flows from App → PokemonList → PokemonListItem.
+> </pasted_content id="91c8">
