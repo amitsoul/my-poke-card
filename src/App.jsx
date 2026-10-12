@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import PokemonList from './components/PokemonList.jsx'
 import PokemonDetails from './components/PokemonDetails.jsx'
+import SearchBar from './components/SearchBar.jsx'
 
 const API_URL = 'https://pokeapi.co/api/v2'
 const ARTWORK_URL =
@@ -20,10 +21,19 @@ export default function App() {
   const [hasError, setHasError] = useState(false)
   const [selectedPokemon, setSelectedPokemon] = useState(null)
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
+  const [searchText, setSearchText] = useState('')
 
-  // Only the first visibleCount Pokémon are drawn; the rest wait in pokemonList
-  const visiblePokemon = pokemonList.slice(0, visibleCount)
-  const hasMore = visibleCount < pokemonList.length
+  // Search the FULL list, then show only the first visibleCount of the results
+  const search = searchText.trim().toLowerCase()
+  const filteredPokemon = pokemonList.filter((pokemon) => pokemon.name.includes(search))
+  const visiblePokemon = filteredPokemon.slice(0, visibleCount)
+  const hasMore = visibleCount < filteredPokemon.length
+
+  // New search → start again from the first page
+  function handleSearchChange(text) {
+    setSearchText(text)
+    setVisibleCount(PAGE_SIZE)
+  }
 
   async function loadPokemon() {
     setIsLoading(true)
@@ -80,6 +90,8 @@ export default function App() {
         <div className="layout">
           <PokemonDetails pokemon={selectedPokemon} />
           <div className="list-column">
+            <SearchBar value={searchText} onChange={handleSearchChange} />
+            {filteredPokemon.length === 0 && <p className="status">No Pokémon found</p>}
             <PokemonList
               pokemonList={visiblePokemon}
               selectedPokemon={selectedPokemon}

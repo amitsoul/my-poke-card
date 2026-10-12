@@ -178,3 +178,20 @@
 > commited. Step 3: when a Pokémon is selected, fetch its details from /pokemon/{id} (types, weight, official artwork) and show them in PokemonDetails, with its own loading and error states.
 > Remove src/data/pokemon.json since it's no longer used. Moves and weakness come later (task 6).
 > Then explain why this fetch depends on the selected Pokémon and what happens if I click fast between two Pokémon.
+
+## 2026-10-12
+
+**16:44 · claude**
+
+> commited task 3. 
+> 
+> <pasted_content id="91c8">
+> Let's start task 4 from tasks.md. Small steps, wait for me after each one, and remind me to commit before we continue.
+> Step 1 only: search by name.
+> - Create a SearchBar component in its own file: a controlled input (value + onChange via props).
+> - Keep searchText as state in App.
+> - Filter the FULL list (not just the 50 shown) by name, case-insensitive. Compute the filtered list directly — don't store it in another state.
+> - When the search text changes, reset Load more back to 50.
+> - If nothing matches, show "No Pokémon found".
+> No energy filter yet. Then explain simply: what a controlled input is, why searchText lives in App and not in SearchBar, and why the filtered list isn't its own state.
+> </pasted_content id="91c8">

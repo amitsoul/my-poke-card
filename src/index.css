@@ -69,6 +69,16 @@ body {
   }
 }
 
+.search-bar {
+  box-sizing: border-box;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font: inherit;
+}
+
 /* Pokémon grid: as many columns of at least 130px as fit in the space.
    That gives 2 on phone, 3–4 on tablet and 5–6 on desktop. */
 .pokemon-grid {
