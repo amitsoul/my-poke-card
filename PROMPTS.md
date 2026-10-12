@@ -224,3 +224,14 @@
 
 > Committed. Yes, please add a real "Try again" button to the energy filter error, using a retryCount like in PokemonDetails, so it's consistent across the app. Keep "Show all Pokémon" too.
 > Then explain in one or two sentences why adding retryCount to the dependency array makes the effect run again.
+
+**17:51 · claude**
+
+> <pasted_content id="91c8">
+> Terminology fix after research on the Pokémon TCG: on cards, a Pokémon's category is its "Type" (shown as the symbol top-right). "Energy" means Energy cards and attack costs, not the Pokémon's category. Our 10 categories and the mapping are correct — only the naming is wrong.
+> Please refactor:
+> - Rename energy → cardType everywhere (file src/utils/cardType.js, CARD_TYPES, getCardType, selectedCardType, component CardTypeFilter, etc.).
+> - UI text: "Card type" instead of "Energy". In PokemonDetails show both: "Game types: Ghost / Poison" and "Card type: Psychic".
+> - Update PRD.md and tasks.md wording the same way. Add a short note in PRD: Fairy was retired from the TCG in 2020 and is printed as Psychic; Poison is Darkness in the current era.
+> No behavior changes. Then show me what changed and wait.
+> </pasted_content id="91c8">

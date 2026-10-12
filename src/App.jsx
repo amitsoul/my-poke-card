@@ -1,10 +1,10 @@
-// The list comes from PokéAPI. The selection, search and energy filter live here in App.
+// The list comes from PokéAPI. The selection, search and card type filter live here in App.
 import { useEffect, useState } from 'react'
 import PokemonList from './components/PokemonList.jsx'
 import PokemonDetails from './components/PokemonDetails.jsx'
 import SearchBar from './components/SearchBar.jsx'
-import EnergyFilter from './components/EnergyFilter.jsx'
-import { ENERGIES } from './utils/energy.js'
+import CardTypeFilter from './components/CardTypeFilter.jsx'
+import { CARD_TYPES } from './utils/cardType.js'
 
 const API_URL = 'https://pokeapi.co/api/v2'
 const ARTWORK_URL =
@@ -24,20 +24,20 @@ export default function App() {
   const [selectedPokemon, setSelectedPokemon] = useState(null)
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [searchText, setSearchText] = useState('')
-  const [selectedEnergy, setSelectedEnergy] = useState(null) // null = All
-  const [energyIds, setEnergyIds] = useState(null) // ids of the selected energy's Pokémon
-  const [hasEnergyError, setHasEnergyError] = useState(false)
-  const [energyRetryCount, setEnergyRetryCount] = useState(0)
+  const [selectedCardType, setSelectedCardType] = useState(null) // null = All
+  const [cardTypeIds, setCardTypeIds] = useState(null) // ids of the selected card type's Pokémon
+  const [hasCardTypeError, setHasCardTypeError] = useState(false)
+  const [cardTypeRetryCount, setCardTypeRetryCount] = useState(0)
 
-  // Still waiting for the selected energy's ids?
-  const isEnergyLoading = selectedEnergy !== null && energyIds === null && !hasEnergyError
+  // Still waiting for the selected card type's ids?
+  const isCardTypeLoading = selectedCardType !== null && cardTypeIds === null && !hasCardTypeError
 
-  // Filter the FULL list by search AND energy, then show only the first visibleCount
+  // Filter the FULL list by search AND card type, then show only the first visibleCount
   const search = searchText.trim().toLowerCase()
   const filteredPokemon = pokemonList.filter((pokemon) => {
     const matchesSearch = pokemon.name.includes(search)
-    const matchesEnergy = selectedEnergy === null || (energyIds !== null && energyIds.has(pokemon.id))
-    return matchesSearch && matchesEnergy
+    const matchesCardType = selectedCardType === null || (cardTypeIds !== null && cardTypeIds.has(pokemon.id))
+    return matchesSearch && matchesCardType
   })
   const visiblePokemon = filteredPokemon.slice(0, visibleCount)
   const hasMore = visibleCount < filteredPokemon.length
@@ -48,34 +48,34 @@ export default function App() {
     setVisibleCount(PAGE_SIZE)
   }
 
-  // New energy → forget the old ids and start again from the first page
-  function handleEnergyChange(energy) {
-    if (energy === selectedEnergy) return
-    setSelectedEnergy(energy)
-    setEnergyIds(null)
-    setHasEnergyError(false)
+  // New card type → forget the old ids and start again from the first page
+  function handleCardTypeChange(cardType) {
+    if (cardType === selectedCardType) return
+    setSelectedCardType(cardType)
+    setCardTypeIds(null)
+    setHasCardTypeError(false)
     setVisibleCount(PAGE_SIZE)
   }
 
-  // Same energy again: clear the error (→ loading) and bump the counter so the effect re-runs
-  function handleEnergyRetry() {
-    setHasEnergyError(false)
-    setEnergyRetryCount(energyRetryCount + 1)
+  // Same card type again: clear the error (→ loading) and bump the counter so the effect re-runs
+  function handleCardTypeRetry() {
+    setHasCardTypeError(false)
+    setCardTypeRetryCount(cardTypeRetryCount + 1)
   }
 
-  // Fetch the ids for the selected energy every time it changes (or "Try again" is clicked)
+  // Fetch the ids for the selected card type every time it changes (or "Try again" is clicked)
   useEffect(() => {
-    if (selectedEnergy === null) return
+    if (selectedCardType === null) return
 
-    // Becomes false if another energy is picked before this answer arrives
+    // Becomes false if another card type is picked before this answer arrives
     let isCurrent = true
 
-    async function loadEnergyIds() {
+    async function loadCardTypeIds() {
       try {
         // Psychic → ['psychic', 'ghost', 'fairy'] → 3 requests at the same time
-        const energy = ENERGIES.find((item) => item.name === selectedEnergy)
+        const cardType = CARD_TYPES.find((item) => item.name === selectedCardType)
         const responses = await Promise.all(
-          energy.types.map((type) => fetch(`${API_URL}/type/${type}`)),
+          cardType.types.map((type) => fetch(`${API_URL}/type/${type}`)),
         )
         if (responses.some((response) => !response.ok)) throw new Error('Type request failed')
         const typeDataList = await Promise.all(responses.map((response) => response.json()))
@@ -89,19 +89,19 @@ export default function App() {
           }
         }
 
-        if (isCurrent) setEnergyIds(ids)
+        if (isCurrent) setCardTypeIds(ids)
       } catch {
-        if (isCurrent) setHasEnergyError(true)
+        if (isCurrent) setHasCardTypeError(true)
       }
     }
 
-    loadEnergyIds()
+    loadCardTypeIds()
 
     // Cleanup: React calls this before the next run, so an old answer is ignored
     return () => {
       isCurrent = false
     }
-  }, [selectedEnergy, energyRetryCount])
+  }, [selectedCardType, cardTypeRetryCount])
 
   async function loadPokemon() {
     setIsLoading(true)
@@ -159,25 +159,25 @@ export default function App() {
           <PokemonDetails pokemon={selectedPokemon} />
           <div className="list-column">
             <SearchBar value={searchText} onChange={handleSearchChange} />
-            <EnergyFilter selectedEnergy={selectedEnergy} onChange={handleEnergyChange} />
+            <CardTypeFilter selectedCardType={selectedCardType} onChange={handleCardTypeChange} />
 
-            {isEnergyLoading && <p className="status">Loading {selectedEnergy} Pokémon...</p>}
+            {isCardTypeLoading && <p className="status">Loading {selectedCardType} Pokémon...</p>}
 
-            {hasEnergyError && (
+            {hasCardTypeError && (
               <div className="status">
-                <p>Oops! We couldn't load the {selectedEnergy} Pokémon.</p>
+                <p>Oops! We couldn't load the {selectedCardType} Pokémon.</p>
                 <div className="status-actions">
-                  <button type="button" className="button" onClick={handleEnergyRetry}>
+                  <button type="button" className="button" onClick={handleCardTypeRetry}>
                     Try again
                   </button>
-                  <button type="button" className="button" onClick={() => handleEnergyChange(null)}>
+                  <button type="button" className="button" onClick={() => handleCardTypeChange(null)}>
                     Show all Pokémon
                   </button>
                 </div>
               </div>
             )}
 
-            {!isEnergyLoading && !hasEnergyError && (
+            {!isCardTypeLoading && !hasCardTypeError && (
               <>
                 {filteredPokemon.length === 0 && <p className="status">No Pokémon found</p>}
                 <PokemonList

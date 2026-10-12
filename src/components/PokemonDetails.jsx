@@ -1,7 +1,7 @@
 // Details of the selected Pokémon. Shows a message when nothing is selected.
 // The list only has id, name and image, so the details are fetched here when the selection changes.
 import { useEffect, useState } from 'react'
-import { getEnergy } from '../utils/energy.js'
+import { getCardType } from '../utils/cardType.js'
 
 const API_URL = 'https://pokeapi.co/api/v2'
 
@@ -32,7 +32,7 @@ export default function PokemonDetails({ pokemon }) {
 
         if (isCurrent) {
           setDetails({
-            // Sort by slot so the first type is always first (it decides the energy)
+            // Sort by slot so the first type is always first (it decides the card type)
             types: [...data.types].sort((a, b) => a.slot - b.slot).map((item) => item.type.name),
             weight: data.weight, // in hectograms: 60 → 6.0 kg
             artwork: data.sprites.other['official-artwork'].front_default,
@@ -85,12 +85,10 @@ export default function PokemonDetails({ pokemon }) {
 
       {details && (
         <>
-          <ul className="pokemon-types">
-            {details.types.map((type) => (
-              <li key={type} className="pokemon-type">{type}</li>
-            ))}
-          </ul>
-          <p className="pokemon-energy">Energy: {getEnergy(details.types)}</p>
+          <p className="pokemon-game-types">
+            Game types: <span className="capitalize">{details.types.join(' / ')}</span>
+          </p>
+          <p className="pokemon-card-type">Card type: {getCardType(details.types)}</p>
           <p className="pokemon-weight">Weight: {(details.weight / 10).toFixed(1)} kg</p>
         </>
       )}

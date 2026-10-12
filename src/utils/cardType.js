@@ -1,7 +1,7 @@
-// The 10 card energies and the Pokémon types that belong to each (mapping from the PRD).
-// Used by the details panel now, and by the energy filter and the card later.
+// The 10 TCG card types and the Pokémon game types that belong to each (mapping from the PRD).
+// Used by the details panel now, and by the card type filter and the card later.
 
-export const ENERGIES = [
+export const CARD_TYPES = [
   { name: 'Grass', types: ['grass', 'bug'] },
   { name: 'Fire', types: ['fire'] },
   { name: 'Water', types: ['water', 'ice'] },
@@ -14,10 +14,10 @@ export const ENERGIES = [
   { name: 'Colorless', types: ['normal', 'flying'] },
 ]
 
-// ['ghost', 'poison'] → 'Psychic' (only the FIRST type counts)
-export function getEnergy(types) {
+// ['ghost', 'poison'] → 'Psychic' (only the FIRST game type counts)
+export function getCardType(types) {
   const firstType = types[0]
-  const energy = ENERGIES.find((item) => item.types.includes(firstType))
+  const cardType = CARD_TYPES.find((item) => item.types.includes(firstType))
   // Types that no Pokémon really uses (like "unknown") fall back to Colorless
-  return energy ? energy.name : 'Colorless'
+  return cardType ? cardType.name : 'Colorless'
 }
