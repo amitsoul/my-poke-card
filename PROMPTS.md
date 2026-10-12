@@ -206,3 +206,16 @@
 > - Show the energy in PokemonDetails (e.g. "Energy: Psychic"). Plain text for now.
 > Then explain why this lives in a separate utils file and not inside a component.
 > </pasted_content id="91c8">
+
+**17:03 · claude**
+
+> <pasted_content id="91c8">
+> Committed. Step 3: the energy filter.
+> - Create an EnergyFilter component in its own file: a row of buttons — "All" + the 10 energies from ENERGIES. The selected one is highlighted. Wrap to more lines on small screens.
+> - Keep selectedEnergy as state in App (null = All).
+> - When an energy is selected, fetch /type/{type} for ALL its types in parallel inside useEffect, keep only Pokémon where that type is their FIRST type (slot 1) and id < 10001, and merge them into one set of ids.
+> - Show loading and error states for the filter (keep the search box usable).
+> - If I switch energies fast, only the last one should win.
+> - Combine it with the search: a Pokémon shows only if it matches BOTH. Reset Load more to 50 when the energy changes.
+> Then explain step by step what happens when I click "Psychic", and why the dependency array is [selectedEnergy].
+> </pasted_content id="91c8">

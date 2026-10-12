@@ -79,6 +79,34 @@ body {
   font: inherit;
 }
 
+/* Energy buttons: wrap to more lines when there's no room */
+.energy-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.energy-button {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.energy-button:hover {
+  border-color: #888;
+}
+
+.energy-button.selected {
+  border-color: #e3350d;
+  background: #e3350d;
+  color: white;
+}
+
 /* Pokémon grid: as many columns of at least 130px as fit in the space.
    That gives 2 on phone, 3–4 on tablet and 5–6 on desktop. */
 .pokemon-grid {

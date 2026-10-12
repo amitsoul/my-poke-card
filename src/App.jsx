@@ -1,8 +1,10 @@
-// Task 3: the list comes from PokéAPI. The selected Pokémon lives here in App.
+// The list comes from PokéAPI. The selection, search and energy filter live here in App.
 import { useEffect, useState } from 'react'
 import PokemonList from './components/PokemonList.jsx'
 import PokemonDetails from './components/PokemonDetails.jsx'
 import SearchBar from './components/SearchBar.jsx'
+import EnergyFilter from './components/EnergyFilter.jsx'
+import { ENERGIES } from './utils/energy.js'
 
 const API_URL = 'https://pokeapi.co/api/v2'
 const ARTWORK_URL =
@@ -22,10 +24,20 @@ export default function App() {
   const [selectedPokemon, setSelectedPokemon] = useState(null)
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const [searchText, setSearchText] = useState('')
+  const [selectedEnergy, setSelectedEnergy] = useState(null) // null = All
+  const [energyIds, setEnergyIds] = useState(null) // ids of the selected energy's Pokémon
+  const [hasEnergyError, setHasEnergyError] = useState(false)
 
-  // Search the FULL list, then show only the first visibleCount of the results
+  // Still waiting for the selected energy's ids?
+  const isEnergyLoading = selectedEnergy !== null && energyIds === null && !hasEnergyError
+
+  // Filter the FULL list by search AND energy, then show only the first visibleCount
   const search = searchText.trim().toLowerCase()
-  const filteredPokemon = pokemonList.filter((pokemon) => pokemon.name.includes(search))
+  const filteredPokemon = pokemonList.filter((pokemon) => {
+    const matchesSearch = pokemon.name.includes(search)
+    const matchesEnergy = selectedEnergy === null || (energyIds !== null && energyIds.has(pokemon.id))
+    return matchesSearch && matchesEnergy
+  })
   const visiblePokemon = filteredPokemon.slice(0, visibleCount)
   const hasMore = visibleCount < filteredPokemon.length
 
@@ -34,6 +46,55 @@ export default function App() {
     setSearchText(text)
     setVisibleCount(PAGE_SIZE)
   }
+
+  // New energy → forget the old ids and start again from the first page
+  function handleEnergyChange(energy) {
+    if (energy === selectedEnergy) return
+    setSelectedEnergy(energy)
+    setEnergyIds(null)
+    setHasEnergyError(false)
+    setVisibleCount(PAGE_SIZE)
+  }
+
+  // Fetch the ids for the selected energy every time it changes
+  useEffect(() => {
+    if (selectedEnergy === null) return
+
+    // Becomes false if another energy is picked before this answer arrives
+    let isCurrent = true
+
+    async function loadEnergyIds() {
+      try {
+        // Psychic → ['psychic', 'ghost', 'fairy'] → 3 requests at the same time
+        const energy = ENERGIES.find((item) => item.name === selectedEnergy)
+        const responses = await Promise.all(
+          energy.types.map((type) => fetch(`${API_URL}/type/${type}`)),
+        )
+        if (responses.some((response) => !response.ok)) throw new Error('Type request failed')
+        const typeDataList = await Promise.all(responses.map((response) => response.json()))
+
+        // Merge into one set: only Pokémon whose FIRST type is this type, and no forms
+        const ids = new Set()
+        for (const typeData of typeDataList) {
+          for (const item of typeData.pokemon) {
+            const id = getIdFromUrl(item.pokemon.url)
+            if (item.slot === 1 && id < 10001) ids.add(id)
+          }
+        }
+
+        if (isCurrent) setEnergyIds(ids)
+      } catch {
+        if (isCurrent) setHasEnergyError(true)
+      }
+    }
+
+    loadEnergyIds()
+
+    // Cleanup: React calls this before the next run, so an old answer is ignored
+    return () => {
+      isCurrent = false
+    }
+  }, [selectedEnergy])
 
   async function loadPokemon() {
     setIsLoading(true)
@@ -91,20 +152,37 @@ export default function App() {
           <PokemonDetails pokemon={selectedPokemon} />
           <div className="list-column">
             <SearchBar value={searchText} onChange={handleSearchChange} />
-            {filteredPokemon.length === 0 && <p className="status">No Pokémon found</p>}
-            <PokemonList
-              pokemonList={visiblePokemon}
-              selectedPokemon={selectedPokemon}
-              onSelect={setSelectedPokemon}
-            />
-            {hasMore && (
-              <button
-                type="button"
-                className="button load-more"
-                onClick={() => setVisibleCount(visibleCount + PAGE_SIZE)}
-              >
-                Load more
-              </button>
+            <EnergyFilter selectedEnergy={selectedEnergy} onChange={handleEnergyChange} />
+
+            {isEnergyLoading && <p className="status">Loading {selectedEnergy} Pokémon...</p>}
+
+            {hasEnergyError && (
+              <div className="status">
+                <p>Oops! We couldn't load the {selectedEnergy} Pokémon.</p>
+                <button type="button" className="button" onClick={() => handleEnergyChange(null)}>
+                  Show all Pokémon
+                </button>
+              </div>
+            )}
+
+            {!isEnergyLoading && !hasEnergyError && (
+              <>
+                {filteredPokemon.length === 0 && <p className="status">No Pokémon found</p>}
+                <PokemonList
+                  pokemonList={visiblePokemon}
+                  selectedPokemon={selectedPokemon}
+                  onSelect={setSelectedPokemon}
+                />
+                {hasMore && (
+                  <button
+                    type="button"
+                    className="button load-more"
+                    onClick={() => setVisibleCount(visibleCount + PAGE_SIZE)}
+                  >
+                    Load more
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>
