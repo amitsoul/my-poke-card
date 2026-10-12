@@ -265,3 +265,36 @@
 > 
 > Show me the changes and wait.
 > </pasted_content id="91c8">
+
+**18:37 · claude**
+
+> <pasted_content id="91c8">
+> My answers, based on how real TCG cards work (weakness is fixed per card type, not calculated from game damage relations):
+> 
+> 1. Weakness ×2 — fixed table by card type:
+> Grass→Fire, Fire→Water, Water→Lightning, Lightning→Fighting, Psychic→Darkness, Fighting→Grass, Darkness→Grass, Metal→Fire, Dragon→none, Colorless→Fighting.
+> Exceptions: Ice game type (printed as Water) → Metal. Normal/Flying Colorless → Lightning.
+> 
+> 2. Resistance −30, only these rules: Metal resists Grass; Psychic resists Fighting; any Pokémon with Flying as one of its game types resists Fighting. Otherwise none.
+> 
+> 3. Fewer than 2 damaging moves: show 1 attack if there's only one. If none (like Ditto), show 1 move without a damage number, cost 1 Colorless.
+> 
+> 4. Move the card spec out of PRD.md into CARD_SPEC.md and link to it, so the PRD stays one page.
+> 
+> 5. Add a note to CARD_SPEC.md: we use the 10 current TCG types. Fairy was retired in 2020 and Fairy Pokémon are printed as Psychic (still true in the 2025–26 Mega Evolution series, e.g. Mega Gardevoir ex).
+> 
+> Update CARD_SPEC.md and tasks.md (6a "Done when": Pikachu → Weakness Fighting, no Resistance; Charmander → Weakness Water; Gardevoir → Psychic, Weakness Darkness, Resistance Fighting −30). No code yet. Show me the changes and wait.
+> </pasted_content id="91c8">
+
+**18:41 · claude**
+
+> <pasted_content id="91c8">
+> Both interpretations are correct (Colorless + Flying → Lightning; Ice only as the first game type).
+> 
+> Conflicts:
+> 1. Lightning + Flying: use Weakness Lightning and keep Resistance Fighting −30, like recent real Zapdos cards.
+> 2. Metal + Flying: the Type rule wins → Resistance Grass.
+> General rule: when rules conflict, the card-type rule wins over the Flying rule. Safety rule: if Weakness and Resistance ever end up the same type, drop the Resistance.
+> 
+> Add these to CARD_SPEC.md (move them out of "Open questions"), and add Zapdos and Skarmory to the examples. No code. Show me the changes.
+> </pasted_content id="91c8">
