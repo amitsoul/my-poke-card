@@ -3,7 +3,7 @@ import { CARD_TYPES } from '../utils/cardType.js'
 
 export default function CardTypeFilter({ selectedCardType, onChange }) {
   return (
-    <div className="card-type-filter" role="group" aria-label="Filter by card type">
+    <div className="card-type-filter" role="group" aria-label="Filter by type">
       <button
         type="button"
         className={selectedCardType === null ? 'card-type-button selected' : 'card-type-button'}

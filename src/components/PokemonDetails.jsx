@@ -85,10 +85,7 @@ export default function PokemonDetails({ pokemon }) {
 
       {details && (
         <>
-          <p className="pokemon-game-types">
-            Game types: <span className="capitalize">{details.types.join(' / ')}</span>
-          </p>
-          <p className="pokemon-card-type">Card type: {getCardType(details.types)}</p>
+          <p className="pokemon-card-type">Type: {getCardType(details.types)}</p>
           <p className="pokemon-weight">Weight: {(details.weight / 10).toFixed(1)} kg</p>
         </>
       )}

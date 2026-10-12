@@ -174,21 +174,13 @@ body {
   color: #888;
 }
 
-.pokemon-game-types {
-  margin: 0.5rem 0 0;
-}
-
 .pokemon-card-type {
-  margin: 0.25rem 0 0;
+  margin: 0.5rem 0 0;
   font-weight: 600;
 }
 
 .pokemon-weight {
   margin: 0.25rem 0 0;
-}
-
-.capitalize {
-  text-transform: capitalize;
 }
 
 .pokemon-card img {

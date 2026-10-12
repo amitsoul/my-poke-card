@@ -235,3 +235,33 @@
 > - Update PRD.md and tasks.md wording the same way. Add a short note in PRD: Fairy was retired from the TCG in 2020 and is printed as Psychic; Poison is Darkness in the current era.
 > No behavior changes. Then show me what changed and wait.
 > </pasted_content id="91c8">
+
+**18:26 · claude**
+
+> <pasted_content id="91c8">
+> I researched real Pokémon TCG cards and we're updating the plan. Please update PRD.md and tasks.md, and make one small UI fix. No other code changes.
+> 
+> UI fix now:
+> - In PokemonDetails remove "Game types" and show only "Type: Psychic". Keep game types in the code (getCardType needs them).
+> - UI labels: "Type" instead of "Card type" (filter too). Keep code names (cardType).
+> 
+> Card spec for PRD.md (replace the old card description):
+> - Stage: "BASIC" top-left.
+> - Name: "<User name>'s <Pokémon>", e.g. "Amit's Pikachu" (TCG "Trainer's Pokémon" style).
+> - HP: the user's exact age (1–120) — intentional.
+> - Type symbol + frame color by card type.
+> - Illustration: user photo + the Pokémon's official artwork.
+> - Pokédex strip with the chosen Pokémon's data, English card format: "NO. 0025 · Mouse Pokémon · HT 1'04" · WT 13.2 lbs". Genus from /pokemon-species/{id}; height (dm) and weight (hg) from /pokemon/{id}, converted to ft/in and lbs.
+> - Ability: the user's Superpower.
+> - 2 attacks: moves with power. Damage rounded to a multiple of 10. Cost by damage: 10–30 → 1 symbol, 40–70 → 2, 80–120 → 3, 130+ → 4; first symbols are the card type, the rest Colorless. Dragon: all cost symbols Colorless (no Dragon Energy exists).
+> - Weakness: one type ×2 (from game damage relations mapped to card types). Dragon: no Weakness. Resistance: −30, often none.
+> - Retreat: Colorless symbols by weight (<100hg → 1, 100–999 → 2, 1000+ → 3).
+> - Flavor text: the user's one-line description.
+> - Bottom line: "Card design: Amit Soul", card number "MPC 001" (fixed, from a counter that only goes up), and "Fan-made · Not an official Pokémon card".
+> - Type symbols: our own SVG icons inspired by the originals (colored circle + white icon: leaf, flame, droplet, bolt, eye, fist, crescent, triangle, claw, star). No official logos or copyright lines.
+> - Also add the fan-made disclaimer to the site footer and README.
+> 
+> tasks.md: split task 6 into 6a "Card data + structure" and 6b "Card design (frame, colors, SVG symbols, disclaimer)". Keep max 8 tasks — merge or tighten others if needed. Update "Done when" lines to match.
+> 
+> Show me the changes and wait.
+> </pasted_content id="91c8">
