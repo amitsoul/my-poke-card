@@ -36,6 +36,14 @@ body {
   background: #c22c0a;
 }
 
+/* Several buttons under a message, side by side (wrapping on small screens) */
+.status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
 /* "Load more" sits centered under the list */
 .load-more {
   display: block;

@@ -27,6 +27,7 @@ export default function App() {
   const [selectedEnergy, setSelectedEnergy] = useState(null) // null = All
   const [energyIds, setEnergyIds] = useState(null) // ids of the selected energy's Pokémon
   const [hasEnergyError, setHasEnergyError] = useState(false)
+  const [energyRetryCount, setEnergyRetryCount] = useState(0)
 
   // Still waiting for the selected energy's ids?
   const isEnergyLoading = selectedEnergy !== null && energyIds === null && !hasEnergyError
@@ -56,7 +57,13 @@ export default function App() {
     setVisibleCount(PAGE_SIZE)
   }
 
-  // Fetch the ids for the selected energy every time it changes
+  // Same energy again: clear the error (→ loading) and bump the counter so the effect re-runs
+  function handleEnergyRetry() {
+    setHasEnergyError(false)
+    setEnergyRetryCount(energyRetryCount + 1)
+  }
+
+  // Fetch the ids for the selected energy every time it changes (or "Try again" is clicked)
   useEffect(() => {
     if (selectedEnergy === null) return
 
@@ -94,7 +101,7 @@ export default function App() {
     return () => {
       isCurrent = false
     }
-  }, [selectedEnergy])
+  }, [selectedEnergy, energyRetryCount])
 
   async function loadPokemon() {
     setIsLoading(true)
@@ -159,9 +166,14 @@ export default function App() {
             {hasEnergyError && (
               <div className="status">
                 <p>Oops! We couldn't load the {selectedEnergy} Pokémon.</p>
-                <button type="button" className="button" onClick={() => handleEnergyChange(null)}>
-                  Show all Pokémon
-                </button>
+                <div className="status-actions">
+                  <button type="button" className="button" onClick={handleEnergyRetry}>
+                    Try again
+                  </button>
+                  <button type="button" className="button" onClick={() => handleEnergyChange(null)}>
+                    Show all Pokémon
+                  </button>
+                </div>
               </div>
             )}
 

@@ -219,3 +219,8 @@
 > - Combine it with the search: a Pokémon shows only if it matches BOTH. Reset Load more to 50 when the energy changes.
 > Then explain step by step what happens when I click "Psychic", and why the dependency array is [selectedEnergy].
 > </pasted_content id="91c8">
+
+**17:10 · claude**
+
+> Committed. Yes, please add a real "Try again" button to the energy filter error, using a retryCount like in PokemonDetails, so it's consistent across the app. Keep "Show all Pokémon" too.
+> Then explain in one or two sentences why adding retryCount to the dependency array makes the effect run again.
