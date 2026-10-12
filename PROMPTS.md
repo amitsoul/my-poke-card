@@ -172,3 +172,9 @@
 
 > Im manually commited tsak 3 step 1. Step 2: show the list in pages of 50 with a "Load more" button at the bottom. Hide the button when everything is shown.
 > The data is already loaded — this only controls how many are displayed. Then explain how it works with state.
+
+**16:45 · claude**
+
+> commited. Step 3: when a Pokémon is selected, fetch its details from /pokemon/{id} (types, weight, official artwork) and show them in PokemonDetails, with its own loading and error states.
+> Remove src/data/pokemon.json since it's no longer used. Moves and weakness come later (task 6).
+> Then explain why this fetch depends on the selected Pokémon and what happens if I click fast between two Pokémon.

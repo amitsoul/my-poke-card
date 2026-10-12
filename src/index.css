@@ -136,6 +136,10 @@ body {
   gap: 0.5rem;
 }
 
+.pokemon-weight {
+  margin: 0.75rem 0 0;
+}
+
 .pokemon-type {
   padding: 0.25rem 0.75rem;
   border: 1px solid #ccc;
