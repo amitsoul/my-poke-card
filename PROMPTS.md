@@ -195,3 +195,14 @@
 > - If nothing matches, show "No Pokémon found".
 > No energy filter yet. Then explain simply: what a controlled input is, why searchText lives in App and not in SearchBar, and why the filtered list isn't its own state.
 > </pasted_content id="91c8">
+
+**16:55 · claude**
+
+> <pasted_content id="91c8">
+> Committed. Before the energy filter, let's do a smaller step first.
+> Step 2: the type → energy mapping.
+> - Create src/utils/energy.js with the 10 energies and the mapping from the PRD (e.g. ice → Water, bug → Grass, ghost/fairy → Psychic, poison → Darkness, normal/flying → Colorless).
+> - Export a function that gets a Pokémon's types and returns its energy based on the FIRST type, and a list of all energies with the types that belong to each (we'll need it for the filter).
+> - Show the energy in PokemonDetails (e.g. "Energy: Psychic"). Plain text for now.
+> Then explain why this lives in a separate utils file and not inside a component.
+> </pasted_content id="91c8">

@@ -1,6 +1,7 @@
 // Details of the selected Pokémon. Shows a message when nothing is selected.
 // The list only has id, name and image, so the details are fetched here when the selection changes.
 import { useEffect, useState } from 'react'
+import { getEnergy } from '../utils/energy.js'
 
 const API_URL = 'https://pokeapi.co/api/v2'
 
@@ -89,6 +90,7 @@ export default function PokemonDetails({ pokemon }) {
               <li key={type} className="pokemon-type">{type}</li>
             ))}
           </ul>
+          <p className="pokemon-energy">Energy: {getEnergy(details.types)}</p>
           <p className="pokemon-weight">Weight: {(details.weight / 10).toFixed(1)} kg</p>
         </>
       )}

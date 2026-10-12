@@ -146,8 +146,13 @@ body {
   gap: 0.5rem;
 }
 
-.pokemon-weight {
+.pokemon-energy {
   margin: 0.75rem 0 0;
+  font-weight: 600;
+}
+
+.pokemon-weight {
+  margin: 0.25rem 0 0;
 }
 
 .pokemon-type {
