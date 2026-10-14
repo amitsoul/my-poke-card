@@ -616,3 +616,12 @@
 > 
 > Check: npm run build passes, linter clean. Then explain simply what path="*" means and why it must work no matter where it is in the list of routes.
 > </pasted_content id="91c8">
+
+**20:29 · claude**
+
+> <pasted_content id="91c8">
+> Committed 6d and checked all URLs in the browser. Close task 6 — documents only:
+> - tasks.md: mark task 6 [x].
+> - docs/requirements-checklist.md: update the routing rows to their real status with where in the code (React Router, details page /pokemon/:id with useParams, nav menu with NavLink, 404 page bonus). Be honest: "at least 2 more pages" stays ⏳ (Create card and My Cards come in tasks 8 and 11), and the nav menu has only one link until My Cards exists — mark what's true today.
+> Show me the changes.
+> </pasted_content id="91c8">

@@ -3,7 +3,7 @@
 > Every requirement from the updated final project instructions, with its real status. Linked from [PRD.md](../PRD.md).
 > ✅ done · ⏳ planned (task in [tasks.md](../tasks.md)) · ❌ not planned
 >
-> Last updated: 14/10/2026, after task 5 (all of `src/` is TypeScript).
+> Last updated: 14/10/2026, after task 6 (routing: list, details and 404 pages).
 
 ## Mandatory
 
@@ -16,21 +16,21 @@
 | No `any` | ✅ | None in `src/`; `strict: true` blocks hidden `any`, and the lint rule `typescript/no-explicit-any` (error) in `.oxlintrc.json` blocks written ones |
 | `npm run dev` with no console errors | ⏳ | Checked by hand after each task so far; final check in task 12 |
 | `npm run build` passes | ✅ | `tsc -b && vite build` in `package.json` — type check, then build; passes after task 5 |
-| At least 4 own components (not pages), one per file | ✅ | 5 today in `src/components/`: `PokemonList`, `PokemonListItem`, `PokemonDetails`, `SearchBar`, `CardTypeFilter`. `PokemonDetails` becomes a page in task 6, leaving 4; the form and card components (tasks 8–10) add more |
-| React Router | ⏳ | Task 6 |
-| List page | ⏳ | Task 6 — the list exists (`App.tsx`) but not as a routed page |
-| Details page `/pokemon/:id` with `useParams` | ⏳ | Task 6 — today details show in a side panel (`PokemonDetails.tsx`) |
-| At least 2 more pages where the user does something | ⏳ | Task 8 (`/create/:id`), task 11 (`/my-cards`) |
-| Nav menu with `Link`/`NavLink` | ⏳ | Task 6 |
+| At least 4 own components (not pages), one per file | ✅ | 6 in `src/components/`: `NavBar`, `PokemonList`, `PokemonListItem`, `PokemonDetails` (display only), `SearchBar`, `CardTypeFilter`. Pages are separate, in `src/pages/` |
+| React Router | ✅ | `react-router` v8: `BrowserRouter` in `src/main.tsx`, `Routes`/`Route` in `src/App.tsx` |
+| List page | ✅ | `/` → `src/pages/PokemonListPage.tsx` |
+| Details page `/pokemon/:id` with `useParams` | ✅ | `src/pages/PokemonDetailsPage.tsx` reads `id` with `useParams` (checked by `parsePokemonId` in `src/utils/pokemonId.ts`) and fetches the details; display in `src/components/PokemonDetails.tsx` |
+| At least 2 more pages where the user does something | ⏳ | Task 8 (`/create/:id`), task 11 (`/my-cards`). The 404 page doesn't count — the user doesn't do anything there |
+| Nav menu with `Link`/`NavLink` | ✅ / ⏳ | `src/components/NavBar.tsx` with `NavLink`; the active link is highlighted (also on `/pokemon/:id`). Only one link today ("Pokémon"); "My Cards" is added in task 11 |
 | List with `map` + unique `key` | ✅ | `src/components/PokemonList.tsx` (`key={pokemon.id}`), `CardTypeFilter.tsx` |
-| Clicking an item opens its details page | ⏳ | Task 6 — today a click opens the side panel |
-| Data passed via props | ✅ | `App.tsx` → `PokemonList` → `PokemonListItem`; `PokemonDetails`, `SearchBar`, `CardTypeFilter` |
-| `fetch` inside `useEffect` with loading / error / data states | ✅ | `App.tsx` (list, Type filter), `PokemonDetails.tsx` (details), each with Try again |
-| Search or filter | ✅ | `SearchBar.tsx` (by name) + `CardTypeFilter.tsx` (by Type), logic in `App.tsx` |
+| Clicking an item opens its details page | ✅ | Each card in `src/components/PokemonListItem.tsx` is a `Link` to `/pokemon/{id}` |
+| Data passed via props | ✅ | `PokemonListPage` → `PokemonList` → `PokemonListItem`; `PokemonListPage` → `SearchBar`, `CardTypeFilter`; `PokemonDetailsPage` → `PokemonDetails` |
+| `fetch` inside `useEffect` with loading / error / data states | ✅ | `src/pages/PokemonListPage.tsx` (list, Type filter), `src/pages/PokemonDetailsPage.tsx` (details, plus "Pokémon not found" for API 404), each with Try again |
+| Search or filter | ✅ | `SearchBar.tsx` (by name) + `CardTypeFilter.tsx` (by Type), logic in `PokemonListPage.tsx`; both kept in the URL (`/?q=char&type=Fire`) |
 | Vitest: 5+ passing tests on real logic, `npm test` | ⏳ | Task 7 (Type mapping, search/filter), more in tasks 8–9 |
 | `@vitest/ui` with a `test:ui` script | ⏳ | Task 7 |
 | Own CSS | ✅ | `src/index.css` |
-| Works on narrow screens | ✅ / ⏳ | Done for the list and details (responsive grid, details above the list on phones); new pages checked in task 12 |
+| Works on narrow screens | ✅ / ⏳ | Checked for the list (responsive grid). The details and 404 pages use flexible widths but haven't been checked on a phone yet; all pages get a final phone/tablet check in task 12 |
 | README: what the app does | ⏳ | Task 12 — `README.md` is still the course template |
 | README: how to run the app and the tests | ⏳ | Task 12 |
 | README: which API | ⏳ | Task 12 |
@@ -51,4 +51,4 @@
 |---|---|---|
 | localStorage favorites | ⏳ | Task 11 — `favorite: boolean` on each saved card in localStorage; heart toggle in My Cards; "All (n)" / "Favorites (n)" filter in the URL (`/my-cards?show=favorites`) |
 | React Testing Library | ⏳ | Task 7 (`SearchBar`, `CardTypeFilter`) and task 8 (form error messages) — 3 tests on components without fetch. Packages approved 14/10/2026 |
-| 404 page | ⏳ | Task 6 |
+| 404 page | ✅ | `src/pages/NotFoundPage.tsx`: route `*` in `src/App.tsx` for unknown URLs, and for `/pokemon/<invalid id>` |
