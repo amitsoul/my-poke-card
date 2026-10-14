@@ -465,3 +465,9 @@
 > 3. Agreed — fix the setState-in-effect warning during the conversion.
 > Then stop and wait.
 > </pasted_content id="91c8">
+
+**18:19 · claude**
+
+> Committed the setup fix and git status is clean. Go ahead with both, as two separate changes:
+> 1. index.html: lang="en", remove dir="rtl", title "My Poke Card". Stop after this one so I can check and commit.
+> 2. Then npm audit fix (source-map-js 1.2.1 → 1.2.2 only), and confirm npm run build, npm run dev and npm audit (0 vulnerabilities).
