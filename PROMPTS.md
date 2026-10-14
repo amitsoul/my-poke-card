@@ -298,3 +298,69 @@
 > 
 > Add these to CARD_SPEC.md (move them out of "Open questions"), and add Zapdos and Skarmory to the examples. No code. Show me the changes.
 > </pasted_content id="91c8">
+
+## 2026-10-14
+
+**17:20 · claude**
+
+> <ide_opened_file>The user opened the file c:\Users\TEST\FrontEnd\my-poke-card\PROMPTS.md in the IDE. This may or may not be related to the current task.</ide_opened_file>
+> 
+> 
+> <pasted_content id="91c8">
+> ---
+> 
+> ## 📌 Note to the lecturer: updated project instructions (14/10/2026)
+> 
+> **Context:** The final project instructions were updated (new Notion page). With your approval, I'm continuing in this same repo instead of opening a new one. I'll update the existing code and documents to meet all the new requirements, and keep the commit history as a record of the process.
+> 
+> ### What I did under the original instructions (08/10 to 12/10)
+> 
+> **Idea:** "My Poke Card". The user picks a favorite Pokémon from PokéAPI, fills in a short form, and gets a personal Pokémon TCG-style card ("<Name>'s <Pokémon>", inspired by the TCG "Trainer's Pokémon" mechanic). The card can be downloaded as a PNG and saved in localStorage.
+> 
+> | Date | Work |
+> |---|---|
+> | 08/10 | Setup from the template, PRD.md, tasks.md |
+> | 11/10 | Task 1: list from local JSON (map + key) · Task 2: click shows details (state in App, props) · Task 3: real fetch from PokéAPI in useEffect, loading/error states with Try again, "Load more" pagination of all species |
+> | 12/10 | Task 4: search by name (controlled input, derived filtered list) + type filter using /type/{type} (Promise.all, race-condition guard, Try again) |
+> 
+> **Process highlights (try, check, fix):**
+> - **Terminology fix:** I first called the 10 card categories "Energy". A friend who knows the TCG pointed out that on cards it's "Type". I researched it, found that our categories and mapping were right and only the naming was wrong, and renamed it everywhere (refactor commit).
+> - **TCG research:** I researched real card anatomy (Stage, HP, Type, Pokédex strip, attacks with Energy cost, Weakness/Resistance, Retreat) and wrote **CARD_SPEC.md**. It covers the 10 current types (Fairy was retired in 2020 and is printed as Psychic), a fixed Weakness/Resistance table by Type with exceptions, and rules for conflicts (e.g. Zapdos, Skarmory). I verified the rules over all 1025 Pokémon. The PRD was kept to one page and links to the spec.
+> - **Video-game vs. card data:** PokéAPI returns video-game data, so game types are used only as input to my mapping. The UI shows only the card Type.
+> 
+> ### What changes with the new requirements
+> 
+> | New requirement | Status before | Plan |
+> |---|---|---|
+> | TypeScript, no `any`, `npm run build` passes | JavaScript | Migrate the existing components and utils to TS, with types for API data and props |
+> | React Router: list page, details page `/pokemon/:id` with `useParams`, nav menu | Details shown in a side panel, selected state in App | Replace the side panel with a details page. The selected Pokémon comes from the URL. The existing fetch, loading and error logic moves into that page |
+> | 2 additional pages | Already planned | **Create card** (`/create/:id`: form + card) and **My Cards** (`/my-cards`: saved cards, download) |
+> | Vitest: 5+ tests, `npm test`, Vitest UI | None | Tests on my real logic: type mapping, search/filter, Weakness/Resistance, unit conversion, attack damage/cost, form validation |
+> | At least 4 components besides pages | 5 components (one becomes a page) | Will grow with the form and card components |
+> | README with how to run tests | Template README | Replace it, and add the fan-made disclaimer |
+> | tasks.md up to 12 tasks | 8 tasks | New plan below |
+> 
+> **Updated task plan:**
+> 1. ✅ List from local JSON
+> 2. ✅ Click shows details (to be rebuilt as a page in task 6)
+> 3. ✅ Fetch from PokéAPI + loading/error + Load more
+> 4. ✅ Search + type filter
+> 5. Migrate to TypeScript
+> 6. Routing: list page, details page, nav menu (+ 404 page)
+> 7. First Vitest tests + Vitest UI
+> 8. Create card page: form, validation, photo upload
+> 9. Card data (per CARD_SPEC.md) + tests
+> 10. Card design: frame, colors, original SVG type symbols, disclaimer
+> 11. Save, download PNG, My Cards page
+> 12. README, build/test checks, phone/tablet testing, polish
+> 
+> **Open question:** Under the original instructions you approved `html-to-image` for the PNG download. I'd like to confirm that it's still OK.
+> 
+> From now on, after each task: `npm test`, run and check in the browser, commit, and a note here.
+> 
+> ---
+> </pasted_content id="91c8">
+
+**17:20 · claude**
+
+> This is a note for the log only — don't change anything, just reply OK
