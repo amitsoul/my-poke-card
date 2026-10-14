@@ -442,3 +442,26 @@
 **18:03 · claude**
 
 > Yes, please update both PRD.md lines: add the 4 RTL packages to the Tech line, and add favorites + the All/Favorites filter (/my-cards?show=favorites) to the /my-cards description. Keep it one page. Documents only.
+
+**18:07 · claude**
+
+> <pasted_content id="91c8">
+> Committed. Let's start task 5 (migrate to TypeScript). Small steps, wait for me after each one, and remind me to commit.
+> Step 1 only: set up TypeScript without converting our components yet.
+> - Install typescript, @types/react, @types/react-dom as dev dependencies.
+> - Add tsconfig files like the official Vite react-ts template (strict mode on). Temporarily allow JS files so the app keeps working during the migration.
+> - Rename vite.config.js → vite.config.ts and main.jsx → main.tsx.
+> - Make the build script type-check first (tsc -b && vite build), like the Vite react-ts template.
+> - Make sure the linter still works.
+> Then check: npm run dev works, npm run build passes. Explain simply what tsconfig is and what "strict" means.
+> </pasted_content id="91c8">
+
+**18:15 · claude**
+
+> <pasted_content id="91c8">
+> Committed, and I checked the browser — everything works.
+> 1. Yes, fix index.html: lang="en", remove dir="rtl", title "My Poke Card". Its own commit.
+> 2. Please check the npm audit issue: is there a safe update within our current versions that fixes it (no --force, no major version jumps)? If yes, apply it and confirm build + dev still work. If not, explain why it's safe to leave and don't change anything.
+> 3. Agreed — fix the setState-in-effect warning during the conversion.
+> Then stop and wait.
+> </pasted_content id="91c8">
