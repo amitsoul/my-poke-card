@@ -364,3 +364,58 @@
 **17:20 · claude**
 
 > This is a note for the log only — don't change anything, just reply OK
+
+**17:36 · claude**
+
+> Update: the lecturer re-confirmed html-to-image under the new instructions. Remove the "pending" note from AGENTS.md and docs/requirements-checklist.md. Docs only.
+
+**17:41 · claude**
+
+> <pasted_content id="91c8">
+> The lecturer updated the final project instructions. I'm staying in this repo (approved by the lecturer), but we must meet EVERY new requirement. No code changes in this step — documents only.
+> 
+> New mandatory requirements:
+> - React + Vite + TypeScript. Types (type/interface) for API data and for every component's props. No `any`. `npm run dev` with no console errors AND `npm run build` passes.
+> - At least 4 components of our own, NOT counting pages, each in its own file.
+> - React Router: list page, details page with its own URL (/pokemon/:id) reading the id with useParams, at least 2 more pages where the user does something, and a nav menu with Link/NavLink.
+> - List with map + unique key. Clicking an item opens its details page. Data passed via props.
+> - fetch inside useEffect with loading / error / data states.
+> - Search or filter.
+> - Vitest: at least 5 passing tests on real logic with `npm test`, plus @vitest/ui with a `test:ui` script.
+> - Own CSS, works on narrow screens.
+> - README.md: what the app does, how to run it AND the tests, which API.
+> - Gradual commits, PRD.md, tasks.md (up to 12 tasks, each with "Done when"), PROMPTS.md. Extra docs are welcome and should be linked from PRD.md.
+> - Not allowed: server/DB/login, Redux, Next.js, heavy UI libraries, APIs with keys.
+> - Bonus: localStorage favorites, React Testing Library, 404 page.
+> 
+> Please do the following, documents only:
+> 
+> 1. AGENTS.md and CLAUDE.md: update every rule that conflicts with the new requirements (e.g. "JavaScript only, no TypeScript", "no extra libraries"). Approved libraries: react-router, typescript, vitest, @vitest/ui, html-to-image (re-confirmed by the lecturer under the new instructions, 14/10/2026). Keep the rule of one task at a time.
+> 
+> 2. PRD.md (keep it one page): pages and URLs:
+>    - "/" Pokémon list (search + type filter)
+>    - "/pokemon/:id" details
+>    - "/create/:id" Create card (form + card preview)
+>    - "/my-cards" My Cards (saved cards, download)
+>    - 404 page (bonus)
+>    Update the "When I…, I see…" lines to match the pages. Link to CARD_SPEC.md and docs/requirements-checklist.md.
+> 
+> 3. tasks.md — exactly this plan, each task with a "Done when" line I can check in the browser. Keep tasks 1–4 marked done:
+>    1 ✅ List from local JSON
+>    2 ✅ Click shows details (to be rebuilt as a page in task 6)
+>    3 ✅ Fetch from PokéAPI + loading/error + Load more
+>    4 ✅ Search + type filter
+>    5 Migrate to TypeScript (types for API data + props, no any, build passes)
+>    6 Routing: list page, details page /pokemon/:id with useParams, nav menu (NavLink), 404 page
+>    7 First Vitest tests + Vitest UI (at least 5 tests: card type mapping, search/filter logic)
+>    8 Create card page /create/:id: form, validation, photo upload
+>    9 Card data per CARD_SPEC.md + tests (weakness/resistance, units, attack damage/cost)
+>    10 Card design: frame, colors, original SVG type symbols, fan-made disclaimer
+>    11 Save to localStorage, download PNG, My Cards page
+>    12 README, final build/test checks, phone/tablet testing, polish
+>    Add a line under the title: "After every task: npm test, npm run build, check in browser, commit."
+> 
+> 4. Create docs/requirements-checklist.md: a table of EVERY mandatory requirement above + bonus items, with columns: Requirement | Status (✅ / ⏳ / ❌) | Where in the code / which task. Fill in the current real status honestly.
+> 
+> Show me all changes and wait.
+> </pasted_content id="91c8">
