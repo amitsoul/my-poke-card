@@ -530,3 +530,13 @@
 > 
 > Then show me the results and wait. Don't update tasks.md or the checklist yet — that will be its own commit after I check the browser.
 > </pasted_content id="91c8">
+
+**19:15 · claude**
+
+> <pasted_content id="91c8">
+> Committed, and I checked everything in the browser — it all works.
+> Close task 5:
+> - tasks.md: mark task 5 [x]. Add to task 6 a note: clean up the setState-before-await in PokemonDetails the same way as App.
+> - docs/requirements-checklist.md: update the TypeScript rows (TS, types for API data + props, no any, npm run build) to their real status, with where in the code.
+> Documents only. Show me the changes.
+> </pasted_content id="91c8">
