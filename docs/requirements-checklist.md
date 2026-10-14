@@ -49,6 +49,6 @@
 
 | Requirement | Status | Where in the code / which task |
 |---|---|---|
-| localStorage favorites | ❌ | Favorites are not planned. Saved cards in localStorage come in task 11 (My Cards) — to confirm with the lecturer whether that counts |
-| React Testing Library | ❌ | Not planned; needs approval as an extra library |
+| localStorage favorites | ⏳ | Task 11 — `favorite: boolean` on each saved card in localStorage; heart toggle in My Cards; "All (n)" / "Favorites (n)" filter in the URL (`/my-cards?show=favorites`) |
+| React Testing Library | ⏳ | Task 7 (`SearchBar`, `CardTypeFilter`) and task 8 (form error messages) — 3 tests on components without fetch. Packages approved 14/10/2026 |
 | 404 page | ⏳ | Task 6 |

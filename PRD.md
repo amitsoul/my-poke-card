@@ -13,7 +13,7 @@ A nav menu (NavLink) on every page: **Pokémon** (`/`) · **My Cards** (`/my-car
 - **`/` Pokémon list** — A grid of Pokémon (name + image) with a search box (by name), a Type filter and "Load more". Clicking a Pokémon opens its details page.
 - **`/pokemon/:id` Details** — The id comes from the URL (`useParams`). Official artwork, number, Type, weight, attacks, Weakness/Resistance, and a "Create my card" button.
 - **`/create/:id` Create card** — A form: Name, Age (1–120, becomes HP), Photo upload, Superpower (becomes the Ability), One-line description (becomes flavor text); English letters only, errors next to each field. Below it, the card preview built to [CARD_SPEC.md](CARD_SPEC.md), with Save and Download PNG.
-- **`/my-cards` My Cards** — Saved cards from localStorage: view, download, delete.
+- **`/my-cards` My Cards** — Saved cards from localStorage: view, download, delete. A heart on each card marks it as a favorite (bonus; only after saving), and an "All (n)" / "Favorites (n)" filter is kept in the URL (`/my-cards?show=favorites`).
 - **404 page** (bonus) — Any unknown URL, with a link back to the list.
 
 ## 4. Must-have features
@@ -23,7 +23,7 @@ A nav menu (NavLink) on every page: **Pokémon** (`/`) · **My Cards** (`/my-car
 4. Save cards to localStorage; My Cards page; download as PNG (`html-to-image`).
 5. Vitest tests (5+) on the real logic: Type mapping, search/filter, Weakness/Resistance, units, attack damage/cost, form validation.
 
-**Tech:** React + Vite + TypeScript (types for API data and all props, no `any`), React Router, Vitest + `@vitest/ui`, own CSS. Approved libraries: `react-router`, `typescript`, `vitest`, `@vitest/ui`, `html-to-image` (re-confirmed by the lecturer, 14/10/2026). No server, DB, login, Redux, Next.js, UI libraries or API keys.
+**Tech:** React + Vite + TypeScript (types for API data and all props, no `any`), React Router, Vitest + `@vitest/ui`, React Testing Library (bonus), own CSS. Approved libraries: `react-router`, `typescript`, `vitest`, `@vitest/ui`, `html-to-image` (re-confirmed by the lecturer, 14/10/2026), `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`, `jsdom`. No server, DB, login, Redux, Next.js, UI libraries or API keys.
 Every network call shows loading and error states. Works on phone, tablet and desktop. All UI text is in English. The footer and README carry "Fan-made · Not an official Pokémon card". Requirement status: [docs/requirements-checklist.md](docs/requirements-checklist.md).
 
 ## 5. Acceptance criteria

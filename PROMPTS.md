@@ -419,3 +419,26 @@
 > 
 > Show me all changes and wait.
 > </pasted_content id="91c8">
+
+**18:01 · claude**
+
+> <pasted_content id="91c8">
+> My decisions:
+> 
+> 1. React Testing Library (bonus) — yes, small version: 2–3 RTL tests on simple components WITHOUT fetch (e.g. SearchBar, the type filter buttons, form error messages). Add it to task 7 or 8. Approved packages: @testing-library/react, @testing-library/jest-dom, @testing-library/user-event, jsdom.
+> 
+> 2. Favorites (bonus) — inside My Cards, as part of task 11:
+>    - Store as a `favorite: boolean` field on each saved card in localStorage.
+>    - Every card in My Cards shows a heart: red = favorite, gray = not. Clicking toggles it.
+>    - A card can be marked favorite only AFTER it's created and saved — not in the create form.
+>    - Filter in My Cards: "All (n)" / "Favorites (n)", kept in the URL: /my-cards?show=favorites.
+>    - Empty state: "No favorites yet. Tap ❤️ on a card to add it."
+> 
+> 3. Agreed — until task 7, the check after each task is npm run build + browser + console.
+> 
+> Update AGENTS.md (approved packages), tasks.md (RTL in task 7 or 8, favorites in task 11 with "Done when" lines) and docs/requirements-checklist.md (both bonus rows → planned, with the task number). Documents only, no code. Show me the changes and wait.
+> </pasted_content id="91c8">
+
+**18:03 · claude**
+
+> Yes, please update both PRD.md lines: add the 4 RTL packages to the Tech line, and add favorites + the All/Favorites filter (/my-cards?show=favorites) to the /my-cards description. Keep it one page. Documents only.
