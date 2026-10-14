@@ -475,3 +475,19 @@
 **18:24 · claude**
 
 > Committed, the layout is now left-to-right and looks right. Go ahead with the second change: npm audit fix (source-map-js 1.2.1 → 1.2.2 only), then check build, dev and audit. Stop and wait after.
+
+**18:29 · claude**
+
+> <pasted_content id="91c8">
+> Committed. Task 5, step 2: types for our data + utils. Don't convert components yet.
+> 
+> 1. Create src/types/pokemon.ts with:
+>    - API response types, only the fields we actually use: the /pokemon-species count, the /pokemon list, /pokemon/{id} details (id, name, types with slot, height, weight, official artwork), and /type/{type} (pokemon with slot).
+>    - App types: PokemonSummary (id, name, image) and a CardType union of exactly our 10 types.
+> 2. Create a small typed fetch helper (e.g. src/utils/api.ts: fetchJson<T>(url)) that checks res.ok and returns Promise<T>, so res.json() never leaks `any` into our code.
+> 3. Convert src/utils/cardType.js → cardType.ts with full types (CARD_TYPES, getCardType). No `any`, no behavior change.
+> App.jsx and the components stay JS for now (allowJs is still on) — just make sure their imports still work.
+> 
+> Check: npm run build passes, the app works the same in the browser, and the linter shows no new warnings.
+> Then explain simply: (a) the difference between `type` and `interface`, and which we used and why, (b) what a union type is, using CardType as the example, (c) why res.json() is a hidden `any` and how fetchJson<T> solves it.
+> </pasted_content id="91c8">

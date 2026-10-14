@@ -1,5 +1,5 @@
 // Row of card type buttons: "All" + the 10 card types. The selected card type lives in App.
-import { CARD_TYPES } from '../utils/cardType.js'
+import { CARD_TYPES } from '../utils/cardType.ts'
 
 export default function CardTypeFilter({ selectedCardType, onChange }) {
   return (

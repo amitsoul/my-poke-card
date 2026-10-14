@@ -4,7 +4,7 @@ import PokemonList from './components/PokemonList.jsx'
 import PokemonDetails from './components/PokemonDetails.jsx'
 import SearchBar from './components/SearchBar.jsx'
 import CardTypeFilter from './components/CardTypeFilter.jsx'
-import { CARD_TYPES } from './utils/cardType.js'
+import { CARD_TYPES } from './utils/cardType.ts'
 
 const API_URL = 'https://pokeapi.co/api/v2'
 const ARTWORK_URL =
