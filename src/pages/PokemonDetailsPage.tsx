@@ -4,6 +4,8 @@ import { Link, useLocation, useParams } from 'react-router'
 import PokemonDetails from '../components/PokemonDetails.tsx'
 import type { PokemonDetailsResponse } from '../types/pokemon.ts'
 import { API_URL, ApiError, fetchJson } from '../utils/api.ts'
+import { parsePokemonId } from '../utils/pokemonId.ts'
+import NotFoundPage from './NotFoundPage.tsx'
 
 // The answer for one id: the details, "no such Pokémon" (404), or any other error
 type DetailsResult =
@@ -20,15 +22,9 @@ function getBackToListUrl(state: unknown): string {
   return '/'
 }
 
-// "25" → 25; anything that isn't a whole number from 1 up → null
-function parseId(value: string | undefined): number | null {
-  const id = Number(value)
-  return Number.isInteger(id) && id > 0 ? id : null
-}
-
 export default function PokemonDetailsPage() {
   const { id } = useParams()
-  const pokemonId = parseId(id)
+  const pokemonId = parsePokemonId(id)
   const backToListUrl = getBackToListUrl(useLocation().state)
 
   const [result, setResult] = useState<DetailsResult | null>(null)
@@ -68,8 +64,12 @@ export default function PokemonDetailsPage() {
     }
   }, [pokemonId, retryCount])
 
-  // Not a valid id (e.g. /pokemon/abc) — treated as "not found" for now; the 404 page comes in step 6d
-  const isNotFound = pokemonId === null || (!isLoading && result !== null && result.status === 'not-found')
+  // Not a valid id (/pokemon/abc, /pokemon/0, /pokemon/1.5) → the 404 page.
+  // This comes after all the hooks above: React needs the same hooks, in the same order, on every render.
+  if (pokemonId === null) return <NotFoundPage />
+
+  // A valid number, but the API has no such Pokémon (e.g. /pokemon/99999)
+  const isNotFound = !isLoading && result !== null && result.status === 'not-found'
 
   return (
     <div className="details-page">

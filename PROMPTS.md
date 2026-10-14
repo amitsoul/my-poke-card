@@ -602,3 +602,17 @@
 > 
 > Check: npm run build passes, linter clean. Then explain simply: (a) what useSearchParams is and how it differs from useState, (b) why replace for typing, (c) how the details page knows which search to go back to.
 > </pasted_content id="91c8">
+
+**20:22 · claude**
+
+> <pasted_content id="91c8">
+> Committed 6c. Step 6d — the last step of task 6:
+> - New page src/pages/NotFoundPage.tsx: a friendly message (e.g. "Page not found") and a button back to "/". English only.
+> - Route "*" → NotFoundPage, for any URL that doesn't exist (/abc, /xyz/123).
+> - /pokemon/abc, /pokemon/0, /pokemon/1.5 (not a whole number from 1 up) → show NotFoundPage instead of the in-page "Pokémon not found".
+> - /pokemon/99999 (valid number, API returns 404) stays as it is: "Pokémon not found" inside the details page.
+> - The "Pokémon" nav link should NOT be highlighted on the 404 page.
+> - Typed, no any.
+> 
+> Check: npm run build passes, linter clean. Then explain simply what path="*" means and why it must work no matter where it is in the list of routes.
+> </pasted_content id="91c8">
