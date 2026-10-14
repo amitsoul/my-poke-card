@@ -1,7 +1,7 @@
 // The list comes from PokéAPI. The selection, search and card type filter live here in App.
 import { useEffect, useState } from 'react'
 import PokemonList from './components/PokemonList.tsx'
-import PokemonDetails from './components/PokemonDetails.jsx'
+import PokemonDetails from './components/PokemonDetails.tsx'
 import SearchBar from './components/SearchBar.tsx'
 import CardTypeFilter from './components/CardTypeFilter.tsx'
 import { CARD_TYPES } from './utils/cardType.ts'

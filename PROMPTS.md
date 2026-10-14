@@ -504,3 +504,16 @@
 > Check: npm run build passes, the app works the same, linter has no new warnings.
 > Then explain simply: (a) how a Props interface works, using PokemonListItem as the example, (b) how a callback prop like onChange is typed and why, (c) what TypeScript would catch now that it couldn't before — one concrete example from our code.
 > </pasted_content id="91c8">
+
+**19:04 · claude**
+
+> <pasted_content id="91c8">
+> Committed. Task 5, step 4a: convert PokemonDetails to TypeScript only (App stays JS for one more step).
+> - git mv .jsx → .tsx, Props interface, use fetchJson<PokemonDetailsResponse> and API_URL from src/utils/api.ts.
+> - Type every useState (e.g. useState<PokemonDetailsResponse | null>(null)).
+> - Keep the loading / error / Try again behavior and the race-condition guard exactly as they are.
+> - No `any`, no behavior change.
+> 
+> Check: npm run build passes, linter has no new warnings. I'll check the browser.
+> Then explain simply: (a) why useState needs a type here like <PokemonDetailsResponse | null>, (b) how the fetch in useEffect is typed now, step by step.
+> </pasted_content id="91c8">
