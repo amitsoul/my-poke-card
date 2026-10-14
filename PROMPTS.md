@@ -540,3 +540,25 @@
 > - docs/requirements-checklist.md: update the TypeScript rows (TS, types for API data + props, no any, npm run build) to their real status, with where in the code.
 > Documents only. Show me the changes.
 > </pasted_content id="91c8">
+
+**19:25 · claude**
+
+> <pasted_content id="91c8">
+> Let's start task 6 (routing). I decided:
+> 1. Nav menu: only "Pokémon" for now. "My Cards" is added in task 11 when the page exists.
+> 2. Search + type filter will be kept in the URL (e.g. /?q=char&type=Fire) — that's step 6c.
+> 3. Details page: same content as today's panel + a "← Back to list" link. "Choose as my partner" comes in task 8.
+> 4. Bad URLs: /abc → 404 page. /pokemon/abc (not a number) → 404 page. /pokemon/99999 (no such Pokémon) → "Pokémon not found" inside the details page with a link back.
+> 
+> Plan: 6a router + nav + list page · 6b details page /pokemon/:id · 6c search/filter in URL · 6d 404. Small steps, wait for me after each one, remind me to commit.
+> 
+> Step 6a only:
+> - Install react-router (approved).
+> - Set up the router (BrowserRouter in main.tsx).
+> - Create a NavBar component in src/components/ with a NavLink "Pokémon" to "/" (active link highlighted).
+> - Move everything App does today (list, search, filter, Load more, details panel) into src/pages/PokemonListPage.tsx. No behavior change — the panel stays for now.
+> - App becomes the layout: NavBar + <Routes> with "/" → PokemonListPage.
+> - Typed props, no any.
+> 
+> Check: npm run build passes, linter clean. Then explain simply: (a) what BrowserRouter, Routes and Route do, (b) the difference between NavLink and a normal <a> link, (c) what's now a "page" vs a "component" in our project and why.
+> </pasted_content id="91c8">
