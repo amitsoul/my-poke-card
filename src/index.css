@@ -48,7 +48,9 @@ body {
   text-align: center;
 }
 
+/* Used on <button> and on <Link>, so it also removes the link underline */
 .button {
+  display: inline-block;
   padding: 0.5rem 1.25rem;
   border: none;
   border-radius: 8px;
@@ -56,6 +58,7 @@ body {
   color: white;
   font: inherit;
   font-weight: 600;
+  text-decoration: none;
   cursor: pointer;
 }
 
@@ -75,33 +78,6 @@ body {
 .load-more {
   display: block;
   margin: 1.5rem auto 0;
-}
-
-/* Page layout.
-   Phone: one column, details above the list (the order in the HTML).
-   Tablet and desktop: list on the left, details on the right. */
-.layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .layout {
-    grid-template-columns: 1fr 280px;
-    grid-template-areas: "list details";
-    align-items: start;
-  }
-
-  .layout .list-column {
-    grid-area: list;
-  }
-
-  .layout .pokemon-details {
-    grid-area: details;
-    position: sticky;
-    top: 1rem;
-  }
 }
 
 .search-bar {
@@ -153,8 +129,9 @@ body {
   gap: 1rem;
 }
 
-/* The card is a button, so we reset the browser's default button look */
+/* The card is a link to the details page, so we remove the default link look */
 .pokemon-card {
+  box-sizing: border-box;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -162,24 +139,30 @@ body {
   padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 12px;
-  background: none;
   color: inherit;
-  font: inherit;
-  cursor: pointer;
+  text-decoration: none;
 }
 
 .pokemon-card:hover {
   border-color: #888;
 }
 
-.pokemon-card.selected {
-  border-color: #e3350d;
-  box-shadow: 0 0 0 1px #e3350d;
-  background: rgba(227, 53, 13, 0.08);
+/* Details page */
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: inherit;
+  font-weight: 600;
+  text-decoration: none;
 }
 
-/* Details panel */
+.back-link:hover {
+  text-decoration: underline;
+}
+
 .pokemon-details {
+  max-width: 400px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;

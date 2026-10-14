@@ -562,3 +562,26 @@
 > 
 > Check: npm run build passes, linter clean. Then explain simply: (a) what BrowserRouter, Routes and Route do, (b) the difference between NavLink and a normal <a> link, (c) what's now a "page" vs a "component" in our project and why.
 > </pasted_content id="91c8">
+
+**19:38 · claude**
+
+> <pasted_content id="91c8">
+> Committed. Decisions: (1) the "Pokémon" nav link should also be active on /pokemon/:id pages. (2) Split details into a page + a display component.
+> 
+> Step 6b:
+> - New page src/pages/PokemonDetailsPage.tsx at route /pokemon/:id. It reads the id with useParams, fetches /pokemon/{id} with fetchJson, and owns loading / error / Try again and the race guard.
+> - PokemonDetails (component) becomes display-only: it receives the details via props and shows image, name, number, Type and weight. No fetching inside it.
+> - Clean up the setState-before-await the same way as App (the note in task 6).
+> - /pokemon/99999 (API returns 404) → "Pokémon not found" + a link back. Other errors (e.g. offline) → error message + Try again. Keep these two cases separate.
+> - Non-number ids (/pokemon/abc) → leave for 6d; for now just don't crash.
+> - PokemonListItem becomes a <Link> to /pokemon/{id}. Remove the selected-Pokémon state, isSelected and onSelect from the list (no longer needed).
+> - Remove the side panel from the list page; the list takes the full width. Remove CSS that's no longer used.
+> - "← Back to list" link on the details page (plain Link to "/" for now — 6c will keep the search).
+> - Typed props, no any.
+> 
+> Check: npm run build passes, linter clean. Then explain simply: (a) what useParams returns and why the id comes as a string, (b) what happens step by step from clicking Pikachu until its details show, (c) where the "selected Pokémon" state went and why.
+> </pasted_content id="91c8">
+
+**19:49 · claude**
+
+> Before I commit 6b: on /pokemon/99999 there are two "back to list" links — the top "← Back to list" and the red "Back to the list" button. It's confusing. In the not-found state, hide the top link and keep only the red centered button. Keep the top "← Back to list" in the loading, ready and error states. No other changes.

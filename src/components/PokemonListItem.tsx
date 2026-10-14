@@ -1,23 +1,18 @@
-// One Pokémon in the list: image + name. Clicking it tells App which Pokémon was picked.
+// One Pokémon in the list: image + name. Clicking it opens its details page.
+import { Link } from 'react-router'
 import type { PokemonSummary } from '../types/pokemon.ts'
 
 interface PokemonListItemProps {
   pokemon: PokemonSummary
-  isSelected: boolean
-  onSelect: (pokemon: PokemonSummary) => void
 }
 
-export default function PokemonListItem({ pokemon, isSelected, onSelect }: PokemonListItemProps) {
+export default function PokemonListItem({ pokemon }: PokemonListItemProps) {
   return (
     <li>
-      <button
-        type="button"
-        className={isSelected ? 'pokemon-card selected' : 'pokemon-card'}
-        onClick={() => onSelect(pokemon)}
-      >
+      <Link to={`/pokemon/${pokemon.id}`} className="pokemon-card">
         <img src={pokemon.image} alt={pokemon.name} width="120" height="120" loading="lazy" />
         <p className="pokemon-name">{pokemon.name}</p>
-      </button>
+      </Link>
     </li>
   )
 }

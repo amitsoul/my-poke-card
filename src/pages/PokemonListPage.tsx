@@ -1,7 +1,6 @@
-// Page "/": the Pokémon list. The selection, search and card type filter live here.
+// Page "/": the Pokémon list, with search, card type filter and "Load more".
 import { useEffect, useState } from 'react'
 import PokemonList from '../components/PokemonList.tsx'
-import PokemonDetails from '../components/PokemonDetails.tsx'
 import SearchBar from '../components/SearchBar.tsx'
 import CardTypeFilter from '../components/CardTypeFilter.tsx'
 import type {
@@ -11,11 +10,9 @@ import type {
   SpeciesCountResponse,
   TypeResponse,
 } from '../types/pokemon.ts'
-import { API_URL, fetchJson } from '../utils/api.ts'
+import { API_URL, fetchJson, getArtworkUrl } from '../utils/api.ts'
 import { CARD_TYPES } from '../utils/cardType.ts'
 
-const ARTWORK_URL =
-  'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork'
 const PAGE_SIZE = 50
 
 // "https://pokeapi.co/api/v2/pokemon/25/" → 25
@@ -29,7 +26,6 @@ export default function PokemonListPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [hasError, setHasError] = useState<boolean>(false)
   const [listRetryCount, setListRetryCount] = useState<number>(0)
-  const [selectedPokemon, setSelectedPokemon] = useState<PokemonSummary | null>(null)
   const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE)
   const [searchText, setSearchText] = useState<string>('')
   const [selectedCardType, setSelectedCardType] = useState<CardType | null>(null) // null = All
@@ -97,7 +93,7 @@ export default function PokemonListPage() {
         const list: PokemonSummary[] = listData.results
           .map((item) => {
             const id = getIdFromUrl(item.url)
-            return { id, name: item.name, image: `${ARTWORK_URL}/${id}.png` }
+            return { id, name: item.name, image: getArtworkUrl(id) }
           })
           .filter((pokemon) => pokemon.id < 10001)
 
@@ -173,49 +169,42 @@ export default function PokemonListPage() {
       )}
 
       {!isLoading && !hasError && (
-        <div className="layout">
-          <PokemonDetails pokemon={selectedPokemon} />
-          <div className="list-column">
-            <SearchBar value={searchText} onChange={handleSearchChange} />
-            <CardTypeFilter selectedCardType={selectedCardType} onChange={handleCardTypeChange} />
+        <>
+          <SearchBar value={searchText} onChange={handleSearchChange} />
+          <CardTypeFilter selectedCardType={selectedCardType} onChange={handleCardTypeChange} />
 
-            {isCardTypeLoading && <p className="status">Loading {selectedCardType} Pokémon...</p>}
+          {isCardTypeLoading && <p className="status">Loading {selectedCardType} Pokémon...</p>}
 
-            {hasCardTypeError && (
-              <div className="status">
-                <p>Oops! We couldn't load the {selectedCardType} Pokémon.</p>
-                <div className="status-actions">
-                  <button type="button" className="button" onClick={handleCardTypeRetry}>
-                    Try again
-                  </button>
-                  <button type="button" className="button" onClick={() => handleCardTypeChange(null)}>
-                    Show all Pokémon
-                  </button>
-                </div>
+          {hasCardTypeError && (
+            <div className="status">
+              <p>Oops! We couldn't load the {selectedCardType} Pokémon.</p>
+              <div className="status-actions">
+                <button type="button" className="button" onClick={handleCardTypeRetry}>
+                  Try again
+                </button>
+                <button type="button" className="button" onClick={() => handleCardTypeChange(null)}>
+                  Show all Pokémon
+                </button>
               </div>
-            )}
+            </div>
+          )}
 
-            {!isCardTypeLoading && !hasCardTypeError && (
-              <>
-                {filteredPokemon.length === 0 && <p className="status">No Pokémon found</p>}
-                <PokemonList
-                  pokemonList={visiblePokemon}
-                  selectedPokemon={selectedPokemon}
-                  onSelect={setSelectedPokemon}
-                />
-                {hasMore && (
-                  <button
-                    type="button"
-                    className="button load-more"
-                    onClick={() => setVisibleCount(visibleCount + PAGE_SIZE)}
-                  >
-                    Load more
-                  </button>
-                )}
-              </>
-            )}
-          </div>
-        </div>
+          {!isCardTypeLoading && !hasCardTypeError && (
+            <>
+              {filteredPokemon.length === 0 && <p className="status">No Pokémon found</p>}
+              <PokemonList pokemonList={visiblePokemon} />
+              {hasMore && (
+                <button
+                  type="button"
+                  className="button load-more"
+                  onClick={() => setVisibleCount(visibleCount + PAGE_SIZE)}
+                >
+                  Load more
+                </button>
+              )}
+            </>
+          )}
+        </>
       )}
     </>
   )

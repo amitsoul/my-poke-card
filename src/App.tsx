@@ -2,6 +2,7 @@
 import { Route, Routes } from 'react-router'
 import NavBar from './components/NavBar.tsx'
 import PokemonListPage from './pages/PokemonListPage.tsx'
+import PokemonDetailsPage from './pages/PokemonDetailsPage.tsx'
 
 export default function App() {
   return (
@@ -10,6 +11,7 @@ export default function App() {
       <main className="app">
         <Routes>
           <Route path="/" element={<PokemonListPage />} />
+          <Route path="/pokemon/:id" element={<PokemonDetailsPage />} />
         </Routes>
       </main>
     </>

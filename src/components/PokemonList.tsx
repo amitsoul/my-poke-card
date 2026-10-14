@@ -4,20 +4,13 @@ import PokemonListItem from './PokemonListItem.tsx'
 
 interface PokemonListProps {
   pokemonList: PokemonSummary[]
-  selectedPokemon: PokemonSummary | null // null = nothing selected yet
-  onSelect: (pokemon: PokemonSummary) => void
 }
 
-export default function PokemonList({ pokemonList, selectedPokemon, onSelect }: PokemonListProps) {
+export default function PokemonList({ pokemonList }: PokemonListProps) {
   return (
     <ul className="pokemon-grid">
       {pokemonList.map((pokemon) => (
-        <PokemonListItem
-          key={pokemon.id}
-          pokemon={pokemon}
-          isSelected={selectedPokemon !== null && selectedPokemon.id === pokemon.id}
-          onSelect={onSelect}
-        />
+        <PokemonListItem key={pokemon.id} pokemon={pokemon} />
       ))}
     </ul>
   )
