@@ -491,3 +491,16 @@
 > Check: npm run build passes, the app works the same in the browser, and the linter shows no new warnings.
 > Then explain simply: (a) the difference between `type` and `interface`, and which we used and why, (b) what a union type is, using CardType as the example, (c) why res.json() is a hidden `any` and how fetchJson<T> solves it.
 > </pasted_content id="91c8">
+
+**18:58 · claude**
+
+> <pasted_content id="91c8">
+> Committed. Task 5, step 3: convert the 4 simple components to TypeScript: PokemonListItem, PokemonList, SearchBar, CardTypeFilter.
+> - Rename .jsx → .tsx with git mv.
+> - Each gets a Props interface (e.g. PokemonListItemProps) using our types from src/types/pokemon.ts. Type the callback props too (e.g. onSelect, onChange).
+> - No `any`, no behavior change.
+> - PokemonDetails and App stay JS for now.
+> 
+> Check: npm run build passes, the app works the same, linter has no new warnings.
+> Then explain simply: (a) how a Props interface works, using PokemonListItem as the example, (b) how a callback prop like onChange is typed and why, (c) what TypeScript would catch now that it couldn't before — one concrete example from our code.
+> </pasted_content id="91c8">

@@ -1,7 +1,13 @@
 // Row of card type buttons: "All" + the 10 card types. The selected card type lives in App.
+import type { CardType } from '../types/pokemon.ts'
 import { CARD_TYPES } from '../utils/cardType.ts'
 
-export default function CardTypeFilter({ selectedCardType, onChange }) {
+interface CardTypeFilterProps {
+  selectedCardType: CardType | null // null = All
+  onChange: (cardType: CardType | null) => void
+}
+
+export default function CardTypeFilter({ selectedCardType, onChange }: CardTypeFilterProps) {
   return (
     <div className="card-type-filter" role="group" aria-label="Filter by type">
       <button

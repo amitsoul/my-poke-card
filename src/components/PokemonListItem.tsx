@@ -1,6 +1,13 @@
 // One Pokémon in the list: image + name. Clicking it tells App which Pokémon was picked.
+import type { PokemonSummary } from '../types/pokemon.ts'
 
-export default function PokemonListItem({ pokemon, isSelected, onSelect }) {
+interface PokemonListItemProps {
+  pokemon: PokemonSummary
+  isSelected: boolean
+  onSelect: (pokemon: PokemonSummary) => void
+}
+
+export default function PokemonListItem({ pokemon, isSelected, onSelect }: PokemonListItemProps) {
   return (
     <li>
       <button

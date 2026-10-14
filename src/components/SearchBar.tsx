@@ -1,6 +1,11 @@
 // Search box. Controlled: the text lives in App and comes in via props.
 
-export default function SearchBar({ value, onChange }) {
+interface SearchBarProps {
+  value: string
+  onChange: (text: string) => void
+}
+
+export default function SearchBar({ value, onChange }: SearchBarProps) {
   return (
     <input
       type="search"
