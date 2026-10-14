@@ -4,30 +4,38 @@ import PokemonList from './components/PokemonList.tsx'
 import PokemonDetails from './components/PokemonDetails.tsx'
 import SearchBar from './components/SearchBar.tsx'
 import CardTypeFilter from './components/CardTypeFilter.tsx'
+import type {
+  CardType,
+  PokemonListResponse,
+  PokemonSummary,
+  SpeciesCountResponse,
+  TypeResponse,
+} from './types/pokemon.ts'
+import { API_URL, fetchJson } from './utils/api.ts'
 import { CARD_TYPES } from './utils/cardType.ts'
 
-const API_URL = 'https://pokeapi.co/api/v2'
 const ARTWORK_URL =
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork'
 const PAGE_SIZE = 50
 
 // "https://pokeapi.co/api/v2/pokemon/25/" → 25
-function getIdFromUrl(url) {
+function getIdFromUrl(url: string): number {
   const parts = url.split('/').filter((part) => part !== '')
   return Number(parts[parts.length - 1])
 }
 
 export default function App() {
-  const [pokemonList, setPokemonList] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasError, setHasError] = useState(false)
-  const [selectedPokemon, setSelectedPokemon] = useState(null)
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
-  const [searchText, setSearchText] = useState('')
-  const [selectedCardType, setSelectedCardType] = useState(null) // null = All
-  const [cardTypeIds, setCardTypeIds] = useState(null) // ids of the selected card type's Pokémon
-  const [hasCardTypeError, setHasCardTypeError] = useState(false)
-  const [cardTypeRetryCount, setCardTypeRetryCount] = useState(0)
+  const [pokemonList, setPokemonList] = useState<PokemonSummary[]>([])
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [hasError, setHasError] = useState<boolean>(false)
+  const [listRetryCount, setListRetryCount] = useState<number>(0)
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonSummary | null>(null)
+  const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE)
+  const [searchText, setSearchText] = useState<string>('')
+  const [selectedCardType, setSelectedCardType] = useState<CardType | null>(null) // null = All
+  const [cardTypeIds, setCardTypeIds] = useState<Set<number> | null>(null) // ids of the selected card type's Pokémon
+  const [hasCardTypeError, setHasCardTypeError] = useState<boolean>(false)
+  const [cardTypeRetryCount, setCardTypeRetryCount] = useState<number>(0)
 
   // Still waiting for the selected card type's ids?
   const isCardTypeLoading = selectedCardType !== null && cardTypeIds === null && !hasCardTypeError
@@ -43,13 +51,13 @@ export default function App() {
   const hasMore = visibleCount < filteredPokemon.length
 
   // New search → start again from the first page
-  function handleSearchChange(text) {
+  function handleSearchChange(text: string) {
     setSearchText(text)
     setVisibleCount(PAGE_SIZE)
   }
 
   // New card type → forget the old ids and start again from the first page
-  function handleCardTypeChange(cardType) {
+  function handleCardTypeChange(cardType: CardType | null) {
     if (cardType === selectedCardType) return
     setSelectedCardType(cardType)
     setCardTypeIds(null)
@@ -63,6 +71,52 @@ export default function App() {
     setCardTypeRetryCount(cardTypeRetryCount + 1)
   }
 
+  // List "Try again": show loading, clear the error, and bump the counter so the list effect re-runs
+  function handleListRetry() {
+    setIsLoading(true)
+    setHasError(false)
+    setListRetryCount(listRetryCount + 1)
+  }
+
+  // Load the list when App first appears (and again on "Try again").
+  // isLoading/hasError are already set (by the initial state or handleListRetry),
+  // so the effect only fetches and saves the result.
+  useEffect(() => {
+    // Becomes false if this run is replaced before the answer arrives
+    let isCurrent = true
+
+    async function loadPokemon() {
+      try {
+        // 1. How many species are there? (never hardcoded)
+        const speciesData = await fetchJson<SpeciesCountResponse>(`${API_URL}/pokemon-species?limit=1`)
+
+        // 2. Get that many Pokémon (name + url only)
+        const listData = await fetchJson<PokemonListResponse>(`${API_URL}/pokemon?limit=${speciesData.count}`)
+
+        // 3. Build our own objects and drop special forms (id 10001+)
+        const list: PokemonSummary[] = listData.results
+          .map((item) => {
+            const id = getIdFromUrl(item.url)
+            return { id, name: item.name, image: `${ARTWORK_URL}/${id}.png` }
+          })
+          .filter((pokemon) => pokemon.id < 10001)
+
+        if (isCurrent) setPokemonList(list)
+      } catch {
+        if (isCurrent) setHasError(true)
+      } finally {
+        if (isCurrent) setIsLoading(false)
+      }
+    }
+
+    loadPokemon()
+
+    // Cleanup: React calls this before the next run, so an old answer is ignored
+    return () => {
+      isCurrent = false
+    }
+  }, [listRetryCount])
+
   // Fetch the ids for the selected card type every time it changes (or "Try again" is clicked)
   useEffect(() => {
     if (selectedCardType === null) return
@@ -74,14 +128,14 @@ export default function App() {
       try {
         // Psychic → ['psychic', 'ghost', 'fairy'] → 3 requests at the same time
         const cardType = CARD_TYPES.find((item) => item.name === selectedCardType)
-        const responses = await Promise.all(
-          cardType.types.map((type) => fetch(`${API_URL}/type/${type}`)),
+        // Can't happen (selectedCardType is always one of CARD_TYPES), but TypeScript makes us check
+        if (cardType === undefined) throw new Error(`Unknown card type: ${selectedCardType}`)
+        const typeDataList = await Promise.all(
+          cardType.types.map((type) => fetchJson<TypeResponse>(`${API_URL}/type/${type}`)),
         )
-        if (responses.some((response) => !response.ok)) throw new Error('Type request failed')
-        const typeDataList = await Promise.all(responses.map((response) => response.json()))
 
         // Merge into one set: only Pokémon whose FIRST type is this type, and no forms
-        const ids = new Set()
+        const ids = new Set<number>()
         for (const typeData of typeDataList) {
           for (const item of typeData.pokemon) {
             const id = getIdFromUrl(item.pokemon.url)
@@ -103,42 +157,6 @@ export default function App() {
     }
   }, [selectedCardType, cardTypeRetryCount])
 
-  async function loadPokemon() {
-    setIsLoading(true)
-    setHasError(false)
-
-    try {
-      // 1. How many species are there? (never hardcoded)
-      const speciesResponse = await fetch(`${API_URL}/pokemon-species?limit=1`)
-      if (!speciesResponse.ok) throw new Error('Species request failed')
-      const speciesData = await speciesResponse.json()
-
-      // 2. Get that many Pokémon (name + url only)
-      const listResponse = await fetch(`${API_URL}/pokemon?limit=${speciesData.count}`)
-      if (!listResponse.ok) throw new Error('Pokémon request failed')
-      const listData = await listResponse.json()
-
-      // 3. Build our own objects and drop special forms (id 10001+)
-      const list = listData.results
-        .map((item) => {
-          const id = getIdFromUrl(item.url)
-          return { id, name: item.name, image: `${ARTWORK_URL}/${id}.png` }
-        })
-        .filter((pokemon) => pokemon.id < 10001)
-
-      setPokemonList(list)
-    } catch {
-      setHasError(true)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  // Load the list once, when App first appears on screen
-  useEffect(() => {
-    loadPokemon()
-  }, [])
-
   return (
     <main className="app">
       <h1>My Poke Card</h1>
@@ -148,7 +166,7 @@ export default function App() {
       {!isLoading && hasError && (
         <div className="status">
           <p>Oops! We couldn't load the Pokémon. Please check your internet connection.</p>
-          <button type="button" className="button" onClick={loadPokemon}>
+          <button type="button" className="button" onClick={handleListRetry}>
             Try again
           </button>
         </div>

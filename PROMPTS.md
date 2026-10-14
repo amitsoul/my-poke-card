@@ -517,3 +517,16 @@
 > Check: npm run build passes, linter has no new warnings. I'll check the browser.
 > Then explain simply: (a) why useState needs a type here like <PokemonDetailsResponse | null>, (b) how the fetch in useEffect is typed now, step by step.
 > </pasted_content id="91c8">
+
+**19:08 · claude**
+
+> <pasted_content id="91c8">
+> Committed. Task 5, step 4b — the last step:
+> 1. Convert App to TypeScript (git mv .jsx → .tsx). Type every useState and use fetchJson + API_URL for the list and type-filter fetches. Keep loading / error / Try again, Load more, search, type filter and the race-condition guard exactly as they are.
+> 2. Fix the setState-in-effect lint warning, without changing behavior. Explain what the warning meant and how you fixed it.
+> 3. Remove the temporary allowJs from tsconfig.app.json.
+> 4. Add a lint rule that forbids explicit `any` (e.g. typescript/no-explicit-any as an error), so `any` can't sneak in later.
+> 5. Confirm: no .js/.jsx files left in src/, no `any` in src/, npm run build passes, linter shows 0 warnings.
+> 
+> Then show me the results and wait. Don't update tasks.md or the checklist yet — that will be its own commit after I check the browser.
+> </pasted_content id="91c8">

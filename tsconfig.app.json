@@ -8,9 +8,6 @@
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
 
-    /* Migration (task 5): let .js/.jsx files stay while we convert them. Remove at the end. */
-    "allowJs": true,
-
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
