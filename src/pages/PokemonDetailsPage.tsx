@@ -1,6 +1,6 @@
 // Page "/pokemon/:id": reads the id from the URL, fetches that Pokémon and shows its details.
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useLocation, useParams } from 'react-router'
 import PokemonDetails from '../components/PokemonDetails.tsx'
 import type { PokemonDetailsResponse } from '../types/pokemon.ts'
 import { API_URL, ApiError, fetchJson } from '../utils/api.ts'
@@ -11,6 +11,15 @@ type DetailsResult =
   | { id: number; status: 'not-found' }
   | { id: number; status: 'error' }
 
+// The list sends { listSearch: '?q=char&type=Fire' } when it opens this page.
+// Opened directly (typed URL, bookmark, refresh in a new tab) → no state → back to "/".
+function getBackToListUrl(state: unknown): string {
+  if (typeof state === 'object' && state !== null && 'listSearch' in state && typeof state.listSearch === 'string') {
+    return '/' + state.listSearch
+  }
+  return '/'
+}
+
 // "25" → 25; anything that isn't a whole number from 1 up → null
 function parseId(value: string | undefined): number | null {
   const id = Number(value)
@@ -20,6 +29,7 @@ function parseId(value: string | undefined): number | null {
 export default function PokemonDetailsPage() {
   const { id } = useParams()
   const pokemonId = parseId(id)
+  const backToListUrl = getBackToListUrl(useLocation().state)
 
   const [result, setResult] = useState<DetailsResult | null>(null)
   const [retryCount, setRetryCount] = useState<number>(0)
@@ -65,7 +75,7 @@ export default function PokemonDetailsPage() {
     <div className="details-page">
       {/* In the not-found state the red button below is the only way back, so this link is hidden */}
       {!isNotFound && (
-        <Link to="/" className="back-link">
+        <Link to={backToListUrl} className="back-link">
           ← Back to list
         </Link>
       )}
@@ -75,7 +85,7 @@ export default function PokemonDetailsPage() {
       {isNotFound && (
         <div className="status">
           <p>Pokémon not found</p>
-          <Link to="/" className="button">
+          <Link to={backToListUrl} className="button">
             Back to the list
           </Link>
         </div>

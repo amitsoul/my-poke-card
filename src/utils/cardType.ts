@@ -21,6 +21,13 @@ export const CARD_TYPES: CardTypeGroup[] = [
   { name: 'Colorless', types: ['normal', 'flying'] },
 ]
 
+// Text from the URL (?type=…) → one of our 10 card types, or null ("All") for anything else.
+// Exact match only: 'Fire' → 'Fire'; 'fire', 'Fairy', 'abc' or a missing param → null.
+export function parseCardType(value: string | null): CardType | null {
+  const cardType = CARD_TYPES.find((item) => item.name === value)
+  return cardType ? cardType.name : null
+}
+
 // ['ghost', 'poison'] → 'Psychic' (only the FIRST game type counts)
 export function getCardType(types: string[]): CardType {
   const firstType = types[0]

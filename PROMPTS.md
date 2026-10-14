@@ -585,3 +585,20 @@
 **19:49 · claude**
 
 > Before I commit 6b: on /pokemon/99999 there are two "back to list" links — the top "← Back to list" and the red "Back to the list" button. It's confusing. In the not-found state, hide the top link and keep only the red centered button. Keep the top "← Back to list" in the loading, ready and error states. No other changes.
+
+**20:05 · claude**
+
+> <pasted_content id="91c8">
+> Committed 6b. My decisions for 6c: (1) Load more resets to 50 when coming back to the list. (2) "Back to list" returns to the list with the same search and filter; if the details page was opened directly (no previous list), it goes to "/".
+> 
+> Step 6c: keep search and type filter in the URL.
+> - Use useSearchParams: ?q=<search text>&type=<CardType>. Remove the searchText / selectedCardType useState — the URL is now the source of truth.
+> - Empty search or "All" → remove that param from the URL (clean "/" when nothing is selected).
+> - Typing in the search box should NOT add a history entry per keystroke (use replace), so Back doesn't step through every letter.
+> - An invalid ?type= (e.g. ?type=Fairy or ?type=abc) → treat as "All", no crash, no error. Only our 10 CardType values are accepted.
+> - Load more resets to 50 whenever q or type changes.
+> - Details page: both "← Back to list" and the red "Back to the list" button return to the list with the same ?q=&type= the user came from. If opened directly (no list before), go to "/".
+> - Typed, no any.
+> 
+> Check: npm run build passes, linter clean. Then explain simply: (a) what useSearchParams is and how it differs from useState, (b) why replace for typing, (c) how the details page knows which search to go back to.
+> </pasted_content id="91c8">
