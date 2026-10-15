@@ -2,6 +2,7 @@
 import '@testing-library/jest-dom/vitest' // adds toBeInTheDocument, toHaveAttribute, … to expect
 import { cleanup } from '@testing-library/react'
 import { afterEach, vi } from 'vitest'
+import { clearMoveCache } from '../utils/moveApi.ts'
 
 // After EVERY test, so one test can't affect the next:
 afterEach(() => {
@@ -12,4 +13,6 @@ afterEach(() => {
   vi.resetAllMocks()
   // Put back the real browser functions a test replaced (e.g. the fake fetch)
   vi.unstubAllGlobals()
+  // Forget the moves fetched in this test (the move cache lives in memory, across tests)
+  clearMoveCache()
 })

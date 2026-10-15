@@ -995,3 +995,15 @@
 > 
 > Do ONLY step 9a now (pure rules + tests + CARD_SPEC updates). Then run npm test and npm run build, show the results, and remind me to commit. I'll send the approval for 9b after review.
 > </pasted_content id="91c8">
+
+**13:36 · claude**
+
+> <pasted_content id="91c8">
+> 9a approved. Go ahead with step 9b only, as in your plan:
+> - Types for /pokemon-species and /move, and moves added to PokemonDetailsResponse.
+> - src/utils/moves.ts: getMoveCandidates (level-up order, lowest level first, ties keep API order, then other moves) and toAttack (English name with slug fallback, damage, cost), with tests.
+> - src/hooks/usePokemonCardInfo.ts: genus + up to 2 attacks, batches of 4, stop at 2 with power, cap of 20, Ditto and Struggle fallbacks, loading/error/retry, the same race guard pattern as usePokemonDetails, and the small move cache.
+> - clearMoveCache() exported and called after every test in src/test/setup.ts.
+> - Tests with a fake fetch: Pikachu → Thunder Shock + Quick Attack and the exact number of move requests; Ditto → Transform; only 1 move with power; no moves → Struggle; the cap of 20; the English name and the slug fallback; the cache (a second load for the same Pokémon sends no new move requests); a failed request → error, then retry works.
+> No UI changes in 9b. Then run npm test and npm run build, show the results, and remind me to commit.
+> </pasted_content id="91c8">

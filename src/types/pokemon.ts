@@ -25,6 +25,18 @@ export interface PokemonTypeSlot {
   type: NamedApiResource
 }
 
+// How a Pokémon learns a move in one game version, e.g. by "level-up" at level 1
+export interface PokemonMoveVersionDetail {
+  level_learned_at: number
+  move_learn_method: NamedApiResource // "level-up", "machine", "egg", "tutor", …
+}
+
+// One move the Pokémon can learn, with how it learns it in each game version
+export interface PokemonMoveSlot {
+  move: NamedApiResource
+  version_group_details: PokemonMoveVersionDetail[]
+}
+
 // GET /pokemon/{id}
 export interface PokemonDetailsResponse {
   id: number
@@ -32,6 +44,7 @@ export interface PokemonDetailsResponse {
   types: PokemonTypeSlot[]
   height: number // decimeters
   weight: number // hectograms
+  moves: PokemonMoveSlot[]
   sprites: {
     other: {
       'official-artwork': {
@@ -45,6 +58,18 @@ export interface PokemonDetailsResponse {
 export interface TypePokemonSlot {
   slot: number
   pokemon: NamedApiResource
+}
+
+// GET /pokemon-species/{id} — we only need the genus ("Mouse Pokémon"), in English
+export interface SpeciesResponse {
+  genera: { genus: string; language: NamedApiResource }[]
+}
+
+// GET /move/{name}
+export interface MoveResponse {
+  name: string // the slug, e.g. "thunder-shock"
+  power: number | null // null for status moves (Growl) and variable-power moves (Seismic Toss)
+  names: { name: string; language: NamedApiResource }[] // "Thunder Shock" in English, and other languages
 }
 
 // GET /type/{type}
