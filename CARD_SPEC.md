@@ -5,8 +5,8 @@
 
 ## Layout (top to bottom)
 - **Top row:** "BASIC" stage top-left · name "<User name>'s <Pokémon>" (e.g. "Amit's Pikachu", TCG "Trainer's Pokémon" style) · "HP" + the user's exact age (1–120, intentional) · Type symbol top-right.
-- **Frame color** by Type.
-- **Illustration:** the user's photo + the Pokémon's official artwork.
+- **Frame and panel:** the outer frame is yellow (#F2C94C) on every card; the inner panel has a light tint of the card's Type (see "Type symbols and colors").
+- **Illustration:** the user's photo **fills** the window (CSS `object-fit: cover`); the Pokémon's official artwork sits on top as a **die-cut sticker** (see "The sticker").
 - **Pokédex strip:** "NO. 0025 · Mouse Pokémon · HT 1'04" · WT 13.2 lbs" (English card format).
 - **Ability:** the user's Superpower.
 - **Attacks:** see rules below.
@@ -78,8 +78,34 @@ Filled on `/create/:id` after a Pokémon is chosen. All fields are required and 
 
 **Card number** — "MPC 001", assigned once when the card is created, from a counter in localStorage that only goes up.
 
-## Type symbols
-Our own SVG icons inspired by the originals: a colored circle with a white icon — Grass leaf, Fire flame, Water droplet, Lightning bolt, Psychic eye, Fighting fist, Darkness crescent, Metal triangle, Dragon claw, Colorless star. No official logos or copyright lines.
+## Card design ("Classic")
+- **Size:** 380×532 design pixels (ratio 5:7). On narrower screens the whole card shrinks as one piece: every size is written in design pixels × (card width / 380), with CSS container query units.
+- **Fonts** (self-hosted from Google Fonts, SIL Open Font License, `src/assets/fonts/OFL.txt`): "Barlow Condensed" 600/700 for the name, HP, attack names and damage; "Barlow" 400/600/700 for everything else. Text #1E1B14.
+- Details per part (header, window, strip, Ability, attacks, Weakness/Resistance/Retreat, flavor box, bottom line) are in the task 10 spec; "MPC 001" (task 11) gets room at the right of the bottom line.
+
+## Type symbols and colors
+Our own SVG icons inspired by the originals: a colored circle with a white icon — Grass leaf, Fire flame, Water droplet, Lightning bolt, Psychic eye, Fighting fist, Darkness crescent, Metal triangle, Dragon claw, Colorless star. No official logos or copyright lines. Each symbol has an accessible name ("Lightning"). Used for the Type, attack costs, Weakness, Resistance and Retreat (on the card and the details page). In code: `src/components/TypeSymbol.tsx` and `src/utils/cardTheme.ts`.
+
+| Type | Circle | Panel tint | Strip tint (a bit darker) |
+|---|---|---|---|
+| Grass | #3E8E3A | #DCEBC8 | #C6DDAA |
+| Fire | #D9481F | #F8D6C8 | #F0BDA8 |
+| Water | #2A78C4 | #D2E5F6 | #B5D3EE |
+| Lightning | #A67C00 | #FAEDB4 | #F2DC86 |
+| Psychic | #8E4BA8 | #E8D9EE | #D7C0E2 |
+| Fighting | #A3521F | #EBD3C0 | #DDBBA0 |
+| Darkness | #3B3F4A | #D9D9DD | #C2C3C9 |
+| Metal | #6F7C86 | #E1E5E8 | #CBD2D7 |
+| Dragon | #7D6619 | #ECE3C3 | #DDD0A2 |
+| Colorless | #8A877C | #ECEBE6 | #DAD8D0 |
+
+Every circle has at least 3:1 contrast with its white icon (WCAG 1.4.11, checked by a test). Lightning was #C99A00 in the mockup (only about 2.6:1), so it is darkened to #A67C00.
+
+## The sticker
+- The official artwork (transparent background) with a white outline that follows the Pokémon's shape plus a small shadow (CSS `filter: drop-shadow`, no library).
+- Fixed size: 45% of the window's height, square. Starts at the bottom right, 3% from the edges.
+- After the card is created, the user can move it: drag with mouse or finger (Pointer Events), or arrow keys when it is focused (2% per press, 10% with Shift). It always stays fully inside the photo window.
+- The position is stored in percent (e.g. `{ x: 70, y: 65 }`) with the card data, so the saved card and the PNG (task 11) show it in the same place. Edit keeps it. No reset, no resizing.
 
 ## Note on Types
 We use the 10 current TCG Types. "Type" is the card's category (the symbol top-right); "Energy" means Energy cards and attack costs. Fairy was retired from the TCG in 2020, and Fairy Pokémon are printed as Psychic — still true in the 2025–26 Mega Evolution series (e.g. Mega Gardevoir ex). Poison Pokémon are printed as Darkness in the current era.

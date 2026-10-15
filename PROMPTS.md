@@ -1041,3 +1041,57 @@
 > - Close task 9: tasks.md [x] with a short Done note, docs/requirements-checklist.md (components, tests), and PRD.md / CARD_SPEC.md only if something is out of date (list what you change).
 > Then run npm test and npm run build, show the results, give me a browser checklist (desktop + phone width), and remind me to commit.
 > </pasted_content id="91c8">
+
+**16:26 · claude**
+
+> <pasted_content id="91c8">
+> Task 10: the card design. Follow AGENTS.md. PLAN FIRST: do not write code until I approve.
+> 
+> Background: I made a design mockup with a design tool (a reference only; you build everything in our own CSS, step by step). I chose the "Classic" direction. Here is its spec.
+> 
+> CARD (design size 380×532 px, ratio 5:7):
+> - Outer frame: yellow #F2C94C, 12px thick, border-radius 18px.
+> - Inner panel: radius 8px, padding 10px 12px 8px, column with 7px gaps, background = a light tint of the card's Type (Lightning #FAEDB4, Fire #F8D6C8, Water #D2E5F6, Colorless #ECEBE6, Fighting #EBD3C0, Dragon #ECE3C3; propose tints for Grass, Psychic, Darkness, Metal in the same style).
+> - Fonts (Google Fonts): "Barlow Condensed" 600/700 for the name, HP, attack names and damage; "Barlow" 400/600/700 for everything else. Text #1E1B14.
+> - Header row: "BASIC" small tag (10px bold italic, light background, 1px border #8C7F5A) · name 23px bold · "HP" 11px + number 24px, both #A12B1F · Type symbol 26px.
+> - Illustration window: 204px high, 4px gold border #C9A94A. The user's photo FILLS the whole window (object-fit: cover). The Pokémon's official artwork sits on top as a STICKER (see below).
+> - Pokédex strip under the window: 10.5px italic semibold, centered, background = a slightly darker tint of the Type.
+> - Ability row: "Ability" label (white on #A12B1F, 11px bold italic, small radius) + the superpower 19px bold #A12B1F.
+> - Attacks: one row each: cost symbols (20px) on the left, the name 19px bold, the damage 22px bold on the right; a thin line under each row.
+> - Weakness / Resistance / Retreat: 3 equal columns, label 9px bold uppercase with letter-spacing, value = a 16px symbol + "×2" / "−30", or "none"; Retreat = that many Colorless symbols.
+> - Flavor text: in a box with a 1px border #B9A66A, 11.5px italic, in quotes.
+> - Bottom line: 8.5px: "Card design: Amit Soul · Fan-made · Not an official Pokémon card". Leave room on the right for "MPC 001", which comes in task 11.
+> 
+> TYPE SYMBOLS: our own SVGs, a colored circle with a white icon (no official logos). Colors: Lightning #C99A00, Fire #D9481F, Water #2A78C4, Colorless #8A877C, Fighting #A3521F, Dragon #7D6619; propose Grass, Psychic, Darkness, Metal. Icons per CARD_SPEC: Grass leaf, Fire flame, Water droplet, Lightning bolt, Psychic eye, Fighting fist, Darkness crescent, Metal triangle, Dragon claw, Colorless star. Use them for the Type, costs, Weakness, Resistance and Retreat (with an accessible name, e.g. "Lightning"). The details page can use them too.
+> 
+> THE STICKER (my decisions, already approved):
+> - Die-cut style: the transparent official artwork with a white outline that follows the Pokémon's shape plus a small shadow, using CSS filter: drop-shadow (no library).
+> - Fixed size, about 45% of the window's height. Starts at the bottom right.
+> - The user can MOVE it after the card is created: drag with mouse or finger (Pointer Events), AND arrow keys when the sticker is focused (keyboard accessibility). It must always stay fully inside the photo window.
+> - The limit logic goes in a pure function (e.g. clampStickerPosition) with Vitest tests.
+> - The position is stored in percent (e.g. {x: 70, y: 65}) together with the card data, so task 11 can save it and the PNG/My Cards show it in the same place. Edit keeps the position.
+> - No reset button. No resizing.
+> 
+> Also: update CARD_SPEC.md (the illustration is now: the user's photo fills the window + the draggable Pokémon sticker) as part of the first step.
+> 
+> In your plan, tell me:
+> 1. How you split task 10 into small steps, each with its own commit (for example: symbols → card layout → photo + sticker → moving the sticker → responsive + close).
+> 2. Files: new and changed; which parts are pure functions with tests.
+> 3. Responsive: on a phone narrower than 380px the whole card must shrink as one piece (all text and sizes together). Options (for example CSS container query units, a scale transform, or em-based sizes) with pros/cons and your recommendation, keeping in mind that task 11 exports the card to PNG with html-to-image.
+> 4. The sticker on touch screens: how dragging works without scrolling the page by accident, and what the keyboard steps are (e.g. 2% per arrow press, more with Shift).
+> 5. Accessibility: how a screen reader user understands the sticker and how to move it (text, labels).
+> 6. Every new UI text, so I can approve it.
+> 7. The tests you plan.
+> 
+> After I approve each step: implement it, run npm test and npm run build, show the results, give me a browser checklist (desktop + phone width + a real phone for dragging), and remind me to commit.
+> </pasted_content id="91c8">
+
+**16:35 · claude**
+
+> <pasted_content id="91c8">
+> Approved: steps 10a–10e, self-hosted fonts (with OFL.txt), responsive option A (cqw), the 4 extra Types' colors, Lightning #A67C00, keyboard 2% / Shift 10%, and all the texts.
+> 
+> One addition to the name-size rule: some API names are much longer than your example, e.g. "squawkabilly-green-plumage" or "maushold-family-of-four". With a 12-letter user name that's 40+ characters. Add a 4th step: 30+ characters → 14px, and allow the name to wrap to 2 lines without pushing HP or the Type symbol off the card. Add a test with "Bartholomewz's Squawkabilly-Green-Plumage", and check it in the browser (/create/931 is Squawkabilly).
+> 
+> Do ONLY step 10a now. Then run npm test and npm run build, show the results, and remind me to commit. I'll send the approval for 10b after review.
+> </pasted_content id="91c8">
