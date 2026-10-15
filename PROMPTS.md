@@ -1007,3 +1007,25 @@
 > - Tests with a fake fetch: Pikachu → Thunder Shock + Quick Attack and the exact number of move requests; Ditto → Transform; only 1 move with power; no moves → Struggle; the cap of 20; the English name and the slug fallback; the cache (a second load for the same Pokémon sends no new move requests); a failed request → error, then retry works.
 > No UI changes in 9b. Then run npm test and npm run build, show the results, and remind me to commit.
 > </pasted_content id="91c8">
+
+**14:32 · claude**
+
+> <pasted_content id="91c8">
+> 9b approved (Magikarp's Hydro Pump is fine: it follows the agreed rule). Go ahead with step 9c only, as in your plan:
+> - src/components/AttackList.tsx (shared later by PokeCard): each attack as "Thunder Shock — 40 · Cost: Lightning, Colorless", or "Transform · Cost: Colorless" with no damage.
+> - The details page, under Weight: the "Attacks" section, then "Weakness: Fighting ×2 · Resistance: none · Retreat: 1" (with a Resistance: "Resistance: Fighting −30"; no Weakness: "Weakness: none"), using usePokemonCardInfo and getCardRules.
+> - Loading: "Loading attacks..." Error: "Oops! We couldn't load the attacks. Please check your internet connection." + Try again. The rest of the details page (image, name, Type, weight, "Create my card with …") still shows while attacks load or fail.
+> - RTL tests for AttackList and for the details page (with the fake API): attacks shown, W/R/Retreat line, the error + retry.
+> Then run npm test and npm run build, show the results, give me a browser checklist (Pikachu, Ditto, Dragonite, Skarmory, Gardevoir, offline + Try again, phone width), and remind me to commit.
+> </pasted_content id="91c8">
+
+**15:27 · claude**
+
+> <pasted_content id="91c8">
+> 9b approved (Magikarp's Hydro Pump is fine: it follows the agreed rule). Go ahead with step 9c only, as in your plan:
+> - src/components/AttackList.tsx (shared later by PokeCard): each attack as "Thunder Shock — 40 · Cost: Lightning, Colorless", or "Transform · Cost: Colorless" with no damage.
+> - The details page, under Weight: the "Attacks" section, then "Weakness: Fighting ×2 · Resistance: none · Retreat: 1" (with a Resistance: "Resistance: Fighting −30"; no Weakness: "Weakness: none"), using usePokemonCardInfo and getCardRules.
+> - Loading: "Loading attacks..." Error: "Oops! We couldn't load the attacks. Please check your internet connection." + Try again. The rest of the details page (image, name, Type, weight, "Create my card with …") still shows while attacks load or fail.
+> - RTL tests for AttackList and for the details page (with the fake API): attacks shown, W/R/Retreat line, the error + retry.
+> Then run npm test and npm run build, show the results, give me a browser checklist (Pikachu, Ditto, Dragonite, Skarmory, Gardevoir, offline + Try again, phone width), and remind me to commit.
+> </pasted_content id="91c8">

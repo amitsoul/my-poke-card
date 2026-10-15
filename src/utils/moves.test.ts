@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { moveResponse, speciesResponse } from '../test/fakeApi.ts'
 import { moveSlot, pikachuDetails } from '../test/pokemonFixtures.ts'
 import type { PokemonDetailsResponse } from '../types/pokemon.ts'
-import { getEnglishGenus, getMoveCandidates, getMoveName, toAttack, toNoDamageAttack } from './moves.ts'
+import { formatAttack, getEnglishGenus, getMoveCandidates, getMoveName, toAttack, toNoDamageAttack } from './moves.ts'
 
 function withMoves(moves: PokemonDetailsResponse['moves']): PokemonDetailsResponse {
   return { ...pikachuDetails, moves }
@@ -71,6 +71,18 @@ describe('getMoveName / toAttack / toNoDamageAttack', () => {
       damage: null,
       cost: ['Colorless'],
     })
+  })
+})
+
+describe('formatAttack', () => {
+  it('shows name, damage and cost', () => {
+    expect(formatAttack({ name: 'Thunder Shock', damage: 40, cost: ['Lightning', 'Colorless'] })).toBe(
+      'Thunder Shock — 40 · Cost: Lightning, Colorless',
+    )
+  })
+
+  it('leaves out the damage for an attack without damage', () => {
+    expect(formatAttack({ name: 'Transform', damage: null, cost: ['Colorless'] })).toBe('Transform · Cost: Colorless')
   })
 })
 

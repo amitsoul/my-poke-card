@@ -1,7 +1,7 @@
 // A tiny fake PokéAPI for tests: instead of the real fetch, answers from our own small data,
 // and remembers every URL that was asked for (so a test can count the move requests).
 import { vi } from 'vitest'
-import type { MoveResponse, SpeciesResponse } from '../types/pokemon.ts'
+import type { MoveResponse, PokemonDetailsResponse, SpeciesResponse } from '../types/pokemon.ts'
 
 // A /move/{name} answer. englishName = null: the move has no English name (tests the slug fallback).
 export function moveResponse(name: string, power: number | null, englishName: string | null = null): MoveResponse {
@@ -22,6 +22,7 @@ function jsonResponse(data: unknown): Response {
 }
 
 interface FakeApiData {
+  pokemon?: PokemonDetailsResponse[] // answers for /pokemon/{id}
   moves?: MoveResponse[]
   species?: SpeciesResponse
   failingMoves?: string[] // these moves answer with a server error (500)
@@ -42,6 +43,9 @@ export function stubPokeApi(data: FakeApiData): { requests: string[]; moveReques
         if (move !== undefined) return jsonResponse(move)
       }
       if (url.includes('/pokemon-species/') && data.species !== undefined) return jsonResponse(data.species)
+      const pokemonId = url.match(/\/pokemon\/(\d+)$/)?.[1]
+      const pokemon = data.pokemon?.find((item) => String(item.id) === pokemonId)
+      if (pokemon !== undefined) return jsonResponse(pokemon)
       return new Response('Not found', { status: 404 })
     }),
   )

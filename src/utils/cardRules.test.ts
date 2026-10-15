@@ -4,6 +4,7 @@ import {
   dropResistanceIfSameAsWeakness,
   formatDexNumber,
   formatHeight,
+  formatWeaknessLine,
   formatWeight,
   getAttackCost,
   getCardRules,
@@ -132,6 +133,20 @@ describe('getResistance', () => {
     expect(dropResistanceIfSameAsWeakness('Fighting', 'Fighting')).toBeNull()
     expect(dropResistanceIfSameAsWeakness('Lightning', 'Fighting')).toBe('Fighting')
     expect(dropResistanceIfSameAsWeakness(null, 'Fighting')).toBe('Fighting')
+  })
+})
+
+describe('formatWeaknessLine', () => {
+  it('shows the Weakness with ×2 and "none" for no Resistance (Pikachu)', () => {
+    expect(formatWeaknessLine('Fighting', null, 1)).toBe('Weakness: Fighting ×2 · Resistance: none · Retreat: 1')
+  })
+
+  it('shows a Resistance with −30 (Gardevoir)', () => {
+    expect(formatWeaknessLine('Darkness', 'Fighting', 2)).toBe('Weakness: Darkness ×2 · Resistance: Fighting −30 · Retreat: 2')
+  })
+
+  it('shows "none" for no Weakness (Dragonite)', () => {
+    expect(formatWeaknessLine(null, 'Fighting', 3)).toBe('Weakness: none · Resistance: Fighting −30 · Retreat: 3')
   })
 })
 

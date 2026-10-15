@@ -404,3 +404,42 @@ body {
 .photo-status {
   margin: 0;
 }
+
+/* Details page: Attacks + Weakness/Resistance/Retreat, in a box like the details above it */
+.pokemon-battle {
+  max-width: 400px;
+  margin: 1rem auto 0;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}
+
+.pokemon-battle h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.125rem;
+}
+
+/* Always present for screen readers; takes no space when empty (not display: none) */
+.attacks-status {
+  margin: 0;
+}
+
+.attack-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.attack-list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.attacks-error p {
+  margin: 0 0 0.5rem;
+}
+
+.weakness-line {
+  margin: 0.75rem 0 0;
+  font-weight: 600;
+}
