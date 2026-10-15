@@ -29,7 +29,7 @@ Every network call shows loading and error states. Works on phone, tablet and de
 ## 5. Acceptance criteria
 - When I open `/` and type "pika", I see only Pokémon whose name contains "pika"; when I pick "Fire", I see only Fire Pokémon.
 - When I click Pikachu, the URL becomes `/pokemon/25` and I see its artwork, Type, attacks and Weakness/Resistance; opening `/pokemon/25` directly shows the same page.
-- When I click "Create my card with Pikachu" on `/pokemon/25`, I reach `/create/25` with Pikachu chosen; age 150 or a name with digits shows an error when I leave the field, and I can't create the card; as "Amit", age 30, I see "Amit's Pikachu", "HP 30" and a yellow Lightning frame.
+- When I click "Create my card with Pikachu" on `/pokemon/25`, I reach `/create/25` with Pikachu chosen; age 150 or a name with digits shows an error when I leave the field, and I can't create the card; as "Amit", age 30, I see "Amit's Pikachu", "HP 30", a light-yellow Lightning panel with the bolt symbol, and Pikachu as a sticker on my photo that I can drag.
 - When I save that card and click "My Cards" in the menu, I see it as "MPC 001", and Download gives a PNG of it.
 - When I open an unknown URL like `/abc`, I see the 404 page with a link back to the list.
 

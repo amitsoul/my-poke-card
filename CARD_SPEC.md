@@ -81,7 +81,17 @@ Filled on `/create/:id` after a Pokémon is chosen. All fields are required and 
 ## Card design ("Classic")
 - **Size:** 380×532 design pixels (ratio 5:7). On narrower screens the whole card shrinks as one piece: every size is written in design pixels × (card width / 380), with CSS container query units.
 - **Fonts** (self-hosted from Google Fonts, SIL Open Font License, `src/assets/fonts/OFL.txt`): "Barlow Condensed" 600/700 for the name, HP, attack names and damage; "Barlow" 400/600/700 for everything else. Text #1E1B14.
-- Details per part (header, window, strip, Ability, attacks, Weakness/Resistance/Retreat, flavor box, bottom line) are in the task 10 spec; "MPC 001" (task 11) gets room at the right of the bottom line.
+- **Parts** (sizes in design pixels):
+  - Frame: yellow #F2C94C, 12 thick, radius 18. Panel: radius 8, padding 10 12 8, a column with 7 between the parts, background = the Type's tint.
+  - Header: "BASIC" tag (10 bold italic, light background, 1px border #8C7F5A) · name (Barlow Condensed bold, 23 → 19 → 16 → 14 for longer names, at most 2 lines) · "HP" 11 + number 24, both #A12B1F · Type symbol 26. Only the name shrinks or wraps.
+  - Window: 204 high, 4px gold border #C9A94A; the photo fills it, the sticker on top.
+  - Pokédex strip: 10.5 italic semibold, centered, on the Type's darker strip tint.
+  - Ability: the label "Ability" (11 bold italic, white on #A12B1F) + the superpower (19 bold #A12B1F, shown in Title Case).
+  - Attacks: one row each — cost symbols 20 (the column is as wide as the attack with the most symbols on this card), name 19 bold, damage 22 bold on the right, a thin line under each row.
+  - Weakness / Resistance / Retreat: 3 equal centered columns; label 9 bold uppercase with letter-spacing; value = a 16 symbol + "×2" / "−30", or "none"; Retreat = that many Colorless symbols.
+  - Flavor text: a box with a 1px border #B9A66A, 11.5 italic, in quotes, exactly as typed.
+  - Bottom line: 8.5, pushed to the bottom of the card (the free space goes above it): "Card design: Amit Soul · Fan-made · Not an official Pokémon card", with room on the right for "MPC 001" (task 11).
+- **Names on the card:** the user's name and the superpower are shown in Title Case (a capital after a space, hyphen or apostrophe: "o'neil" → "O'Neil"); the stored values stay as typed.
 
 ## Type symbols and colors
 Our own SVG icons inspired by the originals: a colored circle with a white icon — Grass leaf, Fire flame, Water droplet, Lightning bolt, Psychic eye, Fighting fist, Darkness crescent, Metal triangle, Dragon claw, Colorless star. No official logos or copyright lines. Each symbol has an accessible name ("Lightning"). Used for the Type, attack costs, Weakness, Resistance and Retreat (on the card and the details page). In code: `src/components/TypeSymbol.tsx` and `src/utils/cardTheme.ts`.

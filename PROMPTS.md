@@ -1153,3 +1153,15 @@
 > - Tests as planned (keyboard 2%/10%, edges, a faked pointer drag, no onMove = no movement, Edit keeps a moved sticker).
 > Then run npm test and npm run build, show the results, give me a browser checklist (mouse, keyboard, phone width in DevTools, and a REAL phone with a finger), and remind me to commit.
 > </pasted_content id="91c8">
+
+**17:48 · claude**
+
+> <pasted_content id="91c8">
+> 10d approved. Go ahead with step 10e: phone checks, polish, and closing task 10.
+> - Polish only what the browser checks show is needed; list anything you change.
+> - tasks.md: task 10 → [x] with a Done note, and replace the old "Done when" line (yellow frame for Pikachu, red frame for Charmander) with the real result (Classic design, Type-tinted panel, symbols, full photo + movable die-cut sticker).
+> - docs/requirements-checklist.md: component count, test count, narrow screens (I checked the card at 375/320 and on a real phone), and anything else task 10 fulfils.
+> - CARD_SPEC.md / PRD.md: only if something is out of date; list what you change.
+> - Do NOT write my "My note" in PROMPTS.md. I'll write it myself, including that I used a design tool to make a mockup as a reference only.
+> Then run npm test and npm run build, show the results, and remind me to commit.
+> </pasted_content id="91c8">
