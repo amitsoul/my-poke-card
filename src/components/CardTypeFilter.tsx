@@ -1,4 +1,5 @@
-// Row of card type buttons: "All" + the 10 card types. The selected card type lives in App.
+// Row of card type buttons: "All" + the 10 card types. The selected card type lives in the URL (?type=),
+// read by PokemonListPage and passed in via props.
 import type { CardType } from '../types/pokemon.ts'
 import { CARD_TYPES } from '../utils/cardType.ts'
 

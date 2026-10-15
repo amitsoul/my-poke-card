@@ -1,4 +1,4 @@
-// Search box. Controlled: the text lives in App and comes in via props.
+// Search box. Controlled: the text lives in the URL (?q=), read by PokemonListPage and passed in via props.
 
 interface SearchBarProps {
   value: string

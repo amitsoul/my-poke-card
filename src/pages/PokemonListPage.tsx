@@ -113,7 +113,7 @@ export default function PokemonListPage() {
     setListRetryCount(listRetryCount + 1)
   }
 
-  // Load the list when App first appears (and again on "Try again").
+  // Load the list when this page first appears (and again on "Try again").
   // isLoading/hasError are already set (by the initial state or handleListRetry),
   // so the effect only fetches and saves the result.
   useEffect(() => {

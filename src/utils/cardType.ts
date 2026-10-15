@@ -1,5 +1,5 @@
 // The 10 TCG card types and the Pokémon game types that belong to each (mapping from the PRD).
-// Used by the details panel now, and by the card type filter and the card later.
+// Used by the details page and the card type filter (and the card later, in task 9).
 import type { CardType } from '../types/pokemon.ts'
 
 // One card type and the game types (as PokéAPI names them) that map to it

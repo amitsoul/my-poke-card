@@ -625,3 +625,17 @@
 > - docs/requirements-checklist.md: update the routing rows to their real status with where in the code (React Router, details page /pokemon/:id with useParams, nav menu with NavLink, 404 page bonus). Be honest: "at least 2 more pages" stays ⏳ (Create card and My Cards come in tasks 8 and 11), and the nav menu has only one link until My Cards exists — mark what's true today.
 > Show me the changes.
 > </pasted_content id="91c8">
+
+## 2026-10-15
+
+**09:45 · claude**
+
+> <pasted_content id="91c8">
+> Let's start task 7 (tests). Plan: 7a fix outdated comments · 7b Vitest + UI + first tests on existing utils · 7c move filter logic and getBackToListUrl to utils + tests · 7d RTL tests for SearchBar and CardTypeFilter · 7e close the task. Small steps, wait for me after each one, remind me to commit.
+> 
+> Step 7a only: three comments still mention App, but the state moved to the URL / PokemonListPage in task 6:
+> - SearchBar.tsx line 1 ("the text lives in App")
+> - CardTypeFilter.tsx line 1 ("The selected card type lives in App")
+> - PokemonListPage.tsx around line 116 ("Load the list when App first appears")
+> Update them to match the current code. Check for any other comment that mentions App wrongly. Comments only — no code changes.
+> </pasted_content id="91c8">
