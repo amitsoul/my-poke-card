@@ -749,3 +749,17 @@
 > 
 > Update the pages/URLs, "When I…, I see…" lines, task 8's description and "Done when", and the checklist rows (2 extra pages: Create card is one of them; nav menu). Keep the PRD one page. Also add @testing-library/dom to the PRD Tech line if it's still missing. Show me the changes and wait.
 > </pasted_content id="91c8">
+
+**11:22 · claude**
+
+> <pasted_content id="91c8">
+> Decisions for the Create card form (approved by me):
+> 
+> 1. Submit button: option A. The button is always enabled. When I click it and there are problems, show ALL field errors and move focus to the first invalid field. Errors also appear on blur. This replaces "button enabled only when everything is valid".
+> 2. Trim: leading and trailing spaces are ignored in every text field. A field with only spaces counts as empty.
+> 3. About you: required, max 80 characters, allowed punctuation is exactly . , ! ? ' -
+> 4. "Change" Pokémon: show the warning only if at least one field has a value. If the form is empty, change without a warning.
+> 
+> Please update ONLY the docs: CARD_SPEC.md (Form fields section), PRD.md acceptance lines if they mention the button, and tasks.md task 8 Done-when lines. Do not write any code yet.
+> When done, show me a short list of exactly what changed in each file, and remind me to commit.
+> </pasted_content id="91c8">

@@ -15,7 +15,7 @@
 - **Bottom line:** "Card design: Amit Soul" · card number "MPC 001" · "Fan-made · Not an official Pokémon card".
 
 ## Form fields (Create card page)
-Filled on `/create/:id` after a Pokémon is chosen. All fields are required and English only; spaces at the start and end are ignored.
+Filled on `/create/:id` after a Pokémon is chosen. All fields are required and English only. In every text field, spaces at the start and end are ignored, and a field with only spaces counts as empty.
 
 | Field | Rule | Error message | On the card |
 |---|---|---|---|
@@ -24,10 +24,11 @@ Filled on `/create/:id` after a Pokémon is chosen. All fields are required and 
 | Age (HP) | Whole number 1–120 | Age must be 1–120 | HP |
 | Photo | An image file; resized to 400px wide and saved as JPEG | Please upload an image | Illustration |
 | Superpower | 3–20 characters: English letters and spaces | English letters only (3–20) | Ability |
-| About you | 1–80 characters: English letters, numbers, spaces and basic punctuation (`. , ! ? ' -`); shown with a character counter | English only, up to 80 characters | Flavor text |
+| About you | Required, up to 80 characters: English letters, numbers, spaces and exactly this punctuation: `. , ! ? ' -`; shown with a character counter | English only, up to 80 characters | Flavor text |
 
 - Errors appear when leaving a field (blur) or on submit, not while typing.
-- "Create my card" is enabled only when every field is valid.
+- "Create my card" is always enabled. Clicking it with problems shows ALL field errors and moves focus to the first invalid field.
+- "Change" (favorite Pokémon) warns that the answers will be cleared only if at least one field has a value; with an empty form it changes without a warning.
 
 ## Rules
 
