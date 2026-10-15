@@ -8,8 +8,9 @@ import FavoritePokemonField from '../components/FavoritePokemonField.tsx'
 import PokeCard from '../components/PokeCard.tsx'
 import { usePokemonCardInfo } from '../hooks/usePokemonCardInfo.ts'
 import { usePokemonDetails } from '../hooks/usePokemonDetails.ts'
-import type { CardData, CardFormDraft } from '../utils/cardForm.ts'
+import type { CardData, CardFormData, CardFormDraft } from '../utils/cardForm.ts'
 import { parsePokemonId } from '../utils/pokemonId.ts'
+import { DEFAULT_STICKER_POSITION, type StickerPosition } from '../utils/sticker.ts'
 import NotFoundPage from './NotFoundPage.tsx'
 
 // What the page remembers about the form — together with the Pokémon it belongs to.
@@ -17,13 +18,22 @@ import NotFoundPage from './NotFoundPage.tsx'
 interface CreateSession {
   pokemonId: number
   hasValues: boolean // an answer exists (typed, or kept after "Edit") → "Change" warns first
-  card: CardData | null // the answers after a valid "Create my card" → the summary is shown
+  card: CardData | null // the answers after a valid "Create my card" → the card is shown
   editValues: CardFormDraft | undefined // the answers and photo to put back into the form after "Edit"
   isWarningOpen: boolean
+  // Where the sticker sits. Kept through "Edit" → "Create my card", so the card keeps its look.
+  stickerPosition: StickerPosition
 }
 
 function freshSession(pokemonId: number): CreateSession {
-  return { pokemonId, hasValues: false, card: null, editValues: undefined, isWarningOpen: false }
+  return {
+    pokemonId,
+    hasValues: false,
+    card: null,
+    editValues: undefined,
+    isWarningOpen: false,
+    stickerPosition: DEFAULT_STICKER_POSITION,
+  }
 }
 
 // The cleaned answers back into the form, for "Edit" (age 30 → "30"; the photo is kept as it is)
@@ -81,7 +91,9 @@ export default function CreateCardPage() {
     changeButtonRef.current?.focus()
   }
 
-  function handleSubmit(card: CardData) {
+  // The form's answers + the sticker position (the default for a new card, the kept one after "Edit")
+  function handleSubmit(formData: CardFormData) {
+    const card: CardData = { ...formData, stickerPosition: session.stickerPosition }
     updateSession({ card, hasValues: true, isWarningOpen: false })
   }
 

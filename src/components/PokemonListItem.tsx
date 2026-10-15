@@ -16,7 +16,8 @@ export default function PokemonListItem({ pokemon }: PokemonListItemProps) {
   return (
     <li>
       <Link to={`/pokemon/${pokemon.id}`} state={{ listSearch: search }} className="pokemon-card">
-        <img src={pokemon.image} alt={name} width="120" height="120" loading="lazy" />
+        {/* crossOrigin on EVERY artwork image: the browser then caches one CORS version, which the PNG export (task 11) can read */}
+        <img src={pokemon.image} alt={name} width="120" height="120" loading="lazy" crossOrigin="anonymous" />
         <p className="pokemon-name">{name}</p>
       </Link>
     </li>

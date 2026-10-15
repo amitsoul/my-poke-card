@@ -1,5 +1,6 @@
 // Checks for the Create card form, exactly as in CARD_SPEC.md "Form fields".
 // Plain functions (no React), so every rule can be tested on its own.
+import type { StickerPosition } from './sticker.ts'
 
 // Every check returns either the cleaned value or the error to show
 export type ValidationResult<T> = { ok: true; value: T } | { ok: false; error: string }
@@ -38,9 +39,14 @@ export interface CardPhoto extends PhotoFile {
   type: 'image/jpeg'
 }
 
-// Everything the card needs, once the whole form is valid
-export interface CardData extends CardTextData {
+// What a valid form gives: the cleaned answers and the photo
+export interface CardFormData extends CardTextData {
   photo: CardPhoto
+}
+
+// The finished card: the form data + where the Pokémon sticker sits on the photo (in %)
+export interface CardData extends CardFormData {
+  stickerPosition: StickerPosition
 }
 
 // What the form starts with after "Edit": the typed answers and the ready photo

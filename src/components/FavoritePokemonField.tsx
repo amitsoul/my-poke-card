@@ -18,7 +18,8 @@ export default function FavoritePokemonField({ details, onChangePokemon, changeB
     <fieldset className="favorite-field">
       <legend>Your favorite Pokémon</legend>
       <div className="favorite-pokemon">
-        <img src={getDetailsImage(details)} alt={name} width="120" height="120" />
+        {/* crossOrigin on EVERY artwork image: the browser then caches one CORS version, which the PNG export (task 11) can read */}
+        <img src={getDetailsImage(details)} alt={name} width="120" height="120" crossOrigin="anonymous" />
         <div className="favorite-info">
           <p className="favorite-name">{name}</p>
           <p>Type: {getCardType(getGameTypes(details))}</p>

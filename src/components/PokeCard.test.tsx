@@ -7,6 +7,7 @@ import { pikachuDetails } from '../test/pokemonFixtures.ts'
 import type { PokemonDetailsResponse } from '../types/pokemon.ts'
 import type { CardData } from '../utils/cardForm.ts'
 import { TYPE_THEME } from '../utils/cardTheme.ts'
+import { DEFAULT_STICKER_POSITION } from '../utils/sticker.ts'
 import PokeCard from './PokeCard.tsx'
 
 const card: CardData = {
@@ -15,6 +16,7 @@ const card: CardData = {
   superpower: 'Super speed',
   aboutYou: 'I love Pokémon cards!',
   photo: { dataUrl: 'data:image/jpeg;base64,AAAA', type: 'image/jpeg', size: 3 },
+  stickerPosition: DEFAULT_STICKER_POSITION,
 }
 
 const readyInfo: PokemonCardInfoState = {
@@ -108,11 +110,39 @@ describe('PokeCard', () => {
     expect(frame.style.getPropertyValue('--type-strip')).toBe(TYPE_THEME.Lightning.stripTint)
   })
 
-  it('shows the photo and the artwork; the artwork can be read by the PNG export (crossOrigin)', () => {
-    const { cardElement } = renderCard(readyInfo)
+  it('the photo fills the window, and the artwork sits on top as a sticker (readable by the PNG export)', () => {
+    const { container, cardElement } = renderCard(readyInfo)
+    const window = part(container, 'poke-card-window') as HTMLElement
+    const photo = within(cardElement).getByRole('img', { name: 'Your photo' })
+    const sticker = within(cardElement).getByRole('img', { name: 'Pikachu' })
 
-    expect(within(cardElement).getByRole('img', { name: 'Your photo' })).toHaveAttribute('src', card.photo.dataUrl)
-    expect(within(cardElement).getByRole('img', { name: 'Pikachu' })).toHaveAttribute('crossorigin', 'anonymous')
+    expect(photo).toHaveAttribute('src', card.photo.dataUrl)
+    expect(photo).toHaveClass('poke-card-photo')
+    // Both in the window; the sticker comes after the photo, so it is drawn on top
+    expect(window).toContainElement(photo)
+    expect(window).toContainElement(sticker)
+    expect(photo.compareDocumentPosition(sticker) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(sticker).toHaveClass('poke-card-sticker')
+    expect(sticker).toHaveAttribute('crossorigin', 'anonymous')
+    expect(sticker).toHaveAttribute('draggable', 'false') // the browser's own "drag this image" is off
+  })
+
+  it('places the sticker at the stored position (in % of the window)', () => {
+    renderCard(readyInfo, { cardData: { ...card, stickerPosition: { x: 12.5, y: 40 } } })
+    expect(screen.getByRole('img', { name: 'Pikachu' })).toHaveStyle({ left: '12.5%', top: '40%' })
+  })
+
+  it('starts the sticker at the bottom right by default', () => {
+    renderCard(readyInfo)
+    expect(screen.getByRole('img', { name: 'Pikachu' })).toHaveStyle({
+      left: `${DEFAULT_STICKER_POSITION.x}%`,
+      top: `${DEFAULT_STICKER_POSITION.y}%`,
+    })
+  })
+
+  it("shows the user's name in Title Case (\"amit\" → \"Amit's Pikachu\"), like the Ability", () => {
+    renderCard(readyInfo, { cardData: { ...card, name: 'amit' } })
+    expect(screen.getByText("Amit's Pikachu")).toBeInTheDocument()
   })
 
   it('a normal name keeps 23 design px', () => {

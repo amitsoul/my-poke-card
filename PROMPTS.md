@@ -1117,3 +1117,25 @@
 > 
 > Then run npm test and npm run build, show the results, and tell me what to re-check in the browser. Still step 10b, same commit.
 > </pasted_content id="91c8">
+
+**17:19 · claude**
+
+> <pasted_content id="91c8">
+> 10b approved. Go ahead with step 10c only, as in your plan:
+> - The user's photo fills the whole window (object-fit: cover).
+> - The Pokémon artwork on top as a die-cut sticker: 4 white drop-shadows + one soft shadow, 45% of the window's height, square, at the bottom right with a 3% gap. Not movable yet (that's 10d).
+> - stickerPosition (in %) added to the card data; DEFAULT_STICKER_POSITION; Edit keeps it.
+> - src/utils/sticker.ts with clampStickerPosition, moveStickerBy, pixelsToPercent, and their tests.
+> - One addition: put crossOrigin="anonymous" on EVERY artwork <img> in the app (list items, details page, favorite field, card), not only the card. Some browsers (Safari) cache an image loaded without CORS and then refuse it for the PNG export in task 11. Same URL everywhere = same cached version.
+> Then run npm test and npm run build, show the results, give me a browser checklist (Pikachu, Dragonite, a tall portrait photo and a wide landscape photo, phone width), and remind me to commit.
+> </pasted_content id="91c8">
+
+**17:27 · claude**
+
+> 10c looks great in the browser (photo fills the window, the die-cut sticker outline and shadow are good). One small fix before I commit, still step 10c:
+> On the card, show the user's name with toTitleCase too, like the Ability: "amit" → "Amit's Ivysaur". Display only: the stored value stays as typed, so after Edit the field still shows "amit". About you stays exactly as typed. Add a test.
+> Then run npm test and npm run build and show the results.
+
+**17:32 · claude**
+
+> Yes, please: also capitalize after an apostrophe, so "o'neil" → O'Neil (and "d'angelo" → D'Angelo). Add the test. Still step 10c, same commit. Then run npm test and npm run build and show the results.

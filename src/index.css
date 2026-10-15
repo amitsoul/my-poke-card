@@ -511,25 +511,34 @@ body {
   height: calc(26 * var(--u));
 }
 
-/* Illustration window (step 10c: the photo fills it, with the Pokémon sticker on top) */
+/* Illustration window: the user's photo fills it; the Pokémon sticker sits on top */
 .poke-card-window {
+  position: relative; /* the sticker's left/top (in %) are measured inside the gold border */
   box-sizing: border-box;
   flex-shrink: 0;
-  display: flex;
   height: calc(204 * var(--u));
   border: calc(4 * var(--u)) solid #c9a94a;
   background: #fff;
   overflow: hidden;
 }
 
-.poke-card-window img {
-  width: 50%;
+.poke-card-photo {
+  display: block;
+  width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* fills the whole window; a tall or wide photo is cropped, never stretched */
 }
 
-.poke-card-window img + img {
+/* The die-cut sticker: the transparent artwork with a white outline that follows the Pokémon's shape
+   (4 white shadows: right, left, down, up) plus one soft dark shadow */
+.poke-card-sticker {
+  position: absolute;
+  height: 45%; /* of the window's height; square, so ≈ 27.2% of its width (src/utils/sticker.ts) */
+  aspect-ratio: 1;
   object-fit: contain;
+  filter: drop-shadow(calc(2 * var(--u)) 0 0 #fff) drop-shadow(calc(-2 * var(--u)) 0 0 #fff)
+    drop-shadow(0 calc(2 * var(--u)) 0 #fff) drop-shadow(0 calc(-2 * var(--u)) 0 #fff)
+    drop-shadow(0 calc(2 * var(--u)) calc(3 * var(--u)) rgba(0, 0, 0, 0.35));
 }
 
 /* Pokédex strip */

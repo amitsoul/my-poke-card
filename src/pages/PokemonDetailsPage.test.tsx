@@ -57,6 +57,7 @@ describe('PokemonDetailsPage — attacks and Weakness', () => {
     renderPage()
 
     expect(await screen.findByRole('heading', { name: 'Pikachu' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Pikachu' })).toHaveAttribute('crossorigin', 'anonymous')
     expect(screen.getByRole('status')).toHaveTextContent('Loading attacks...')
     expect(screen.getByText('Type: Lightning')).toBeInTheDocument()
     expect(getWeaknessValue(document.body, 'Weakness')).toBe('Fighting ×2')

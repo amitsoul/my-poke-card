@@ -11,7 +11,7 @@ import {
   validateName,
   validateSuperpower,
   validateTextFields,
-  type CardData,
+  type CardFormData,
   type CardFormDraft,
   type CardFormField,
   type CardTextField,
@@ -25,7 +25,7 @@ import PhotoField from './PhotoField.tsx'
 interface CardFormProps {
   initialValues?: CardFormDraft // for "Edit": start with the previous answers and photo
   onDirtyChange: (hasValues: boolean) => void // tells the page whether a field has a value (for the "Change" warning)
-  onSubmit: (card: CardData) => void // called ONLY when everything is valid, with the cleaned answers
+  onSubmit: (card: CardFormData) => void // called ONLY when everything is valid, with the cleaned answers
 }
 
 const EMPTY_DRAFT: CardFormDraft = { name: '', age: '', photo: null, superpower: '', aboutYou: '' }

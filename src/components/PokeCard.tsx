@@ -1,6 +1,7 @@
 // The personal card in the "Classic" design (CARD_SPEC.md "Card design"), every field in the "Layout" order.
 // All sizes are design pixels × --u (CSS), so the card shrinks as one piece on narrow screens.
-// Step 10c puts the photo in the whole window with a movable sticker; the card number (MPC 001) comes in task 11.
+// The photo fills the window, with the Pokémon as a sticker on top (moving it: step 10d).
+// The card number (MPC 001) comes in task 11.
 import { useEffect, useRef, type CSSProperties } from 'react'
 import type { PokemonCardInfoState } from '../hooks/usePokemonCardInfo.ts'
 import type { PokemonDetailsResponse } from '../types/pokemon.ts'
@@ -32,7 +33,8 @@ export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onE
   }, [])
 
   const pokemonName = formatPokemonName(details.name)
-  const cardName = `${card.name}'s ${pokemonName}`
+  // The user's name in Title Case, like the Ability ("amit" → "Amit's Ivysaur"); the stored value stays as typed
+  const cardName = `${toTitleCase(card.name)}'s ${pokemonName}`
   const rules = getCardRules(getGameTypes(details), details.weight)
   const theme = TYPE_THEME[rules.cardType]
   const genus = cardInfo.status === 'ready' ? cardInfo.info.genus : null
@@ -67,10 +69,18 @@ export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onE
               </span>
             </div>
 
+            {/* The photo fills the window (cropped to fit); the sticker sits on top, at its position in % */}
             <div className="poke-card-window">
-              <img src={card.photo.dataUrl} alt="Your photo" />
+              <img className="poke-card-photo" src={card.photo.dataUrl} alt="Your photo" />
               {/* crossOrigin: lets the PNG export (task 11) read this image from GitHub's image server */}
-              <img src={getDetailsImage(details)} alt={pokemonName} crossOrigin="anonymous" />
+              <img
+                className="poke-card-sticker"
+                src={getDetailsImage(details)}
+                alt={pokemonName}
+                crossOrigin="anonymous"
+                draggable={false}
+                style={{ left: `${card.stickerPosition.x}%`, top: `${card.stickerPosition.y}%` }}
+              />
             </div>
 
             <p className="poke-card-dex">{dexStrip}</p>

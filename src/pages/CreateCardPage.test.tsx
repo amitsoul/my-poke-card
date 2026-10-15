@@ -8,6 +8,7 @@ import { getAttackRows, getWeaknessValue } from '../test/cardQueries.ts'
 import { moveResponse, speciesResponse, stubPokeApi } from '../test/fakeApi.ts'
 import { charmanderDetails, pikachuDetails } from '../test/pokemonFixtures.ts'
 import { resizePhoto } from '../utils/photo.ts'
+import { DEFAULT_STICKER_POSITION } from '../utils/sticker.ts'
 import CreateCardPage from './CreateCardPage.tsx'
 
 // FAKE #2 — resizePhoto (same idea as in CardForm.test.tsx): jsdom can't draw, so only this one
@@ -55,8 +56,8 @@ function renderPage(path: string) {
   return userEvent.setup()
 }
 
-async function fillValidForm(user: ReturnType<typeof userEvent.setup>) {
-  await user.type(await screen.findByLabelText('Your name'), 'Amit')
+async function fillValidForm(user: ReturnType<typeof userEvent.setup>, name = 'Amit') {
+  await user.type(await screen.findByLabelText('Your name'), name)
   await user.type(screen.getByLabelText('Age (HP)'), '30')
   await user.upload(screen.getByLabelText('Photo'), new File(['png'], 'me.png', { type: 'image/png' }))
   await screen.findByRole('img', { name: 'Your photo' })
@@ -114,7 +115,9 @@ describe('CreateCardPage', () => {
     expect(card).toHaveTextContent('Card design: Amit Soul · Fan-made · Not an official Pokémon card')
     // Look inside the card: the "Your favorite Pokémon" field above it also has a Pikachu image
     expect(within(card).getByRole('img', { name: 'Your photo' })).toHaveAttribute('src', SMALL_JPEG)
-    expect(within(card).getByRole('img', { name: 'Pikachu' })).toBeInTheDocument()
+    const sticker = within(card).getByRole('img', { name: 'Pikachu' })
+    const startPosition = { left: `${DEFAULT_STICKER_POSITION.x}%`, top: `${DEFAULT_STICKER_POSITION.y}%` }
+    expect(sticker).toHaveStyle(startPosition) // a new card: the sticker starts at the bottom right
     expect(screen.getByRole('heading', { name: 'Your card' })).toHaveFocus()
 
     await user.click(screen.getByRole('button', { name: 'Edit' }))
@@ -124,9 +127,26 @@ describe('CreateCardPage', () => {
     expect(screen.getByLabelText('About you')).toHaveValue('I love Pokémon cards!')
     expect(screen.getByRole('img', { name: 'Your photo' })).toHaveAttribute('src', SMALL_JPEG)
 
+    // Create again after Edit: the sticker keeps its position (moving it comes in step 10d)
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    const cardAgain = screen.getByRole('article', { name: 'Your card' })
+    expect(within(cardAgain).getByRole('img', { name: 'Pikachu' })).toHaveStyle(startPosition)
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
+
     // Nobody typed after "Edit", but the form is full — so "Change" must still warn
     await user.click(screen.getByRole('button', { name: 'Change' }))
     expect(screen.getByRole('alert')).toBeInTheDocument()
+  })
+
+  it('shows the name in Title Case on the card, but keeps it as typed: after Edit the field says "amit"', async () => {
+    const user = renderPage('/create/25')
+    await fillValidForm(user, 'amit')
+
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    expect(within(screen.getByRole('article', { name: 'Your card' })).getByText("Amit's Pikachu")).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
+    expect(screen.getByLabelText('Your name')).toHaveValue('amit')
   })
 
   it('a different Pokémon starts with an empty form', async () => {

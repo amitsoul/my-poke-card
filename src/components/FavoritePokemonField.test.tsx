@@ -13,7 +13,7 @@ describe('FavoritePokemonField', () => {
   it('shows the Pokémon name, image and card type', () => {
     render(<FavoritePokemonField details={pikachuDetails} onChangePokemon={vi.fn()} />)
     expect(screen.getByText('Pikachu')).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: 'Pikachu' })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'Pikachu' })).toHaveAttribute('crossorigin', 'anonymous')
     expect(screen.getByText('Type: Lightning')).toBeInTheDocument()
   })
 
