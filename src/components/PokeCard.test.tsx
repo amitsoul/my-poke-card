@@ -122,22 +122,50 @@ describe('PokeCard', () => {
     expect(window).toContainElement(photo)
     expect(window).toContainElement(sticker)
     expect(photo.compareDocumentPosition(sticker) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    expect(sticker).toHaveClass('poke-card-sticker')
+    expect(sticker).toHaveClass('poke-card-sticker-image')
     expect(sticker).toHaveAttribute('crossorigin', 'anonymous')
     expect(sticker).toHaveAttribute('draggable', 'false') // the browser's own "drag this image" is off
   })
 
+  // The sticker's place is on its wrapper (.poke-card-sticker): a <span> when fixed, a <button> when movable
+  function stickerWrapper(): HTMLElement {
+    const wrapper = screen.getByRole('img', { name: 'Pikachu' }).closest('.poke-card-sticker')
+    if (!(wrapper instanceof HTMLElement)) throw new Error('No sticker wrapper')
+    return wrapper
+  }
+
   it('places the sticker at the stored position (in % of the window)', () => {
     renderCard(readyInfo, { cardData: { ...card, stickerPosition: { x: 12.5, y: 40 } } })
-    expect(screen.getByRole('img', { name: 'Pikachu' })).toHaveStyle({ left: '12.5%', top: '40%' })
+    expect(stickerWrapper()).toHaveStyle({ left: '12.5%', top: '40%' })
   })
 
   it('starts the sticker at the bottom right by default', () => {
     renderCard(readyInfo)
-    expect(screen.getByRole('img', { name: 'Pikachu' })).toHaveStyle({
+    expect(stickerWrapper()).toHaveStyle({
       left: `${DEFAULT_STICKER_POSITION.x}%`,
       top: `${DEFAULT_STICKER_POSITION.y}%`,
     })
+  })
+
+  it('without onStickerMove: a fixed sticker (no button) and no tip', () => {
+    renderCard(readyInfo)
+    expect(screen.queryByRole('button', { name: 'Pikachu sticker' })).toBeNull()
+    expect(screen.queryByText(/Tip: drag the Pokémon sticker/)).toBeNull()
+  })
+
+  it('with onStickerMove: a movable sticker button and the tip under the card', () => {
+    render(
+      <PokeCard
+        card={card}
+        details={pikachuDetails}
+        cardInfo={readyInfo}
+        onRetryCardInfo={vi.fn()}
+        onEdit={vi.fn()}
+        onStickerMove={vi.fn()}
+      />,
+    )
+    expect(screen.getByRole('button', { name: 'Pikachu sticker' })).toBeInTheDocument()
+    expect(screen.getByText('Tip: drag the Pokémon sticker to place it on your photo.')).toBeInTheDocument()
   })
 
   it("shows the user's name in Title Case (\"amit\" → \"Amit's Pikachu\"), like the Ability", () => {

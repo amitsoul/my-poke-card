@@ -152,6 +152,10 @@ export default function CreateCardPage() {
               details={state.details}
               cardInfo={cardInfo.state}
               onRetryCardInfo={cardInfo.retry}
+              // A moved sticker is saved in the card AND in the session, so Edit → Create keeps it
+              onStickerMove={(stickerPosition) => {
+                if (session.card !== null) updateSession({ stickerPosition, card: { ...session.card, stickerPosition } })
+              }}
               onEdit={() => {
                 if (session.card !== null) handleEdit(session.card)
               }}

@@ -115,9 +115,10 @@ describe('CreateCardPage', () => {
     expect(card).toHaveTextContent('Card design: Amit Soul · Fan-made · Not an official Pokémon card')
     // Look inside the card: the "Your favorite Pokémon" field above it also has a Pikachu image
     expect(within(card).getByRole('img', { name: 'Your photo' })).toHaveAttribute('src', SMALL_JPEG)
-    const sticker = within(card).getByRole('img', { name: 'Pikachu' })
+    // On the created card the sticker is a movable button; a new card starts it at the bottom right
+    const sticker = within(card).getByRole('button', { name: 'Pikachu sticker' })
     const startPosition = { left: `${DEFAULT_STICKER_POSITION.x}%`, top: `${DEFAULT_STICKER_POSITION.y}%` }
-    expect(sticker).toHaveStyle(startPosition) // a new card: the sticker starts at the bottom right
+    expect(sticker).toHaveStyle(startPosition)
     expect(screen.getByRole('heading', { name: 'Your card' })).toHaveFocus()
 
     await user.click(screen.getByRole('button', { name: 'Edit' }))
@@ -130,7 +131,7 @@ describe('CreateCardPage', () => {
     // Create again after Edit: the sticker keeps its position (moving it comes in step 10d)
     await user.click(screen.getByRole('button', { name: 'Create my card' }))
     const cardAgain = screen.getByRole('article', { name: 'Your card' })
-    expect(within(cardAgain).getByRole('img', { name: 'Pikachu' })).toHaveStyle(startPosition)
+    expect(within(cardAgain).getByRole('button', { name: 'Pikachu sticker' })).toHaveStyle(startPosition)
     await user.click(screen.getByRole('button', { name: 'Edit' }))
 
     // Nobody typed after "Edit", but the form is full — so "Change" must still warn
@@ -147,6 +148,32 @@ describe('CreateCardPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Edit' }))
     expect(screen.getByLabelText('Your name')).toHaveValue('amit')
+  })
+
+  it('a moved sticker stays after Edit → Create; a different Pokémon starts at the default again', async () => {
+    const user = renderPage('/create/25')
+    await fillValidForm(user)
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+
+    // Move it with the keyboard: 5 × ← = 10% to the left, 1 × Shift+↑ = 10% up
+    const sticker = screen.getByRole('button', { name: 'Pikachu sticker' })
+    sticker.focus()
+    await user.keyboard('{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{ArrowLeft}{Shift>}{ArrowUp}{/Shift}')
+    const moved = { left: `${DEFAULT_STICKER_POSITION.x - 10}%`, top: `${DEFAULT_STICKER_POSITION.y - 10}%` }
+    expect(sticker).toHaveStyle(moved)
+
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    expect(screen.getByRole('button', { name: 'Pikachu sticker' })).toHaveStyle(moved)
+
+    // Another Pokémon → a fresh card with the sticker at the default place
+    await user.click(screen.getByRole('link', { name: 'Go to Charmander' }))
+    await fillValidForm(user)
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    expect(screen.getByRole('button', { name: 'Charmander sticker' })).toHaveStyle({
+      left: `${DEFAULT_STICKER_POSITION.x}%`,
+      top: `${DEFAULT_STICKER_POSITION.y}%`,
+    })
   })
 
   it('a different Pokémon starts with an empty form', async () => {

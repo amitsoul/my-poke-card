@@ -415,6 +415,14 @@ body {
   margin-top: 1rem;
 }
 
+/* The tip under the card (only where the sticker can move) */
+.sticker-tip {
+  max-width: 380px;
+  margin: 0.5rem 0 0;
+  color: #666;
+  font-size: 0.875rem;
+}
+
 /* The container: its width (at most 380px) is what 100cqw means inside it */
 .poke-card-container {
   container-type: inline-size;
@@ -529,16 +537,47 @@ body {
   object-fit: cover; /* fills the whole window; a tall or wide photo is cropped, never stretched */
 }
 
-/* The die-cut sticker: the transparent artwork with a white outline that follows the Pokémon's shape
-   (4 white shadows: right, left, down, up) plus one soft dark shadow */
+/* The sticker's place and size: absolute, at left/top in %; 45% of the window's height, square
+   (≈ 27.2% of its width — see src/utils/sticker.ts). A <span> when fixed, a <button> when it can move. */
 .poke-card-sticker {
   position: absolute;
-  height: 45%; /* of the window's height; square, so ≈ 27.2% of its width (src/utils/sticker.ts) */
+  display: block;
+  height: 45%;
   aspect-ratio: 1;
+}
+
+/* The die-cut look: the transparent artwork with a white outline that follows the Pokémon's shape
+   (4 white shadows: right, left, down, up) plus one soft dark shadow */
+.poke-card-sticker-image {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   filter: drop-shadow(calc(2 * var(--u)) 0 0 #fff) drop-shadow(calc(-2 * var(--u)) 0 0 #fff)
     drop-shadow(0 calc(2 * var(--u)) 0 #fff) drop-shadow(0 calc(-2 * var(--u)) 0 #fff)
     drop-shadow(0 calc(2 * var(--u)) calc(3 * var(--u)) rgba(0, 0, 0, 0.35));
+}
+
+/* The movable sticker: a button without the button look */
+.sticker-button {
+  padding: 0;
+  border: 0;
+  border-radius: calc(6 * var(--u));
+  background: none;
+  cursor: grab;
+  touch-action: none; /* ONLY here: a finger on the sticker moves it; anywhere else the page scrolls as usual */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sticker-button:active {
+  cursor: grabbing;
+}
+
+/* A clear focus ring for keyboard users, drawn INSIDE the sticker so the window's edge never cuts it off */
+.sticker-button:focus-visible {
+  outline: calc(3 * var(--u)) solid #1a73e8;
+  outline-offset: calc(-3 * var(--u));
 }
 
 /* Pokédex strip */

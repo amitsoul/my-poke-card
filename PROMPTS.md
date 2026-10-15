@@ -1139,3 +1139,17 @@
 **17:32 · claude**
 
 > Yes, please: also capitalize after an apostrophe, so "o'neil" → O'Neil (and "d'angelo" → D'Angelo). Add the test. Still step 10c, same commit. Then run npm test and npm run build and show the results.
+
+**17:36 · claude**
+
+> <pasted_content id="91c8">
+> 10c approved. Go ahead with step 10d only, as in your plan:
+> - CardSticker: a real <button> named "<Pokémon> sticker", with the description "Drag to move it, or use the arrow keys. Hold Shift to move faster." (aria-describedby).
+> - Drag with Pointer Events + setPointerCapture; touch-action: none ONLY on the sticker; draggable={false} on the image. Pixels → % with pixelsToPercent, then clampStickerPosition, so it never leaves the photo window.
+> - Arrow keys: 2% per press, Shift + arrow 10%; the arrows don't scroll the page while the sticker has focus. A clear focus ring.
+> - Movable only on the created card on /create/:id (an onMove prop). Without onMove the sticker is fixed (for task 11: My Cards and the PNG).
+> - The new position is saved in the page session, so Edit → Create keeps it, and a different Pokémon starts at the default.
+> - The visible hint under the card: "Tip: drag the Pokémon sticker to place it on your photo."
+> - Tests as planned (keyboard 2%/10%, edges, a faked pointer drag, no onMove = no movement, Edit keeps a moved sticker).
+> Then run npm test and npm run build, show the results, give me a browser checklist (mouse, keyboard, phone width in DevTools, and a REAL phone with a finger), and remind me to commit.
+> </pasted_content id="91c8">

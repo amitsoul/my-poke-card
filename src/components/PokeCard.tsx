@@ -6,11 +6,13 @@ import { useEffect, useRef, type CSSProperties } from 'react'
 import type { PokemonCardInfoState } from '../hooks/usePokemonCardInfo.ts'
 import type { PokemonDetailsResponse } from '../types/pokemon.ts'
 import type { CardData } from '../utils/cardForm.ts'
+import type { StickerPosition } from '../utils/sticker.ts'
 import { formatDexNumber, formatHeight, formatWeight, getCardRules } from '../utils/cardRules.ts'
 import { getNameFontSize, TYPE_THEME } from '../utils/cardTheme.ts'
 import { formatPokemonName, getDetailsImage, getGameTypes } from '../utils/pokemonDetails.ts'
 import { toTitleCase } from '../utils/text.ts'
 import AttacksBlock from './AttacksBlock.tsx'
+import CardSticker from './CardSticker.tsx'
 import TypeSymbol from './TypeSymbol.tsx'
 import WeaknessRow from './WeaknessRow.tsx'
 
@@ -20,11 +22,12 @@ interface PokeCardProps {
   cardInfo: PokemonCardInfoState // genus + attacks (may still be loading, or have failed)
   onRetryCardInfo: () => void
   onEdit: () => void
+  onStickerMove?: (position: StickerPosition) => void // only on the created card: then the sticker can be moved
 }
 
 export const CARD_DESIGNER = 'Amit Soul'
 
-export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onEdit }: PokeCardProps) {
+export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onEdit, onStickerMove }: PokeCardProps) {
   const headingRef = useRef<HTMLHeadingElement>(null)
 
   // Once, when the card appears: move focus to its heading, so keyboard and screen-reader users know it worked
@@ -72,14 +75,11 @@ export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onE
             {/* The photo fills the window (cropped to fit); the sticker sits on top, at its position in % */}
             <div className="poke-card-window">
               <img className="poke-card-photo" src={card.photo.dataUrl} alt="Your photo" />
-              {/* crossOrigin: lets the PNG export (task 11) read this image from GitHub's image server */}
-              <img
-                className="poke-card-sticker"
+              <CardSticker
                 src={getDetailsImage(details)}
-                alt={pokemonName}
-                crossOrigin="anonymous"
-                draggable={false}
-                style={{ left: `${card.stickerPosition.x}%`, top: `${card.stickerPosition.y}%` }}
+                pokemonName={pokemonName}
+                position={card.stickerPosition}
+                onMove={onStickerMove}
               />
             </div>
 
@@ -107,6 +107,11 @@ export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onE
           </div>
         </div>
       </div>
+
+      {/* Only where the sticker can move. Outside the card frame, so it's not part of the card (or the PNG). */}
+      {onStickerMove !== undefined && (
+        <p className="sticker-tip">Tip: drag the Pokémon sticker to place it on your photo.</p>
+      )}
 
       <button type="button" className="button" onClick={onEdit}>
         Edit
