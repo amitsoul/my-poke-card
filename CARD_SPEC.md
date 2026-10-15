@@ -15,19 +15,21 @@
 - **Bottom line:** "Card design: Amit Soul" · card number "MPC 001" · "Fan-made · Not an official Pokémon card".
 
 ## Form fields (Create card page)
-Filled on `/create/:id` after a Pokémon is chosen. All fields are required and English only. In every text field, spaces at the start and end are ignored, and a field with only spaces counts as empty.
+Filled on `/create/:id` after a Pokémon is chosen. All fields are required and English only. Checked by `src/utils/cardForm.ts`.
 
-| Field | Rule | Error message | On the card |
-|---|---|---|---|
-| Your favorite Pokémon | Chosen via list → details → "Create my card with <Pokémon>"; shown with image, name, Type and a "Change" button | — | Artwork, name, Type, attacks… |
-| Your name | 2–12 characters: English letters, space, hyphen, apostrophe (Mary-Ann, O'Neil) | Use English letters only (2–12) | "<Name>'s <Pokémon>" (e.g. "Amit's Pikachu") |
-| Age (HP) | Whole number 1–120 | Age must be 1–120 | HP |
-| Photo | An image file; resized to 400px wide and saved as JPEG | Please upload an image | Illustration |
-| Superpower | 3–20 characters: English letters and spaces | English letters only (3–20) | Ability |
-| About you | Required, up to 80 characters: English letters, numbers, spaces and exactly this punctuation: `. , ! ? ' -`; shown with a character counter | English only, up to 80 characters | Flavor text |
+**Cleaning before the check (every text field):** spaces at the start and end are ignored, and a field with only spaces counts as empty. In Your name and Superpower, two or more spaces in a row become one ("Mary  Ann" → "Mary Ann"). The curly apostrophe `’` (iPhone "smart punctuation") counts as `'`.
+
+| Field | Rule | Empty | Wrong | On the card |
+|---|---|---|---|---|
+| Your favorite Pokémon | Chosen via list → details → "Create my card with <Pokémon>"; shown with image, name, Type and a "Change" button | — | — | Artwork, name, Type, attacks… |
+| Your name | 2–12 characters: English letters A–Z, with ONE space, hyphen or apostrophe between letters; starts and ends with a letter (Mary-Ann, O'Neil, Mary Ann ok; "--", "-Amit", "Mary--Ann" wrong) | Please enter your name | Use English letters only (2–12) | "<Name>'s <Pokémon>" (e.g. "Amit's Pikachu") |
+| Age (HP) | Digits only, whole number 1–120; a leading zero is fine ("025" → 25); "25.5", "1e2", "-5" are wrong | Please enter your age | Age must be 1–120 | HP |
+| Photo | JPG, PNG or WebP (not GIF or HEIC), at most 10 MB; resized to 400px wide and saved as JPEG | Please upload an image | Wrong type: Please upload a JPG, PNG or WebP image · Too big: Image must be under 10 MB | Illustration |
+| Superpower | 3–20 characters: English letters A–Z, with ONE space or hyphen between letters; starts and ends with a letter ("X-ray vision", "Fire-breathing" ok; "X--ray", "-fly" wrong) | Please enter your superpower | English letters only (3–20) | Ability |
+| About you | Up to 80 characters (counted after trimming): English letters, the letter é/É (as in "Pokémon"), numbers, spaces and exactly this punctuation: `. , ! ? ' -`. The input stops at 80 characters; the counter shows the typed length, e.g. "12 / 80" | Please write something about you | English only, up to 80 characters | Flavor text |
 
 - Errors appear when leaving a field (blur) or on submit, not while typing.
-- "Create my card" is always enabled. Clicking it with problems shows ALL field errors and moves focus to the first invalid field.
+- "Create my card" is always enabled. Clicking it with problems shows ALL field errors and moves focus to the first invalid field (form order: name, age, photo, superpower, about you).
 - "Change" (favorite Pokémon) warns that the answers will be cleared only if at least one field has a value; with an empty form it changes without a warning.
 
 ## Rules

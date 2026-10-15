@@ -803,3 +803,36 @@
 > 
 > Go ahead and implement. Then run npm test and npm run build, show me the results, list every file you created or changed, give me the browser checklist (including re-checking the 4 states of the details page), and remind me to commit.
 > </pasted_content id="91c8">
+
+**12:12 · claude**
+
+> <pasted_content id="91c8">
+> Task 8, step 8c: validation utils + tests. Follow AGENTS.md. PLAN FIRST: do not write code until I approve.
+> 
+> Scope: only pure functions in src/utils/ (no UI, no React) that check the form fields exactly as in CARD_SPEC.md "Form fields": name, age, superpower, about you, photo. Plus Vitest tests for them.
+> 
+> In your plan, tell me:
+> 1. The function names, their inputs and outputs (TypeScript types), and which file(s).
+> 2. Edge cases that CARD_SPEC doesn't decide yet. For each one give your suggestion and I'll approve or change it. At least:
+>    - Name: only symbols like "--" or "''", or two spaces/hyphens in a row ("Mary  Ann", "Mary--Ann"). Must it start and end with a letter?
+>    - Age: "25.5", "025", "1e2", "" (the input value is a string).
+>    - Superpower: two spaces in a row.
+>    - About you: numbers are allowed. Is the 80 limit counted after trim? What does the character counter show?
+>    - Photo: which file types are accepted (for example jpg/png/webp, what about HEIC from iPhone or GIF)? Is there a max file size before resizing?
+>    - Error text when a field is EMPTY: the same message as in CARD_SPEC, or a separate one like "Please enter your name"?
+> 3. The list of tests you plan (input → expected result), in a short table.
+> 
+> After I approve: implement, run npm test and npm run build, show the results, and remind me to commit.
+> </pasted_content id="91c8">
+
+**12:17 · claude**
+
+> <pasted_content id="91c8">
+> Approved, with these decisions:
+> 
+> - #10: yes, allow hyphens in Superpower, with the same rule as the name: one hyphen only, between letters ("X-ray vision", "Fire-breathing" ok; "X--ray", "-fly" wrong).
+> - New: your test row "I love Pokémon cards!" would FAIL under "English letters only", because of é. Decision: allow the letter é (and É) in About you only, since the app itself writes "Pokémon". Add an explicit test for it. Name and Superpower stay plain A–Z.
+> - All other suggestions (#1–#9, #11–#13) and all the messages: approved as you wrote them.
+> 
+> Go ahead: update CARD_SPEC.md "Form fields" with the agreed rules and messages, implement src/utils/cardForm.ts and the tests, run npm test and npm run build, show the results, and remind me to commit.
+> </pasted_content id="91c8">
