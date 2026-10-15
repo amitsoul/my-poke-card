@@ -8,6 +8,10 @@ export default function NavBar() {
   const detailsMatch = useMatch('/pokemon/:id')
   const isOnDetailsPage = detailsMatch !== null && parsePokemonId(detailsMatch.params.id) !== null
 
+  // NavLink to "/create" is also active on /create/25 by itself. Same rule: not on /create/abc (the 404 page).
+  const createMatch = useMatch('/create/:id')
+  const isOnInvalidCreatePage = createMatch !== null && parsePokemonId(createMatch.params.id) === null
+
   return (
     <nav className="navbar" aria-label="Main">
       <NavLink
@@ -15,6 +19,12 @@ export default function NavBar() {
         className={({ isActive }) => (isActive || isOnDetailsPage ? 'nav-link active' : 'nav-link')}
       >
         Pokémon
+      </NavLink>
+      <NavLink
+        to="/create"
+        className={({ isActive }) => (isActive && !isOnInvalidCreatePage ? 'nav-link active' : 'nav-link')}
+      >
+        Create card
       </NavLink>
     </nav>
   )

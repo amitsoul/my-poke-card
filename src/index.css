@@ -199,8 +199,62 @@ body {
   aspect-ratio: 1;
 }
 
+/* The name is formatted in code (formatPokemonName), so no text-transform here */
 .pokemon-name {
   margin: 0.5rem 0 0;
   font-weight: 600;
-  text-transform: capitalize;
+}
+
+/* "Create my card with …" under the details */
+.details-actions {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+/* Create card page */
+.create-page {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.favorite-field {
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}
+
+.favorite-field legend {
+  padding: 0 0.5rem;
+  font-weight: 600;
+}
+
+/* Phone: image above the text. Wider screens: side by side. */
+.favorite-pokemon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.favorite-pokemon img {
+  width: 120px;
+  height: 120px;
+}
+
+.favorite-info p {
+  margin: 0 0 0.5rem;
+}
+
+.favorite-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+@media (min-width: 480px) {
+  .favorite-pokemon {
+    flex-direction: row;
+    text-align: left;
+  }
 }

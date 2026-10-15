@@ -763,3 +763,43 @@
 > Please update ONLY the docs: CARD_SPEC.md (Form fields section), PRD.md acceptance lines if they mention the button, and tasks.md task 8 Done-when lines. Do not write any code yet.
 > When done, show me a short list of exactly what changed in each file, and remind me to commit.
 > </pasted_content id="91c8">
+
+**11:28 · claude**
+
+> <pasted_content id="91c8">
+> Task 8, step 8b. Follow AGENTS.md. PLAN FIRST: do not write any code until I approve the plan.
+> 
+> Scope of 8b (only this, no form fields yet):
+> 1. Routes: add /create and /create/:id in App.tsx (before the "*" route).
+> 2. NavBar: add a NavLink "Create card" to /create, after "Pokémon". It should be active on /create and on /create/:id.
+> 3. Details page: add a button-style link "Create my card with <Name>" (same display name as the h1) that goes to /create/<id>. Show it only when the Pokémon loaded successfully.
+> 4. New page src/pages/CreateCardPage.tsx:
+>    - /create (no id): show only "Choose your favorite Pokémon" with a button that goes to the list (/). Nothing else.
+>    - /create/:id: the "Your favorite Pokémon" field shows the image, name, Type and a "Change" button that goes to the list (/). No warning yet (the warning needs form values, it comes in 8d).
+>    - /create/abc or /create/0 → the same NotFoundPage as /pokemon/abc (use parsePokemonId).
+>    - /create/99999 → "Pokémon not found" with a button back to the list, same behavior as the details page.
+>    - Loading and error states with "Try again", same behavior as the details page.
+> 5. Keep TypeScript strict, no any. All UI text in English. Keep it responsive.
+> 
+> In your plan, tell me:
+> - Which files you will create and which you will change.
+> - How CreateCardPage will load the Pokémon. The details page already has this fetch logic (race guard, retry, not-found). Give me 2–3 options (for example: duplicate it, move it into a shared custom hook, or another idea), with the pros and cons of each in simple words, and your recommendation. I will choose.
+> - Every UI text you plan to show (headings, buttons), so I can approve the wording.
+> - Which new tests, if any, you suggest for 8b.
+> 
+> After I approve and you implement: run npm test and npm run build, show me the results, give me a short manual test list for the browser, and remind me to commit.
+> </pasted_content id="91c8">
+
+**12:01 · claude**
+
+> <pasted_content id="91c8">
+> Approved, with these choices:
+> 
+> 1. Loading: option B, the custom hook usePokemonDetails(pokemonId) in src/hooks/. Keep the details page behavior exactly the same.
+> 2. Texts: all approved as in your table. On /create, add the hint line: Pick a Pokémon from the list, then tap "Create my card" on its page.
+> 3. formatPokemonName: approved, use it for the h1 and the button. Also use it in PokemonListItem so the list and the details page always show the same name (for example Ho-Oh in both).
+> 4. Nav: approved, "Create card" is not active on /create/abc.
+> 5. FavoritePokemonField, the 3 helpers in src/utils/pokemonDetails.ts, and the tests: approved.
+> 
+> Go ahead and implement. Then run npm test and npm run build, show me the results, list every file you created or changed, give me the browser checklist (including re-checking the 4 states of the details page), and remind me to commit.
+> </pasted_content id="91c8">
