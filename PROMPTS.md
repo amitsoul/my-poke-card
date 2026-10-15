@@ -639,3 +639,23 @@
 > - PokemonListPage.tsx around line 116 ("Load the list when App first appears")
 > Update them to match the current code. Check for any other comment that mentions App wrongly. Comments only — no code changes.
 > </pasted_content id="91c8">
+
+**09:53 · claude**
+
+> <pasted_content id="91c8">
+> Committed 7a. Step 7b:
+> 1. Install vitest and @vitest/ui as dev dependencies (approved).
+> 2. package.json scripts:
+>    - "test": run all tests once and exit (so `npm test` passes or fails clearly, not watch mode)
+>    - "test:ui": open the Vitest UI in the browser
+> 3. Test files next to the code: src/utils/pokemonId.test.ts and src/utils/cardType.test.ts. Import describe/it/expect from 'vitest' explicitly (no globals).
+> 4. Tests (real logic, not trivial):
+>    - parsePokemonId: "25" → 25; "1" → 1; "abc", "0", "-3", "1.5", "" and undefined → null
+>    - parseCardType: "Fire" and "Colorless" → accepted; "fire" (lowercase), "Fairy", "abc", "" and null → null
+>    - getCardType: ["ghost"] → Psychic; ["normal","flying"] → Colorless; ["grass","poison"] → Grass (first type decides); ["ice"] → Water; ["fairy"] → Psychic; an unknown type → Colorless
+>    Group them with describe, one `it` per behavior, with clear English names.
+> 5. Make sure npm run build still passes (test files type-checked, not in the bundle) and the linter is clean.
+> 
+> Then: run npm test and show me the output. Also show me ONE test failing on purpose (e.g. temporarily expect ghost → Fire), show the error message, then put it back.
+> Explain simply: (a) what describe, it and expect do, (b) the difference between npm test and npm run test:ui, (c) why these tests are "real logic" and not trivial.
+> </pasted_content id="91c8">
