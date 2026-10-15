@@ -10,6 +10,12 @@ export function getArtworkUrl(id: number): string {
   return `${ARTWORK_URL}/${id}.png`
 }
 
+// "https://pokeapi.co/api/v2/pokemon/25/" → 25 (the last part of a PokéAPI link)
+export function getIdFromUrl(url: string): number {
+  const parts = url.split('/').filter((part) => part !== '')
+  return Number(parts[parts.length - 1])
+}
+
 // Thrown when the server answers with an error status, so callers can tell 404 from other errors
 export class ApiError extends Error {
   status: number

@@ -11,8 +11,9 @@ import type {
   SpeciesCountResponse,
   TypeResponse,
 } from '../types/pokemon.ts'
-import { API_URL, fetchJson, getArtworkUrl } from '../utils/api.ts'
+import { API_URL, fetchJson, getArtworkUrl, getIdFromUrl } from '../utils/api.ts'
 import { CARD_TYPES, parseCardType } from '../utils/cardType.ts'
+import { filterPokemon, normalizeSearch } from '../utils/filterPokemon.ts'
 
 const PAGE_SIZE = 50
 
@@ -27,11 +28,8 @@ interface PageState {
   count: number
 }
 
-// "https://pokeapi.co/api/v2/pokemon/25/" → 25
-function getIdFromUrl(url: string): number {
-  const parts = url.split('/').filter((part) => part !== '')
-  return Number(parts[parts.length - 1])
-}
+// While a card type's ids are loading (or failed), no Pokémon matches it — same as before the move to utils
+const NO_IDS = new Set<number>()
 
 export default function PokemonListPage() {
   const [pokemonList, setPokemonList] = useState<PokemonSummary[]>([])
@@ -53,17 +51,15 @@ export default function PokemonListPage() {
   const isCardTypeLoading = selectedCardType !== null && currentCardTypeResult === null
   const hasCardTypeError = currentCardTypeResult !== null && currentCardTypeResult.status === 'error'
 
-  // Filter the FULL list by search AND card type
-  const search = searchText.trim().toLowerCase()
-  const filteredPokemon = pokemonList.filter((pokemon) => {
-    const matchesSearch = pokemon.name.includes(search)
-    const matchesCardType =
-      selectedCardType === null ||
-      (currentCardTypeResult !== null &&
-        currentCardTypeResult.status === 'ready' &&
-        currentCardTypeResult.ids.has(pokemon.id))
-    return matchesSearch && matchesCardType
-  })
+  // Filter the FULL list by search AND card type (null = All)
+  const cardTypeIds =
+    selectedCardType === null
+      ? null
+      : currentCardTypeResult !== null && currentCardTypeResult.status === 'ready'
+        ? currentCardTypeResult.ids
+        : NO_IDS
+  const filteredPokemon = filterPokemon(pokemonList, searchText, cardTypeIds)
+  const search = normalizeSearch(searchText)
 
   // "Load more" counts per search + filter: when either changes (typing, a click, or Back), we're back to 50
   const filterKey = `${search}|${selectedCardType ?? ''}`

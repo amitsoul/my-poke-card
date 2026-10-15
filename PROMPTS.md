@@ -659,3 +659,21 @@
 > Then: run npm test and show me the output. Also show me ONE test failing on purpose (e.g. temporarily expect ghost → Fire), show the error message, then put it back.
 > Explain simply: (a) what describe, it and expect do, (b) the difference between npm test and npm run test:ui, (c) why these tests are "real logic" and not trivial.
 > </pasted_content id="91c8">
+
+**10:06 · claude**
+
+> <pasted_content id="91c8">
+> Committed 7b, and I checked test:ui in the browser — all green.
+> 
+> Step 7c: move logic out of the pages into src/utils so it can be tested. No behavior change.
+> 1. filterPokemon(list, searchText, cardTypeIds) — the search + card type filter from PokemonListPage (trim, case-insensitive name match, and "keep only ids in the set" when a Set is given, null = All). PokemonListPage uses it.
+> 2. getBackToListUrl(state) — from PokemonDetailsPage. Move it to utils as is.
+> 3. getIdFromUrl(url) — from PokemonListPage ("https://pokeapi.co/api/v2/pokemon/25/" → 25).
+> 
+> Tests (one `it` per behavior, clear English names):
+> - filterPokemon: empty search returns all; search is case-insensitive and ignores spaces ("  PIKA " finds pikachu); "chu" finds pikachu and raichu (matches anywhere); with a Set of ids only those stay; search + Set together (both must match); no match → empty list.
+> - getBackToListUrl: state with listSearch "?q=char&type=Fire" → "/?q=char&type=Fire"; empty listSearch "" → "/"; no state (null/undefined) → "/"; wrong shapes (a number, an object without listSearch, listSearch that is not a string) → "/".
+> - getIdFromUrl: with and without a trailing slash.
+> 
+> Check: npm test (all pass), npm run build, linter clean, and the app works the same in the browser. Then show me the npm test summary and explain why moving logic out of a component makes it testable.
+> </pasted_content id="91c8">

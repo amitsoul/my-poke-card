@@ -5,6 +5,7 @@ import PokemonDetails from '../components/PokemonDetails.tsx'
 import type { PokemonDetailsResponse } from '../types/pokemon.ts'
 import { API_URL, ApiError, fetchJson } from '../utils/api.ts'
 import { parsePokemonId } from '../utils/pokemonId.ts'
+import { getBackToListUrl } from '../utils/navigation.ts'
 import NotFoundPage from './NotFoundPage.tsx'
 
 // The answer for one id: the details, "no such Pokémon" (404), or any other error
@@ -12,15 +13,6 @@ type DetailsResult =
   | { id: number; status: 'ready'; details: PokemonDetailsResponse }
   | { id: number; status: 'not-found' }
   | { id: number; status: 'error' }
-
-// The list sends { listSearch: '?q=char&type=Fire' } when it opens this page.
-// Opened directly (typed URL, bookmark, refresh in a new tab) → no state → back to "/".
-function getBackToListUrl(state: unknown): string {
-  if (typeof state === 'object' && state !== null && 'listSearch' in state && typeof state.listSearch === 'string') {
-    return '/' + state.listSearch
-  }
-  return '/'
-}
 
 export default function PokemonDetailsPage() {
   const { id } = useParams()
