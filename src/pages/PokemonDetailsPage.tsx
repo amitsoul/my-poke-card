@@ -1,6 +1,6 @@
 // Page "/pokemon/:id": reads the id from the URL, loads that Pokémon and shows its details.
 import { Link, useLocation, useParams } from 'react-router'
-import AttackList from '../components/AttackList.tsx'
+import AttacksBlock from '../components/AttacksBlock.tsx'
 import PokemonDetails from '../components/PokemonDetails.tsx'
 import { usePokemonCardInfo } from '../hooks/usePokemonCardInfo.ts'
 import { usePokemonDetails } from '../hooks/usePokemonDetails.ts'
@@ -66,19 +66,7 @@ export default function PokemonDetailsPage() {
           {/* Attacks + Weakness/Resistance/Retreat — the same data the card shows */}
           <section className="pokemon-battle" aria-labelledby="attacks-heading">
             <h2 id="attacks-heading">Attacks</h2>
-            {/* Always on the page, so screen readers announce "Loading attacks..." reliably */}
-            <p role="status" className="attacks-status">
-              {cardInfo.state.status === 'loading' ? 'Loading attacks...' : ''}
-            </p>
-            {cardInfo.state.status === 'error' && (
-              <div className="attacks-error">
-                <p>Oops! We couldn't load the attacks. Please check your internet connection.</p>
-                <button type="button" className="button" onClick={cardInfo.retry}>
-                  Try again
-                </button>
-              </div>
-            )}
-            {cardInfo.state.status === 'ready' && <AttackList attacks={cardInfo.state.info.attacks} />}
+            <AttacksBlock cardInfo={cardInfo.state} onRetry={cardInfo.retry} />
             {/* No API needed: from the game types and weight, so it shows right away */}
             <p className="weakness-line">{getWeaknessText(state.details)}</p>
           </section>

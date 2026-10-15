@@ -1029,3 +1029,15 @@
 > - RTL tests for AttackList and for the details page (with the fake API): attacks shown, W/R/Retreat line, the error + retry.
 > Then run npm test and npm run build, show the results, give me a browser checklist (Pikachu, Ditto, Dragonite, Skarmory, Gardevoir, offline + Try again, phone width), and remind me to commit.
 > </pasted_content id="91c8">
+
+**15:42 · claude**
+
+> <pasted_content id="91c8">
+> 9c approved. Go ahead with step 9d only, as in your plan:
+> - src/components/PokeCard.tsx: plain text, every field in order, exactly as in your plan (BASIC · Amit's Pikachu · HP 30 · Lightning; photo + artwork; the Pokédex strip; Ability; the attacks via AttackList; Weakness/Resistance/Retreat; the About you quote; "Card design: Amit Soul · Fan-made · Not an official Pokémon card"). No card number yet (task 11). No design yet (task 10).
+> - On /create/:id, PokeCard replaces CardSummary (delete CardSummary and its test if any). Edit and the focus on the "Your card" heading stay the same.
+> - Start loading the card info (usePokemonCardInfo) as soon as the Pokémon is loaded, not only after "Create my card", so the card is usually ready immediately. If it is still loading or failed when the card is shown: "Loading attacks..." or the error + Try again inside the card, like on the details page.
+> - RTL tests for PokeCard and an updated CreateCardPage test: full submit → the card with all fields in order, the attacks, the photo, and Edit still keeps everything.
+> - Close task 9: tasks.md [x] with a short Done note, docs/requirements-checklist.md (components, tests), and PRD.md / CARD_SPEC.md only if something is out of date (list what you change).
+> Then run npm test and npm run build, show the results, give me a browser checklist (desktop + phone width), and remind me to commit.
+> </pasted_content id="91c8">

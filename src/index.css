@@ -335,26 +335,54 @@ body {
   font-weight: 600;
 }
 
-/* The summary after "Create my card" (until the real card in tasks 9–10) */
-.card-summary {
+/* The card after "Create my card": plain text for now — the real design comes in task 10 */
+.poke-card {
   margin-top: 1.5rem;
   padding: 1rem;
   border: 1px solid #ccc;
   border-radius: 12px;
 }
 
-.card-summary h2 {
+.poke-card h2 {
   margin-top: 0;
 }
 
-.card-summary-title {
+.poke-card p {
+  margin: 0 0 0.5rem;
+}
+
+.poke-card-top {
   font-size: 1.125rem;
   font-weight: 600;
 }
 
-.card-summary-note {
+/* The user's photo and the Pokémon's artwork side by side, shrinking on narrow screens */
+.poke-card-illustration {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.poke-card-illustration img {
+  width: 50%;
+  max-width: 200px;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+}
+
+.poke-card-dex,
+.poke-card-bottom {
   color: #888;
   font-size: 0.875rem;
+}
+
+.poke-card-flavor {
+  font-style: italic;
+}
+
+.poke-card .button {
+  margin-top: 0.5rem;
 }
 
 /* Hidden from the eye only: still focusable and read by screen readers (used for the photo input) */

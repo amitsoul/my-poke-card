@@ -1,9 +1,10 @@
 // The whole Create card page: the Change warning, Edit, and starting fresh for another Pokémon.
 // The form's own rules (errors, focus, counter) are tested in CardForm.test.tsx.
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Link, MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { moveResponse, speciesResponse, stubPokeApi } from '../test/fakeApi.ts'
 import { charmanderDetails, pikachuDetails } from '../test/pokemonFixtures.ts'
 import { resizePhoto } from '../utils/photo.ts'
 import CreateCardPage from './CreateCardPage.tsx'
@@ -17,23 +18,23 @@ vi.mock('../utils/photo.ts', async (importOriginal) => {
 
 const SMALL_JPEG = 'data:image/jpeg;base64,AAAA'
 
-function jsonResponse(data: unknown): Response {
-  return new Response(JSON.stringify(data), { status: 200, headers: { 'Content-Type': 'application/json' } })
-}
-
-// FAKE #1 — fetch. Instead of the real PokéAPI (slow, needs internet, could change), the browser's fetch
-// is replaced by a tiny fake that answers with our own Pikachu or Charmander, or 404 for anything else.
-// The page doesn't know the difference: it just gets an answer. (setup.ts puts the real fetch back after each test.)
+// FAKE #1 — fetch (src/test/fakeApi.ts). Instead of the real PokéAPI (slow, needs internet, could change),
+// fetch is replaced by a tiny fake that answers with our own Pikachu or Charmander, their species and moves,
+// or 404 for anything else. The page doesn't know the difference: it just gets an answer.
+// (setup.ts puts the real fetch back after each test.)
 beforeEach(() => {
-  vi.stubGlobal(
-    'fetch',
-    vi.fn(async (input: RequestInfo | URL) => {
-      const url = String(input)
-      if (url.endsWith('/pokemon/25')) return jsonResponse(pikachuDetails)
-      if (url.endsWith('/pokemon/4')) return jsonResponse(charmanderDetails)
-      return new Response('Not found', { status: 404 })
-    }),
-  )
+  stubPokeApi({
+    pokemon: [pikachuDetails, charmanderDetails],
+    species: speciesResponse('Mouse Pokémon'),
+    moves: [
+      moveResponse('tail-whip', null, 'Tail Whip'),
+      moveResponse('growl', null, 'Growl'),
+      moveResponse('thunder-shock', 40, 'Thunder Shock'),
+      moveResponse('quick-attack', 40, 'Quick Attack'),
+      moveResponse('scratch', 40, 'Scratch'),
+      moveResponse('ember', 40, 'Ember'),
+    ],
+  })
   vi.mocked(resizePhoto).mockResolvedValue(SMALL_JPEG)
 })
 
@@ -89,13 +90,24 @@ describe('CreateCardPage', () => {
     expect(screen.getByText('LIST PAGE')).toBeInTheDocument()
   })
 
-  it('a full submit shows the summary with the photo; "Edit" keeps everything; "Change" then warns without typing', async () => {
+  it('a full submit shows the card with every field, the attacks and the photo; "Edit" keeps everything; "Change" then warns without typing', async () => {
     const user = renderPage('/create/25')
     await fillValidForm(user)
 
     await user.click(screen.getByRole('button', { name: 'Create my card' }))
-    expect(screen.getByText("Amit's Pikachu · HP 30 · Lightning")).toBeInTheDocument()
-    expect(screen.getByRole('img', { name: 'Your photo' })).toHaveAttribute('src', SMALL_JPEG)
+    const card = screen.getByRole('article', { name: 'Your card' })
+    expect(card).toHaveTextContent("BASIC · Amit's Pikachu · HP 30 · Lightning")
+    expect(card).toHaveTextContent(`NO. 0025 · Mouse Pokémon · HT 1'04" · WT 13.2 lbs`)
+    expect(card).toHaveTextContent('Ability: Super speed')
+    // The attacks were loaded while the form was filled, so they're already on the card
+    expect(card).toHaveTextContent('Thunder Shock — 40 · Cost: Lightning, Colorless')
+    expect(card).toHaveTextContent('Quick Attack — 40 · Cost: Lightning, Colorless')
+    expect(card).toHaveTextContent('Weakness: Fighting ×2 · Resistance: none · Retreat: 1')
+    expect(card).toHaveTextContent('"I love Pokémon cards!"')
+    expect(card).toHaveTextContent('Card design: Amit Soul · Fan-made · Not an official Pokémon card')
+    // Look inside the card: the "Your favorite Pokémon" field above it also has a Pikachu image
+    expect(within(card).getByRole('img', { name: 'Your photo' })).toHaveAttribute('src', SMALL_JPEG)
+    expect(within(card).getByRole('img', { name: 'Pikachu' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: 'Your card' })).toHaveFocus()
 
     await user.click(screen.getByRole('button', { name: 'Edit' }))

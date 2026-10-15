@@ -3,13 +3,12 @@
 import { useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import CardForm from '../components/CardForm.tsx'
-import CardSummary from '../components/CardSummary.tsx'
 import ChangeWarning from '../components/ChangeWarning.tsx'
 import FavoritePokemonField from '../components/FavoritePokemonField.tsx'
+import PokeCard from '../components/PokeCard.tsx'
+import { usePokemonCardInfo } from '../hooks/usePokemonCardInfo.ts'
 import { usePokemonDetails } from '../hooks/usePokemonDetails.ts'
 import type { CardData, CardFormDraft } from '../utils/cardForm.ts'
-import { getCardType } from '../utils/cardType.ts'
-import { formatPokemonName, getGameTypes } from '../utils/pokemonDetails.ts'
 import { parsePokemonId } from '../utils/pokemonId.ts'
 import NotFoundPage from './NotFoundPage.tsx'
 
@@ -42,6 +41,9 @@ export default function CreateCardPage() {
   const { id } = useParams()
   const pokemonId = parsePokemonId(id)
   const { state, retry } = usePokemonDetails(pokemonId)
+  // Genus + attacks start loading as soon as the Pokémon is loaded — while the user fills the form —
+  // so the card is usually complete the moment it's shown
+  const cardInfo = usePokemonCardInfo(state.status === 'ready' ? state.details : null)
   const navigate = useNavigate()
   const [savedSession, setSavedSession] = useState<CreateSession | null>(null)
   const changeButtonRef = useRef<HTMLButtonElement>(null)
@@ -133,10 +135,11 @@ export default function CreateCardPage() {
               onSubmit={handleSubmit}
             />
           ) : (
-            <CardSummary
+            <PokeCard
               card={session.card}
-              pokemonName={formatPokemonName(state.details.name)}
-              cardType={getCardType(getGameTypes(state.details))}
+              details={state.details}
+              cardInfo={cardInfo.state}
+              onRetryCardInfo={cardInfo.retry}
               onEdit={() => {
                 if (session.card !== null) handleEdit(session.card)
               }}
