@@ -61,9 +61,3 @@ export function getEnglishGenus(species: SpeciesResponse): string | null {
   const english = species.genera.find((item) => item.language.name === 'en')
   return english !== undefined ? english.genus : null
 }
-
-// One attack as text: "Thunder Shock — 40 · Cost: Lightning, Colorless" (no damage: "Transform · Cost: Colorless")
-export function formatAttack(attack: Attack): string {
-  const damage = attack.damage === null ? '' : ` — ${attack.damage}`
-  return `${attack.name}${damage} · Cost: ${attack.cost.join(', ')}`
-}

@@ -1,3 +1,68 @@
+/* ---------- Fonts: self-hosted Barlow + Barlow Condensed (SIL Open Font License: src/assets/fonts/OFL.txt) ---------- */
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/barlow-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/barlow-400-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./assets/fonts/barlow-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./assets/fonts/barlow-600-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./assets/fonts/barlow-700.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./assets/fonts/barlow-700-italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./assets/fonts/barlow-condensed-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./assets/fonts/barlow-condensed-700.woff2') format('woff2');
+}
+
 :root {
   font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   line-height: 1.5;
@@ -335,54 +400,264 @@ body {
   font-weight: 600;
 }
 
-/* The card after "Create my card": plain text for now — the real design comes in task 10 */
+/* The card after "Create my card": the "Classic" design (CARD_SPEC.md "Card design").
+   Every size is written in design pixels × --u, where --u = the card's width / 380.
+   So below 380px the whole card shrinks as one piece; text, symbols and gaps together. */
 .poke-card {
   margin-top: 1.5rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 12px;
 }
 
 .poke-card h2 {
-  margin-top: 0;
+  margin: 0 0 0.75rem;
 }
 
-.poke-card p {
-  margin: 0 0 0.5rem;
+.poke-card > .button {
+  margin-top: 1rem;
 }
 
-.poke-card-top {
-  font-size: 1.125rem;
-  font-weight: 600;
+/* The container: its width (at most 380px) is what 100cqw means inside it */
+.poke-card-container {
+  container-type: inline-size;
+  width: 100%;
+  max-width: 380px;
 }
 
-/* The user's photo and the Pokémon's artwork side by side, shrinking on narrow screens */
-.poke-card-illustration {
+.poke-card-frame {
+  --u: calc(100cqw / 380); /* one design pixel */
+  box-sizing: border-box;
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  aspect-ratio: 5 / 7; /* 380 × 532; it only grows if the content really needs more room */
+  padding: calc(12 * var(--u));
+  border-radius: calc(18 * var(--u));
+  background: #f2c94c; /* the yellow frame, on every card */
+  color: #1e1b14;
+  font-family: 'Barlow', system-ui, sans-serif;
+  font-size: calc(12 * var(--u));
+  line-height: 1.2;
 }
 
-.poke-card-illustration img {
-  width: 50%;
-  max-width: 200px;
-  height: auto;
-  border-radius: 8px;
-  object-fit: contain;
+.poke-card-panel {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: calc(7 * var(--u));
+  padding: calc(10 * var(--u)) calc(12 * var(--u)) calc(8 * var(--u));
+  border-radius: calc(8 * var(--u));
+  background: var(--type-tint); /* a light tint of the card's Type */
 }
 
-.poke-card-dex,
-.poke-card-bottom {
-  color: #888;
-  font-size: 0.875rem;
+.poke-card-panel p {
+  margin: 0;
 }
 
-.poke-card-flavor {
+/* Header: BASIC · name · HP · Type symbol. Only the name may shrink or wrap. */
+.poke-card-header {
+  display: flex;
+  align-items: center;
+  gap: calc(6 * var(--u));
+}
+
+.poke-card-stage {
+  flex-shrink: 0;
+  padding: calc(1 * var(--u)) calc(5 * var(--u));
+  border: calc(1 * var(--u)) solid #8c7f5a;
+  border-radius: calc(3 * var(--u));
+  background: rgba(255, 255, 255, 0.6);
+  font-size: calc(10 * var(--u));
+  font-weight: 700;
   font-style: italic;
 }
 
-.poke-card .button {
-  margin-top: 0.5rem;
+.poke-card-name {
+  flex: 1;
+  min-width: 0; /* lets it shrink instead of pushing HP and the symbol off the card */
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-weight: 700; /* the font size comes from getNameFontSize (inline style) */
+  line-height: 1.05;
+  overflow-wrap: break-word;
+  /* at most 2 lines */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.poke-card-hp {
+  flex-shrink: 0;
+  color: #a12b1f;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.poke-card-hp-label {
+  font-size: calc(11 * var(--u));
+}
+
+.poke-card-hp-value {
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-size: calc(24 * var(--u));
+}
+
+.poke-card-type {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.poke-card-type .type-symbol {
+  width: calc(26 * var(--u));
+  height: calc(26 * var(--u));
+}
+
+/* Illustration window (step 10c: the photo fills it, with the Pokémon sticker on top) */
+.poke-card-window {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: flex;
+  height: calc(204 * var(--u));
+  border: calc(4 * var(--u)) solid #c9a94a;
+  background: #fff;
+  overflow: hidden;
+}
+
+.poke-card-window img {
+  width: 50%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.poke-card-window img + img {
+  object-fit: contain;
+}
+
+/* Pokédex strip */
+.poke-card-panel .poke-card-dex {
+  padding: calc(2 * var(--u)) calc(6 * var(--u));
+  background: var(--type-strip); /* a bit darker than the panel */
+  font-size: calc(10.5 * var(--u));
+  font-style: italic;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Ability */
+.poke-card-ability {
+  display: flex;
+  align-items: baseline;
+  gap: calc(6 * var(--u));
+}
+
+.poke-card-ability-label {
+  flex-shrink: 0;
+  padding: calc(1 * var(--u)) calc(6 * var(--u));
+  border-radius: calc(3 * var(--u));
+  background: #a12b1f;
+  color: #fff;
+  font-size: calc(11 * var(--u));
+  font-weight: 700;
+  font-style: italic;
+}
+
+.poke-card-ability-text {
+  color: #a12b1f;
+  font-size: calc(19 * var(--u));
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* Attacks: only as tall as they need (the free space goes above the bottom line instead) */
+.poke-card-attacks {
+  min-height: 0;
+}
+
+.poke-card .attack-row {
+  gap: calc(6 * var(--u));
+  padding: calc(4 * var(--u)) 0;
+  border-bottom-width: calc(1 * var(--u));
+}
+
+.poke-card .attack-cost {
+  /* room for the most symbols any attack on this card has (20 per symbol + 2 between), so the names line up */
+  min-width: calc((var(--cost-slots, 1) * 22 - 2) * var(--u));
+  gap: calc(2 * var(--u));
+}
+
+.poke-card .attack-cost .type-symbol {
+  width: calc(20 * var(--u));
+  height: calc(20 * var(--u));
+}
+
+.poke-card .attack-name {
+  font-size: calc(19 * var(--u));
+}
+
+.poke-card .attack-damage {
+  font-size: calc(22 * var(--u));
+}
+
+.poke-card .attacks-error p {
+  margin: 0 0 calc(4 * var(--u));
+  font-size: calc(11 * var(--u));
+}
+
+.poke-card .attacks-error .button {
+  padding: calc(3 * var(--u)) calc(10 * var(--u));
+  font-size: calc(11 * var(--u));
+}
+
+/* Weakness · Resistance · Retreat */
+.poke-card .weakness-row {
+  margin: 0;
+  padding-top: calc(4 * var(--u));
+}
+
+.poke-card .weakness-row dt {
+  font-size: calc(9 * var(--u));
+}
+
+.poke-card .weakness-row dd {
+  margin-top: calc(2 * var(--u));
+  gap: calc(3 * var(--u));
+  font-size: calc(13 * var(--u));
+}
+
+.poke-card .weakness-row .type-symbol {
+  width: calc(16 * var(--u));
+  height: calc(16 * var(--u));
+}
+
+.poke-card .retreat-cost {
+  gap: calc(2 * var(--u));
+}
+
+/* Flavor text */
+.poke-card-flavor {
+  padding: calc(4 * var(--u)) calc(8 * var(--u));
+  border: calc(1 * var(--u)) solid #b9a66a;
+  font-size: calc(11.5 * var(--u));
+  font-style: italic;
+  line-height: 1.25;
+}
+
+/* Bottom line, with room on the right for "MPC 001" (task 11) */
+/* The card's free space goes above the bottom line, so it sits at the bottom.
+   (.poke-card-panel in front: more specific than ".poke-card-panel p { margin: 0 }") */
+.poke-card-panel .poke-card-bottom {
+  margin-top: auto;
+}
+
+.poke-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(6 * var(--u));
+  font-size: calc(8.5 * var(--u));
+}
+
+.poke-card-number {
+  flex-shrink: 0;
+  min-width: calc(40 * var(--u));
 }
 
 /* Hidden from the eye only: still focusable and read by screen readers (used for the photo input) */
@@ -452,22 +727,75 @@ body {
   margin: 0;
 }
 
+/* Attack rows: cost symbols · name · damage (details page sizes; the card overrides them with --u) */
 .attack-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.attack-list li {
+.attack-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.4rem 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(30, 27, 20, 0.25);
+}
+
+.attack-cost {
+  flex-shrink: 0;
+  display: flex;
+  gap: 2px;
+  /* room for the most symbols any attack in this list has (1.25em per symbol + 2px between) */
+  min-width: calc(var(--cost-slots, 1) * 1.25em + (var(--cost-slots, 1) - 1) * 2px);
+}
+
+.attack-name {
+  flex: 1;
+  min-width: 0;
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.attack-damage {
+  flex-shrink: 0;
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* Weakness · Resistance · Retreat: 3 equal columns */
+.weakness-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0.75rem 0 0;
+  text-align: center;
+}
+
+.weakness-row dt {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.weakness-row dd {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  margin: 0.2rem 0 0;
+  font-weight: 700;
+}
+
+.retreat-cost {
+  display: inline-flex;
+  gap: 2px;
 }
 
 .attacks-error p {
   margin: 0 0 0.5rem;
 }
 
-.weakness-line {
-  margin: 0.75rem 0 0;
-  font-weight: 600;
-}

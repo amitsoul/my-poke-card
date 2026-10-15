@@ -7,6 +7,9 @@ import { TYPE_THEME } from '../utils/cardTheme.ts'
 interface TypeSymbolProps {
   type: CardType
   size?: string // a CSS size, e.g. "26px" or "calc(26 * var(--u))"; default: a bit bigger than the text
+  // true inside a group that already has a name (e.g. "Cost: Lightning, Colorless"),
+  // so screen readers don't read every symbol a second time
+  decorative?: boolean
 }
 
 // The white icons, drawn on a 32×32 grid (the circle fills it). `bg` = the circle's color, for cut-out details.
@@ -63,7 +66,7 @@ function icon(type: CardType, bg: string): ReactElement {
   }
 }
 
-export default function TypeSymbol({ type, size = '1.25em' }: TypeSymbolProps) {
+export default function TypeSymbol({ type, size = '1.25em', decorative = false }: TypeSymbolProps) {
   const { color } = TYPE_THEME[type]
   return (
     <svg
@@ -71,8 +74,9 @@ export default function TypeSymbol({ type, size = '1.25em' }: TypeSymbolProps) {
       viewBox="0 0 32 32"
       width={size}
       height={size}
-      role="img"
-      aria-label={type}
+      role={decorative ? undefined : 'img'}
+      aria-label={decorative ? undefined : type}
+      aria-hidden={decorative ? true : undefined}
       focusable="false" // old browsers would otherwise put the SVG in the Tab order
     >
       <circle cx="16" cy="16" r="16" fill={color} />

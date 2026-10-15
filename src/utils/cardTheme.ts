@@ -35,3 +35,13 @@ export function contrastRatio(hexA: string, hexB: string): number {
   const [lighter, darker] = [relativeLuminance(hexA), relativeLuminance(hexB)].sort((a, b) => b - a)
   return (lighter + 0.05) / (darker + 0.05)
 }
+
+// The card name's font size in design pixels, so long names still fit next to HP and the Type symbol:
+// up to 16 characters → 23 · 17–22 → 19 · 23–29 → 16 · 30+ → 14 (and the name may wrap to 2 lines).
+// "Amit's Pikachu" (14) → 23 · "Bartholomewz's Squawkabilly-Green-Plumage" (41) → 14
+export function getNameFontSize(name: string): number {
+  if (name.length <= 16) return 23
+  if (name.length <= 22) return 19
+  if (name.length <= 29) return 16
+  return 14
+}

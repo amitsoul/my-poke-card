@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { CARD_TYPES } from './cardType.ts'
-import { contrastRatio, TYPE_THEME } from './cardTheme.ts'
+import { contrastRatio, getNameFontSize, TYPE_THEME } from './cardTheme.ts'
 
 describe('contrastRatio', () => {
   it('gives the known WCAG values: black on white is 21, a color with itself is 1', () => {
@@ -40,5 +40,24 @@ describe('TYPE_THEME', () => {
       // The card's text color #1E1B14 must stay very readable on the strip (WCAG AA for text: 4.5:1)
       expect(contrastRatio('#1E1B14', theme.stripTint), cardType).toBeGreaterThanOrEqual(4.5)
     }
+  })
+})
+
+describe('getNameFontSize', () => {
+  it(`keeps the full 23px for names up to 16 characters ("Amit's Pikachu")`, () => {
+    expect(getNameFontSize("Amit's Pikachu")).toBe(23)
+    expect(getNameFontSize('a'.repeat(16))).toBe(23)
+  })
+
+  it('uses 19px for 17–22 characters and 16px for 23–29', () => {
+    expect(getNameFontSize('a'.repeat(17))).toBe(19)
+    expect(getNameFontSize('a'.repeat(22))).toBe(19)
+    expect(getNameFontSize('a'.repeat(23))).toBe(16)
+    expect(getNameFontSize('a'.repeat(29))).toBe(16)
+  })
+
+  it('uses 14px for 30+ characters (the name may then wrap to 2 lines)', () => {
+    expect(getNameFontSize('a'.repeat(30))).toBe(14)
+    expect(getNameFontSize("Bartholomewz's Squawkabilly-Green-Plumage")).toBe(14) // 41 characters
   })
 })

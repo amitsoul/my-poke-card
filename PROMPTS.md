@@ -1095,3 +1095,25 @@
 > 
 > Do ONLY step 10a now. Then run npm test and npm run build, show the results, and remind me to commit. I'll send the approval for 10b after review.
 > </pasted_content id="91c8">
+
+**16:51 · claude**
+
+> <pasted_content id="91c8">
+> 10a approved. tasks.md can wait for 10e, and no temporary preview is needed.
+> 
+> Go ahead with step 10b only, as in your plan: the self-hosted fonts (+ OFL.txt), the Classic card layout in PokeCard with the --u / cqw sizing, TypeSymbol in the header, attack costs, Weakness/Resistance/Retreat (as a <dl>) and on the details page, AttackList rows, and getNameFontSize including the 4th step (30+ characters → 14px, up to 2 lines, HP and the Type symbol never pushed off). In 10b the photo window can keep the current two images; the full photo + sticker is step 10c.
+> Then run npm test and npm run build, show the results, give me a browser checklist (Pikachu, Charmander, Dragonite, /create/931 Squawkabilly with a 12-letter name, phone widths 375 and 320, and a desktop compare against the mockup), and remind me to commit.
+> </pasted_content id="91c8">
+
+**17:07 · claude**
+
+> <pasted_content id="91c8">
+> Before I commit 10b, four fixes from my browser check (compared with the mockup):
+> 
+> 1. Attack rows: there's a big gap between the cost symbols and the attack name, because the cost column always reserves room for 4 symbols. Make the column as wide as the attack with the MOST symbols on THIS card (so names still line up across the rows, but Pikachu's names start right after its 2 symbols).
+> 2. Spacing: the empty space currently sits between the attacks and the Weakness/Resistance/Retreat row, so there's a "hole" in the middle of the card. Put the extra space before the bottom line instead (like the mockup): attacks → W/R/R → flavor box stay close together, and the bottom line sits at the bottom.
+> 3. Keep the W/R/R columns centered (as now).
+> 4. Display the Ability (superpower) in Title Case on the card ("super speed" → "Super Speed"), like the attack names. Use a small pure function with a test. Keep the stored value as typed. About you stays exactly as the user typed it.
+> 
+> Then run npm test and npm run build, show the results, and tell me what to re-check in the browser. Still step 10b, same commit.
+> </pasted_content id="91c8">

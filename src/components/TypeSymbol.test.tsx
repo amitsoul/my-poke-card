@@ -32,6 +32,12 @@ describe('TypeSymbol', () => {
     expect(new Set(drawings).size).toBe(10)
   })
 
+  it('decorative: hidden from screen readers (used inside a group that already has a name)', () => {
+    const { container } = render(<TypeSymbol type="Colorless" decorative />)
+    expect(screen.queryByRole('img')).toBeNull()
+    expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
+  })
+
   it('uses the given size, and a default size otherwise', () => {
     const { container, rerender } = render(<TypeSymbol type="Fire" size="26px" />)
     expect(container.querySelector('svg')).toHaveAttribute('width', '26px')

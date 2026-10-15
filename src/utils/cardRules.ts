@@ -113,10 +113,3 @@ export function formatHeight(decimeters: number): string {
 export function formatWeight(hectograms: number): string {
   return `${(hectograms * 0.220462).toFixed(1)} lbs`
 }
-
-// "Weakness: Fighting ×2 · Resistance: none · Retreat: 1" (with a Resistance: "Resistance: Fighting −30")
-export function formatWeaknessLine(weakness: CardType | null, resistance: CardType | null, retreat: number): string {
-  const weaknessText = weakness === null ? 'none' : `${weakness} ×${WEAKNESS_MULTIPLIER}`
-  const resistanceText = resistance === null ? 'none' : `${resistance} −${RESISTANCE_AMOUNT}`
-  return `Weakness: ${weaknessText} · Resistance: ${resistanceText} · Retreat: ${retreat}`
-}

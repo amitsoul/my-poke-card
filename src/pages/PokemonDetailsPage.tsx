@@ -2,20 +2,14 @@
 import { Link, useLocation, useParams } from 'react-router'
 import AttacksBlock from '../components/AttacksBlock.tsx'
 import PokemonDetails from '../components/PokemonDetails.tsx'
+import WeaknessRow from '../components/WeaknessRow.tsx'
 import { usePokemonCardInfo } from '../hooks/usePokemonCardInfo.ts'
 import { usePokemonDetails } from '../hooks/usePokemonDetails.ts'
-import type { PokemonDetailsResponse } from '../types/pokemon.ts'
-import { formatWeaknessLine, getCardRules } from '../utils/cardRules.ts'
+import { getCardRules } from '../utils/cardRules.ts'
 import { parsePokemonId } from '../utils/pokemonId.ts'
 import { getBackToListUrl } from '../utils/navigation.ts'
 import { formatPokemonName, getGameTypes } from '../utils/pokemonDetails.ts'
 import NotFoundPage from './NotFoundPage.tsx'
-
-// "Weakness: Fighting ×2 · Resistance: none · Retreat: 1" — from the game types and weight, no API needed
-function getWeaknessText(details: PokemonDetailsResponse): string {
-  const rules = getCardRules(getGameTypes(details), details.weight)
-  return formatWeaknessLine(rules.weakness, rules.resistance, rules.retreat)
-}
 
 export default function PokemonDetailsPage() {
   const { id } = useParams()
@@ -28,6 +22,9 @@ export default function PokemonDetailsPage() {
   // Not a valid id (/pokemon/abc, /pokemon/0, /pokemon/1.5) → the 404 page.
   // This comes after all the hooks above: React needs the same hooks, in the same order, on every render.
   if (pokemonId === null) return <NotFoundPage />
+
+  // Weakness / Resistance / Retreat — from the game types and weight, so no API is needed
+  const rules = state.status === 'ready' ? getCardRules(getGameTypes(state.details), state.details.weight) : null
 
   return (
     <div className="details-page">
@@ -68,7 +65,9 @@ export default function PokemonDetailsPage() {
             <h2 id="attacks-heading">Attacks</h2>
             <AttacksBlock cardInfo={cardInfo.state} onRetry={cardInfo.retry} />
             {/* No API needed: from the game types and weight, so it shows right away */}
-            <p className="weakness-line">{getWeaknessText(state.details)}</p>
+            {rules !== null && (
+              <WeaknessRow weakness={rules.weakness} resistance={rules.resistance} retreat={rules.retreat} />
+            )}
           </section>
 
           <div className="details-actions">

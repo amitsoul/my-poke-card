@@ -4,6 +4,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Link, MemoryRouter, Route, Routes } from 'react-router'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { getAttackRows, getWeaknessValue } from '../test/cardQueries.ts'
 import { moveResponse, speciesResponse, stubPokeApi } from '../test/fakeApi.ts'
 import { charmanderDetails, pikachuDetails } from '../test/pokemonFixtures.ts'
 import { resizePhoto } from '../utils/photo.ts'
@@ -96,13 +97,19 @@ describe('CreateCardPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Create my card' }))
     const card = screen.getByRole('article', { name: 'Your card' })
-    expect(card).toHaveTextContent("BASIC · Amit's Pikachu · HP 30 · Lightning")
+    expect(within(card).getByText("Amit's Pikachu")).toBeInTheDocument()
+    expect(card).toHaveTextContent('HP 30')
+    expect(within(card).getAllByRole('img', { name: 'Lightning' }).length).toBeGreaterThan(0) // the Type symbol
     expect(card).toHaveTextContent(`NO. 0025 · Mouse Pokémon · HT 1'04" · WT 13.2 lbs`)
-    expect(card).toHaveTextContent('Ability: Super speed')
+    expect(card).toHaveTextContent('Super Speed') // shown in Title Case on the card
     // The attacks were loaded while the form was filled, so they're already on the card
-    expect(card).toHaveTextContent('Thunder Shock — 40 · Cost: Lightning, Colorless')
-    expect(card).toHaveTextContent('Quick Attack — 40 · Cost: Lightning, Colorless')
-    expect(card).toHaveTextContent('Weakness: Fighting ×2 · Resistance: none · Retreat: 1')
+    expect(getAttackRows(card)).toEqual([
+      'Cost: Lightning, Colorless | Thunder Shock | 40',
+      'Cost: Lightning, Colorless | Quick Attack | 40',
+    ])
+    expect(getWeaknessValue(card, 'Weakness')).toBe('Fighting ×2')
+    expect(getWeaknessValue(card, 'Resistance')).toBe('none')
+    expect(getWeaknessValue(card, 'Retreat')).toBe('Colorless')
     expect(card).toHaveTextContent('"I love Pokémon cards!"')
     expect(card).toHaveTextContent('Card design: Amit Soul · Fan-made · Not an official Pokémon card')
     // Look inside the card: the "Your favorite Pokémon" field above it also has a Pikachu image

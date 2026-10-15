@@ -1,9 +1,10 @@
 // The details page with a fake PokéAPI (src/test/fakeApi.ts): attacks, the Weakness line, and the attacks' own
 // loading/error states — while the rest of the page (name, Type, Create button) stays visible.
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
+import { getAttackRows, getWeaknessValue } from '../test/cardQueries.ts'
 import { moveResponse, speciesResponse, stubPokeApi } from '../test/fakeApi.ts'
 import { pikachuDetails } from '../test/pokemonFixtures.ts'
 import PokemonDetailsPage from './PokemonDetailsPage.tsx'
@@ -31,10 +32,16 @@ describe('PokemonDetailsPage — attacks and Weakness', () => {
     stubPokeApi({ pokemon: [pikachuDetails], moves: PIKACHU_MOVES, species: speciesResponse('Mouse Pokémon') })
     renderPage()
 
-    expect(await screen.findByText('Thunder Shock — 40 · Cost: Lightning, Colorless')).toBeInTheDocument()
-    expect(screen.getByText('Quick Attack — 40 · Cost: Lightning, Colorless')).toBeInTheDocument()
+    await waitFor(() =>
+      expect(getAttackRows(document.body)).toEqual([
+        'Cost: Lightning, Colorless | Thunder Shock | 40',
+        'Cost: Lightning, Colorless | Quick Attack | 40',
+      ]),
+    )
     expect(screen.getByRole('heading', { name: 'Attacks' })).toBeInTheDocument()
-    expect(screen.getByText('Weakness: Fighting ×2 · Resistance: none · Retreat: 1')).toBeInTheDocument()
+    expect(getWeaknessValue(document.body, 'Weakness')).toBe('Fighting ×2')
+    expect(getWeaknessValue(document.body, 'Resistance')).toBe('none')
+    expect(getWeaknessValue(document.body, 'Retreat')).toBe('Colorless')
   })
 
   it('while the attacks load, the rest of the page is already there', async () => {
@@ -52,7 +59,7 @@ describe('PokemonDetailsPage — attacks and Weakness', () => {
     expect(await screen.findByRole('heading', { name: 'Pikachu' })).toBeInTheDocument()
     expect(screen.getByRole('status')).toHaveTextContent('Loading attacks...')
     expect(screen.getByText('Type: Lightning')).toBeInTheDocument()
-    expect(screen.getByText('Weakness: Fighting ×2 · Resistance: none · Retreat: 1')).toBeInTheDocument()
+    expect(getWeaknessValue(document.body, 'Weakness')).toBe('Fighting ×2')
     expect(screen.getByRole('link', { name: 'Create my card with Pikachu' })).toBeInTheDocument()
   })
 
@@ -74,7 +81,7 @@ describe('PokemonDetailsPage — attacks and Weakness', () => {
     stubPokeApi({ pokemon: [pikachuDetails], moves: PIKACHU_MOVES, species: speciesResponse('Mouse Pokémon') })
     await user.click(screen.getByRole('button', { name: 'Try again' }))
 
-    expect(await screen.findByText('Thunder Shock — 40 · Cost: Lightning, Colorless')).toBeInTheDocument()
+    expect(await screen.findByText('Thunder Shock')).toBeInTheDocument()
     expect(screen.queryByText(/couldn't load the attacks/)).toBeNull()
   })
 })
