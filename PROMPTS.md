@@ -698,3 +698,24 @@
 > 
 > Then show me the npm test summary and explain simply: (a) what render, screen and userEvent do, (b) what vi.fn() is and why we need it here, (c) why we find a button by its role and name and not by its CSS class.
 > </pasted_content id="91c8">
+
+**10:46 · claude**
+
+> <pasted_content id="91c8">
+> Committed 7d.
+> Decisions: (1) Yes — add @testing-library/dom explicitly to package.json devDependencies (same version that's installed) and to the approved list in AGENTS.md. (2) Keep the test speed as it is for now.
+> 
+> Step 7e — close task 7:
+> - tasks.md: mark task 7 [x]. Task 8 still has the RTL form test.
+> - docs/requirements-checklist.md: update to the real status, with where in the code:
+>   Vitest with at least 5 passing tests on real logic → ✅ (how many, which files)
+>   npm test passes → ✅
+>   Vitest UI with test:ui → ✅
+>   React Testing Library (bonus) → partly done (2 component files now, the form test comes in task 8)
+>   README "how to run the tests" stays ⏳ (task 12).
+> Run npm test and npm run build once more. Show me the changes.
+> </pasted_content id="91c8">
+
+**10:49 · claude**
+
+> Yes, add @testing-library/dom to the Tech line in PRD.md too. Nothing else.

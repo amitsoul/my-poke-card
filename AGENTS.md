@@ -7,7 +7,7 @@
 - ניתוב עם React Router בלבד.
 - בלי ספריות נוספות אלא אם ביקשתי במפורש. `fetch` מובנה בדפדפן.
 - ספריות מאושרות: `react-router`, `typescript`, `vitest`, `@vitest/ui`, `html-to-image` (לכפתור הורדת PNG; אושרה מחדש על ידי המרצה תחת ההנחיות החדשות, 14/10/2026).
-- לבדיקות רכיבים (React Testing Library): `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`, `jsdom`.
+- לבדיקות רכיבים (React Testing Library): `@testing-library/react`, `@testing-library/dom`, `@testing-library/jest-dom`, `@testing-library/user-event`, `jsdom`.
 - בלי שרת, בלי בסיס נתונים, בלי הרשמה והתחברות. בלי APIs שצריכים מפתח.
 - CSS רגיל בקבצים שלנו. בלי ספריות UI. הכול עובד גם במסך צר.
 

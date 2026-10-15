@@ -23,7 +23,7 @@ A nav menu (NavLink) on every page: **Pokémon** (`/`) · **My Cards** (`/my-car
 4. Save cards to localStorage; My Cards page; download as PNG (`html-to-image`).
 5. Vitest tests (5+) on the real logic: Type mapping, search/filter, Weakness/Resistance, units, attack damage/cost, form validation.
 
-**Tech:** React + Vite + TypeScript (types for API data and all props, no `any`), React Router, Vitest + `@vitest/ui`, React Testing Library (bonus), own CSS. Approved libraries: `react-router`, `typescript`, `vitest`, `@vitest/ui`, `html-to-image` (re-confirmed by the lecturer, 14/10/2026), `@testing-library/react`, `@testing-library/jest-dom`, `@testing-library/user-event`, `jsdom`. No server, DB, login, Redux, Next.js, UI libraries or API keys.
+**Tech:** React + Vite + TypeScript (types for API data and all props, no `any`), React Router, Vitest + `@vitest/ui`, React Testing Library (bonus), own CSS. Approved libraries: `react-router`, `typescript`, `vitest`, `@vitest/ui`, `html-to-image` (re-confirmed by the lecturer, 14/10/2026), `@testing-library/react`, `@testing-library/dom`, `@testing-library/jest-dom`, `@testing-library/user-event`, `jsdom`. No server, DB, login, Redux, Next.js, UI libraries or API keys.
 Every network call shows loading and error states. Works on phone, tablet and desktop. All UI text is in English. The footer and README carry "Fan-made · Not an official Pokémon card". Requirement status: [docs/requirements-checklist.md](docs/requirements-checklist.md).
 
 ## 5. Acceptance criteria
