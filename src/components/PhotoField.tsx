@@ -42,7 +42,11 @@ export default function PhotoField({ photo, error, onSelect, onRemove, inputRef 
       />
 
       {photo.status === 'ready' && <img src={photo.photo.dataUrl} alt="Your photo" className="photo-preview" />}
-      {photo.status === 'preparing' && <p role="status">Preparing your photo...</p>}
+      {/* Always on the page (empty when not preparing): screen readers only announce changes reliably
+          in a live region that already exists — so we change its text instead of adding the element */}
+      <p role="status" className="photo-status">
+        {photo.status === 'preparing' ? 'Preparing your photo...' : ''}
+      </p>
 
       <div className="photo-actions">
         <label htmlFor={id} className="button photo-button">

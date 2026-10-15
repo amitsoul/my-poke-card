@@ -15,6 +15,19 @@ describe('PhotoField', () => {
     expect(screen.queryByRole('img')).toBeNull()
   })
 
+  it('keeps the same status region on the page and only changes its text (so screen readers announce it)', () => {
+    const { rerender } = render(
+      <PhotoField photo={{ status: 'empty' }} error={undefined} onSelect={vi.fn()} onRemove={vi.fn()} />,
+    )
+    const status = screen.getByRole('status')
+    expect(status).toBeEmptyDOMElement() // already there, but empty
+
+    rerender(<PhotoField photo={{ status: 'preparing' }} error={undefined} onSelect={vi.fn()} onRemove={vi.fn()} />)
+
+    expect(screen.getByRole('status')).toBe(status) // the SAME element, not a new one
+    expect(status).toHaveTextContent('Preparing your photo...')
+  })
+
   it('while preparing: shows "Preparing your photo..."', () => {
     render(<PhotoField photo={{ status: 'preparing' }} error={undefined} onSelect={vi.fn()} onRemove={vi.fn()} />)
 

@@ -16,3 +16,19 @@ export const pikachuDetails: PokemonDetailsResponse = {
     },
   },
 }
+
+export const charmanderDetails: PokemonDetailsResponse = {
+  id: 4,
+  name: 'charmander',
+  types: [{ slot: 1, type: { name: 'fire', url: 'https://pokeapi.co/api/v2/type/10/' } }],
+  height: 6,
+  weight: 85,
+  sprites: {
+    other: {
+      'official-artwork': {
+        front_default:
+          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png',
+      },
+    },
+  },
+}

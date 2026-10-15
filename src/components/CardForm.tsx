@@ -1,6 +1,7 @@
 // The Create card form: Your name, Age (HP), Photo, Superpower, About you.
 // It owns what the user types/chooses and which errors are shown; the page only hears about it through callbacks.
 import { useRef, useState, type FormEvent } from 'react'
+import { flushSync } from 'react-dom'
 import {
   ABOUT_YOU_MAX,
   getFirstInvalidField,
@@ -106,10 +107,13 @@ export default function CardForm({ initialValues = EMPTY_DRAFT, onDirtyChange, o
     const errors = { ...validateCardForm({ ...values, photo: readyPhoto }).errors }
     if (photo.status === 'preparing') errors.photo = PHOTO_WAIT_ERROR // not "Please upload an image": they did
 
-    setShownErrors(errors) // with problems: show ALL errors…
+    // With problems: show ALL errors, then move focus to the first invalid field.
+    // flushSync makes React put the errors on the screen RIGHT NOW (normally it waits until this function ends).
+    // So when focus lands on the field, its error already exists and a screen reader reads them together.
+    flushSync(() => setShownErrors(errors))
     const firstInvalidField = getFirstInvalidField(errors)
     if (firstInvalidField !== null) {
-      inputs.current[firstInvalidField]?.focus() // …and move focus to the first invalid field
+      inputs.current[firstInvalidField]?.focus()
       return
     }
 

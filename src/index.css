@@ -398,3 +398,9 @@ body {
   height: auto;
   border-radius: 8px;
 }
+
+/* The photo's live region: always present (for screen readers), so it takes no space when empty.
+   Not display: none — that would hide it from screen readers too. */
+.photo-status {
+  margin: 0;
+}

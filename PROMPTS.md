@@ -922,3 +922,40 @@
 > 
 > Go ahead and implement. Update CARD_SPEC.md with the agreed details. Then run npm test and npm run build, show the results, give me the browser checklist (desktop, phone width, and a real phone if possible: camera, gallery, a sideways photo), and remind me to commit.
 > </pasted_content id="91c8">
+
+**13:00 · claude**
+
+> <pasted_content id="91c8">
+> Task 8, step 8f: the RTL form tests + closing task 8. Follow AGENTS.md. PLAN FIRST: do not write code until I approve.
+> 
+> Part 1: RTL tests that STAY in the repo (not temporary). Cover at least:
+> - Errors appear on blur, not while typing; a shown error disappears once the value is fixed.
+> - Submit with problems: all errors appear and focus moves to the first invalid field. Also check that the focused input is connected to its error text (aria-invalid + aria-describedby points to an element with the error), so a screen reader reads it.
+> - The About you counter.
+> - The Change warning: no warning on an empty form; warning with values; warning after Edit without typing; "Keep editing" refocuses Change; "Yes, change" goes to the list.
+> - Photo: submit while preparing → "Please wait…"; a full submit shows the summary with the photo; Edit keeps everything.
+> - A different Pokémon (key reset) starts with an empty form.
+> In your plan: which test files, what you render (CardForm alone vs. the whole CreateCardPage), and how you fake the API (fetch) and resizePhoto (vi.mock). Keep the fakes small and explain them in simple words, because I need to explain them in my defense.
+> 
+> Part 2: closing task 8:
+> - tasks.md: mark task 8 [x], with a short "Done" note.
+> - docs/requirements-checklist.md: update the component count, the test count, the pages, and anything task 8 now fulfils.
+> - CARD_SPEC.md / PRD.md: only if something is out of date. List what you would change.
+> - Do NOT write my "My note" lines in PROMPTS.md. I write those myself.
+> 
+> After I approve: implement, run npm test and npm run build, show the results, and remind me to commit.
+> </pasted_content id="91c8">
+> 
+>  Small fix to include in 8f: in PhotoField, keep the role="status" element always rendered (empty when not preparing) and only change its text to "Preparing your photo...". Screen readers announce changes reliably only in a live region that already exists. Cover it in a test.
+
+**13:04 · claude**
+
+> <pasted_content id="91c8">
+> Approved: both test files, the three fakes, the test list, the PhotoField live-region fix, and all of Part 2 including the one PRD line.
+> 
+> Two additions:
+> 1. Focus timing: in CardForm's submit, the focus currently moves BEFORE React renders the errors, so a screen reader may read the field without its error. Use flushSync from react-dom so the errors are rendered first, then move focus. Add a short comment explaining why. (Test 3 checks the result after rendering, so also keep it.)
+> 2. Reset the fakes between tests (for example vi.clearAllMocks / restoreMocks in afterEach, plus vi.unstubAllGlobals), so one test can't affect another.
+> 
+> Go ahead: implement, run npm test and npm run build, show the results, and remind me to commit.
+> </pasted_content id="91c8">
