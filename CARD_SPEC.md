@@ -37,13 +37,17 @@ Filled on `/create/:id` after a Pokémon is chosen. All fields are required and 
 
 **Type** — the first game type → one of the 10 TCG Types: Grass (grass, bug), Fire, Water (water, ice), Lightning (electric), Psychic (psychic, ghost, fairy), Fighting (fighting, rock, ground), Darkness (dark, poison), Metal (steel), Dragon, Colorless (normal, flying).
 
-**Pokédex strip** — number as 4 digits ("NO. 0025"); genus in English from `/pokemon-species/{id}`; height from decimeters to feet/inches (4 dm → 1'04"); weight from hectograms to lbs, one decimal (60 hg → 13.2 lbs).
+**Pokédex strip** — number as 4 digits ("NO. 0025"); genus in English from `/pokemon-species/{id}` (if there is no English genus, it is left out: "NO. 0025 · HT 1'04" · WT 13.2 lbs"); height from decimeters to feet/inches — the total inches are rounded first, then split, with 2-digit inches (4 dm = 15.7 in → 1'04"; 6 dm = 23.6 in → 24 in → 2'00", not 1'12"); weight from hectograms to lbs, one decimal (60 hg → 13.2 lbs, 4600 hg → 1014.1 lbs).
 
-**Attacks** — the Pokémon's moves that have power (from `/move/{name}`):
-- 2 or more → the first 2. Only 1 → show 1 attack.
-- None (e.g. Ditto) → show its first move with no damage number, cost 1 Colorless.
-- Damage = power rounded to a multiple of 10.
-- Cost by damage: 10–30 → 1 symbol, 40–70 → 2, 80–120 → 3, 130+ → 4. The first symbol is the card's Type, the rest Colorless.
+**Attacks** — the Pokémon's moves that have power (from `/move/{name}`), in this order:
+- **Order:** first the moves it learns by **leveling up**, lowest level first (ties keep the API's order); then all its other moves, in the API's order. *Why:* the API lists moves starting with old TM moves, so "the first 2" in API order gave Pikachu Mega Punch + Pay Day. In level-up order Pikachu gets **Thunder Shock + Quick Attack**, like its real cards.
+- 2 or more with power → the first 2 in that order. Only 1 → show 1 attack. At most 20 moves are checked (in batches of 4, stopping when 2 are found).
+- None with power (e.g. Ditto) → show its first move in that order, with no damage number, cost 1 Colorless.
+- No moves at all → **Struggle**, 50 damage, cost 2 Colorless (in the games, the attack a Pokémon uses when it has no moves). Its cost is **all Colorless** because Struggle has no type — an exception to "the first symbol is the card's Type".
+- Moves with variable power (`power: null`, e.g. Seismic Toss) count as "no power".
+- Name: the English name from the API ("Thunder Shock", "U-turn"); if there is none, the formatted slug.
+- Damage = power rounded to the nearest multiple of 10, at least 10 (35 → 40, 15 → 20, 125 → 130, 4 → 10).
+- Cost by damage (after rounding): 10–30 → 1 symbol, 40–70 → 2, 80–120 → 3, 130+ → 4. The first symbol is the card's Type, the rest Colorless.
 - Dragon: all cost symbols are Colorless (there is no Dragon Energy).
 
 **Weakness ×2** — a fixed table by Type (not from game damage relations):

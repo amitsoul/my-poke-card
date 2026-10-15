@@ -959,3 +959,39 @@
 > 
 > Go ahead: implement, run npm test and npm run build, show the results, and remind me to commit.
 > </pasted_content id="91c8">
+
+**13:21 · claude**
+
+> <pasted_content id="91c8">
+> Task 9: card data per CARD_SPEC.md + tests. Follow AGENTS.md. PLAN FIRST: do not write code until I approve.
+> 
+> Scope (from tasks.md task 9): genus from /pokemon-species/{id}, height/weight in ft/in and lbs, attacks from /move/{name}, Weakness/Resistance from the fixed tables with the conflict rules, retreat by weight, a PokeCard component with every field in order (plain text, no design yet), and the details page showing the same attacks and Weakness/Resistance. The card number (MPC 001) is NOT in this task (task 11, localStorage).
+> 
+> In your plan, tell me:
+> 1. How you split task 9 into small steps (like 8a–8f), each with its own commit. I suggest: pure rules + tests first, then fetching, then the component and pages.
+> 2. Files: new and changed. Which parts are pure functions (tested in Vitest) and which need the API.
+> 3. Fetching moves: a Pokémon has many moves, and each needs its own /move/{name} request to know its power. How do you find "the first 2 moves with power" without sending dozens of requests? Options + pros/cons + your recommendation. Also: loading and error states, and the race guard (like usePokemonDetails).
+> 4. The move name on the card: the English name from the API (e.g. "Thunder Shock") or formatting the slug ("thunder-shock")? Options + your recommendation.
+> 5. Edge cases, with your suggestion for each:
+>    - A Pokémon with no moves at all in the API (some newer ones).
+>    - Power that rounds to 0 (e.g. power 4), and power exactly at the cost borders (30/40, 70/80, 120/130).
+>    - No English genus.
+>    - Height/weight conversion rounding (show 2 examples).
+> 6. Tests: turn EVERY row of the CARD_SPEC "Examples" table (Pikachu, Charmander, Gardevoir, Glaceon, Pidgey, Snorlax, Dragonite, Zapdos, Skarmory) into a test, plus the cost, damage, retreat and conversion rules. Show me the test list.
+> 7. Where the data appears: what exactly the details page adds, and where PokeCard is shown (instead of the summary on /create/:id?). Every new UI text, so I can approve the wording.
+> 
+> After I approve each step: implement it, run npm test and npm run build, show the results, give me a browser checklist, and remind me to commit.
+> </pasted_content id="91c8">
+
+**13:30 · claude**
+
+> <pasted_content id="91c8">
+> Approved: steps 9a–9d, option C (level-up order, batches of 4, cap of 20, small cache), English move names (A), Struggle for "no moves", minimum damage 10, leaving out a missing genus, and all the texts.
+> 
+> Three additions:
+> 1. Option C changes an approved rule: CARD_SPEC says "the first 2" moves. Update CARD_SPEC to the new rule (level-up order, lowest level first, then other moves) and explain why (Pikachu: Thunder Shock + Quick Attack, like its real cards).
+> 2. Struggle: write in CARD_SPEC that its cost is all Colorless because it has no type. This is an exception to "the first symbol is the card's Type".
+> 3. The move cache: it lives in memory across tests, so one test could get a move fetched in another test. Export a small function to clear it and call it after every test in src/test/setup.ts.
+> 
+> Do ONLY step 9a now (pure rules + tests + CARD_SPEC updates). Then run npm test and npm run build, show the results, and remind me to commit. I'll send the approval for 9b after review.
+> </pasted_content id="91c8">
