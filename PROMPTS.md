@@ -719,3 +719,33 @@
 **10:49 · claude**
 
 > Yes, add @testing-library/dom to the Tech line in PRD.md too. Nothing else.
+
+**11:12 · claude**
+
+> <pasted_content id="91c8">
+> Let's start task 8 (Create card page). Plan: 8a docs · 8b page + routes + nav + Pokémon picker · 8c validation utils + tests · 8d text fields, errors, button, summary · 8e photo upload + resize · 8f RTL form test + close. Small steps, wait for me after each one, remind me to commit.
+> 
+> Step 8a — documents only (PRD.md, tasks.md, CARD_SPEC.md if relevant, docs/requirements-checklist.md). My decisions:
+> 
+> FLOW
+> - Two ways to reach the form:
+>   1. Details page button "Create my card with <Pokémon name>" → /create/:id (Pokémon already chosen).
+>   2. Nav link "Create card" → /create (no Pokémon yet). The nav becomes: Pokémon · Create card (task 8) · My Cards (task 11).
+> - First field in the form: "Your favorite Pokémon".
+>   - If chosen: show its image, name and Type, plus a "Change" button.
+>   - If not chosen: show only "Choose your favorite Pokémon" with a button to the list. The other fields are hidden until a Pokémon is chosen.
+> - "Change" goes back to the list; it warns first that the answers will be cleared. No draft saving.
+> - Choosing happens in the normal list → details → "Create my card with X". No special picker mode.
+> - /create/abc (invalid id) → 404 page. /create/99999 → "Pokémon not found", like the details page.
+> 
+> FIELDS (all required, English only)
+> - Your name: 2–12 characters; English letters, space, hyphen, apostrophe (Mary-Ann, O'Neil). Error: "Use English letters only (2–12)".
+> - Age (HP): whole number 1–120. Error: "Age must be 1–120".
+> - Photo: required, image files only. Resized to 400px wide and saved as JPEG. Error: "Please upload an image".
+> - Superpower: 3–20 characters; English letters and spaces. Error: "English letters only (3–20)".
+> - About you: required, up to 80 characters; English letters, numbers and basic punctuation, with a character counter. Error: "English only, up to 80 characters".
+> - Errors show on leaving a field (blur) or on submit, not while typing. "Create my card" is enabled only when everything is valid.
+> - In task 8, submit shows a simple summary (e.g. "Amit's Pikachu · HP 30 · Lightning"). The real card comes in tasks 9–10.
+> 
+> Update the pages/URLs, "When I…, I see…" lines, task 8's description and "Done when", and the checklist rows (2 extra pages: Create card is one of them; nav menu). Keep the PRD one page. Also add @testing-library/dom to the PRD Tech line if it's still missing. Show me the changes and wait.
+> </pasted_content id="91c8">

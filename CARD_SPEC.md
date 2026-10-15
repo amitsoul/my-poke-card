@@ -11,8 +11,23 @@
 - **Ability:** the user's Superpower.
 - **Attacks:** see rules below.
 - **Weakness · Resistance · Retreat** row: see rules below.
-- **Flavor text:** the user's one-line description.
+- **Flavor text:** the user's "About you" text.
 - **Bottom line:** "Card design: Amit Soul" · card number "MPC 001" · "Fan-made · Not an official Pokémon card".
+
+## Form fields (Create card page)
+Filled on `/create/:id` after a Pokémon is chosen. All fields are required and English only; spaces at the start and end are ignored.
+
+| Field | Rule | Error message | On the card |
+|---|---|---|---|
+| Your favorite Pokémon | Chosen via list → details → "Create my card with <Pokémon>"; shown with image, name, Type and a "Change" button | — | Artwork, name, Type, attacks… |
+| Your name | 2–12 characters: English letters, space, hyphen, apostrophe (Mary-Ann, O'Neil) | Use English letters only (2–12) | "<Name>'s <Pokémon>" (e.g. "Amit's Pikachu") |
+| Age (HP) | Whole number 1–120 | Age must be 1–120 | HP |
+| Photo | An image file; resized to 400px wide and saved as JPEG | Please upload an image | Illustration |
+| Superpower | 3–20 characters: English letters and spaces | English letters only (3–20) | Ability |
+| About you | 1–80 characters: English letters, numbers, spaces and basic punctuation (`. , ! ? ' -`); shown with a character counter | English only, up to 80 characters | Flavor text |
+
+- Errors appear when leaving a field (blur) or on submit, not while typing.
+- "Create my card" is enabled only when every field is valid.
 
 ## Rules
 

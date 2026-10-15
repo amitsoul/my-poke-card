@@ -20,8 +20,8 @@
 | React Router | ✅ | `react-router` v8: `BrowserRouter` in `src/main.tsx`, `Routes`/`Route` in `src/App.tsx` |
 | List page | ✅ | `/` → `src/pages/PokemonListPage.tsx` |
 | Details page `/pokemon/:id` with `useParams` | ✅ | `src/pages/PokemonDetailsPage.tsx` reads `id` with `useParams` (checked by `parsePokemonId` in `src/utils/pokemonId.ts`) and fetches the details; display in `src/components/PokemonDetails.tsx` |
-| At least 2 more pages where the user does something | ⏳ | Task 8 (`/create/:id`), task 11 (`/my-cards`). The 404 page doesn't count — the user doesn't do anything there |
-| Nav menu with `Link`/`NavLink` | ✅ / ⏳ | `src/components/NavBar.tsx` with `NavLink`; the active link is highlighted (also on `/pokemon/:id`). Only one link today ("Pokémon"); "My Cards" is added in task 11 |
+| At least 2 more pages where the user does something | ⏳ | 1) Create card (`/create` and `/create/:id`): choose a Pokémon and fill a form — task 8. 2) My Cards (`/my-cards`): view, download, delete, favorites — task 11. The 404 page doesn't count — the user doesn't do anything there |
+| Nav menu with `Link`/`NavLink` | ✅ / ⏳ | `src/components/NavBar.tsx` with `NavLink`; the active link is highlighted (also on `/pokemon/:id`). Only one link today ("Pokémon"); "Create card" is added in task 8 and "My Cards" in task 11 |
 | List with `map` + unique `key` | ✅ | `src/components/PokemonList.tsx` (`key={pokemon.id}`), `CardTypeFilter.tsx` |
 | Clicking an item opens its details page | ✅ | Each card in `src/components/PokemonListItem.tsx` is a `Link` to `/pokemon/{id}` |
 | Data passed via props | ✅ | `PokemonListPage` → `PokemonList` → `PokemonListItem`; `PokemonListPage` → `SearchBar`, `CardTypeFilter`; `PokemonDetailsPage` → `PokemonDetails` |
