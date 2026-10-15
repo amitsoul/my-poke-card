@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  getFirstInvalidField,
   validateAboutYou,
   validateAge,
   validateCardForm,
@@ -8,6 +9,7 @@ import {
   validateSuperpower,
   validateTextFields,
   type CardFormValues,
+  type CardPhoto,
   type PhotoFile,
 } from './cardForm.ts'
 
@@ -122,6 +124,11 @@ describe('validatePhoto', () => {
     }
   })
 
+  it('accepts a resized photo (a JPEG data URL with its size)', () => {
+    const photo: CardPhoto = { dataUrl: 'data:image/jpeg;base64,AAAA', type: 'image/jpeg', size: 3 }
+    expect(validatePhoto(photo)).toEqual({ ok: true, value: photo })
+  })
+
   it('rejects an image over 10 MB', () => {
     expect(validatePhoto({ type: 'image/jpeg', size: 11 * MB })).toEqual({
       ok: false,
@@ -223,6 +230,14 @@ describe('validateTextFields', () => {
     expect(Object.keys(result.errors)).toEqual(['name', 'age', 'superpower', 'aboutYou'])
     expect(result.firstInvalidField).toBe('name')
     expect(result.data).toBeNull()
+  })
+})
+
+describe('getFirstInvalidField', () => {
+  it('follows the form order: name, age, photo, superpower, about you', () => {
+    expect(getFirstInvalidField({ aboutYou: 'x', photo: 'x', superpower: 'x' })).toBe('photo')
+    expect(getFirstInvalidField({ aboutYou: 'x', age: 'x' })).toBe('age')
+    expect(getFirstInvalidField({})).toBeNull()
   })
 })
 

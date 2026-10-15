@@ -879,3 +879,46 @@
 > 
 > Go ahead and implement, including the NFC fix and the tests from section 8. Then run npm test and npm run build, show the results, give me the browser checklist (desktop and phone width), and remind me to commit.
 > </pasted_content id="91c8">
+
+**12:44 · claude**
+
+> <pasted_content id="91c8">
+> Task 8, step 8e: photo upload + preview + resize. Follow AGENTS.md. PLAN FIRST: do not write code until I approve.
+> 
+> Scope: add the Photo field to CardForm, in form order (name, age, photo, superpower, about you), switch submit to validateCardForm, resize the image as in CARD_SPEC (400px wide, saved as JPEG), show a preview, and show the photo in the summary.
+> 
+> In your plan, tell me:
+> 1. Files: new and changed. Which part is a pure function (testable in Vitest) and which part needs the browser (canvas)?
+> 2. The file input: the accept attribute, how it looks (the default browser input vs. a styled button), and how it behaves on a phone (camera or gallery).
+> 3. Resizing: exact output size (400px wide, keep the aspect ratio? never upscale small images?), JPEG quality, and the output format. Remember task 11 saves cards in localStorage, so tell me the expected size in KB and whether you suggest a data URL or something else.
+> 4. Edge cases, with your suggestion for each:
+>    - A transparent PNG becomes JPEG (the background would turn black).
+>    - A phone photo taken sideways (EXIF rotation).
+>    - A file that says image/jpeg but is broken and can't be read. What error text?
+>    - A very large photo (for example 8000px) on an older phone.
+>    - Choosing a new photo after one was already chosen, and removing a photo.
+> 5. Cropping: should 8e only resize, and cropping to the card's illustration shape wait for task 10 (card design)? Or crop now? Give options and your recommendation.
+> 6. While resizing: is there a loading state? What text?
+> 7. Integration: "has values" for the Change warning must include the photo. Edit must keep the photo. The key={pokemonId} reset must also clear it. Any memory cleanup (for example revoking object URLs)?
+> 8. Accessibility: the label, the error link (aria-describedby), the preview's alt text, focus on submit when the photo is the first invalid field.
+> 9. Every new UI text, so I can approve the wording.
+> 10. Tests you suggest for 8e (knowing jsdom has no real canvas).
+> 
+> After I approve: implement, run npm test and npm run build, show the results, give me a browser checklist (desktop and a real phone if possible), and remind me to commit.
+> </pasted_content id="91c8">
+
+**12:49 · claude**
+
+> <pasted_content id="91c8">
+> Approved, with these decisions:
+> 
+> 1. Cropping: option A. Resize only now; the crop is done with CSS object-fit: cover in task 10.
+> 2. Height limit: none.
+> 3. A new invalid photo removes the old one: approved.
+> 4. "Please wait until your photo is ready": approved.
+> 5. All texts in section 9: approved.
+> 
+> One thing to make explicit: run validatePhoto on the ORIGINAL file (type and size) BEFORE starting resizePhoto, so a 50 MB file or a PDF is never loaded into an image at all. Add a test or a checklist line for this.
+> 
+> Go ahead and implement. Update CARD_SPEC.md with the agreed details. Then run npm test and npm run build, show the results, give me the browser checklist (desktop, phone width, and a real phone if possible: camera, gallery, a sideways photo), and remind me to commit.
+> </pasted_content id="91c8">

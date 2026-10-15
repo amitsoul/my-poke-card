@@ -7,7 +7,7 @@ import CardSummary from '../components/CardSummary.tsx'
 import ChangeWarning from '../components/ChangeWarning.tsx'
 import FavoritePokemonField from '../components/FavoritePokemonField.tsx'
 import { usePokemonDetails } from '../hooks/usePokemonDetails.ts'
-import type { CardTextData, CardTextValues } from '../utils/cardForm.ts'
+import type { CardData, CardFormDraft } from '../utils/cardForm.ts'
 import { getCardType } from '../utils/cardType.ts'
 import { formatPokemonName, getGameTypes } from '../utils/pokemonDetails.ts'
 import { parsePokemonId } from '../utils/pokemonId.ts'
@@ -18,8 +18,8 @@ import NotFoundPage from './NotFoundPage.tsx'
 interface CreateSession {
   pokemonId: number
   hasValues: boolean // an answer exists (typed, or kept after "Edit") → "Change" warns first
-  card: CardTextData | null // the answers after a valid "Create my card" → the summary is shown
-  editValues: CardTextValues | undefined // the answers to put back into the form after "Edit"
+  card: CardData | null // the answers after a valid "Create my card" → the summary is shown
+  editValues: CardFormDraft | undefined // the answers and photo to put back into the form after "Edit"
   isWarningOpen: boolean
 }
 
@@ -27,9 +27,15 @@ function freshSession(pokemonId: number): CreateSession {
   return { pokemonId, hasValues: false, card: null, editValues: undefined, isWarningOpen: false }
 }
 
-// The cleaned answers back into form text, for "Edit" (age 30 → "30")
-function toFormValues(card: CardTextData): CardTextValues {
-  return { name: card.name, age: String(card.age), superpower: card.superpower, aboutYou: card.aboutYou }
+// The cleaned answers back into the form, for "Edit" (age 30 → "30"; the photo is kept as it is)
+function toFormValues(card: CardData): CardFormDraft {
+  return {
+    name: card.name,
+    age: String(card.age),
+    photo: card.photo,
+    superpower: card.superpower,
+    aboutYou: card.aboutYou,
+  }
 }
 
 export default function CreateCardPage() {
@@ -73,13 +79,13 @@ export default function CreateCardPage() {
     changeButtonRef.current?.focus()
   }
 
-  function handleSubmit(card: CardTextData) {
+  function handleSubmit(card: CardData) {
     updateSession({ card, hasValues: true, isWarningOpen: false })
   }
 
   // Back to the form with the answers kept. The form is filled but nobody typed yet,
   // so the page sets hasValues here — "Change" must still warn.
-  function handleEdit(card: CardTextData) {
+  function handleEdit(card: CardData) {
     updateSession({ card: null, editValues: toFormValues(card), hasValues: true })
   }
 

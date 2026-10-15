@@ -23,12 +23,29 @@ export interface CardFormValues {
 }
 export type CardTextValues = Omit<CardFormValues, 'photo'>
 
-// The cleaned text answers, once every text field is valid (the photo is added in step 8e)
+// The cleaned text answers, once every text field is valid
 export interface CardTextData {
   name: string
   age: number
   superpower: string
   aboutYou: string
+}
+
+// The photo after resizing: a JPEG as a data URL (text, so it can be saved in localStorage later).
+// It has a type and a size, so validatePhoto can check it like a file.
+export interface CardPhoto extends PhotoFile {
+  dataUrl: string
+  type: 'image/jpeg'
+}
+
+// Everything the card needs, once the whole form is valid
+export interface CardData extends CardTextData {
+  photo: CardPhoto
+}
+
+// What the form starts with after "Edit": the typed answers and the ready photo
+export interface CardFormDraft extends CardTextValues {
+  photo: CardPhoto | null
 }
 
 export const ABOUT_YOU_MAX = 80
@@ -131,6 +148,11 @@ export function validateTextFields(values: CardTextValues): {
   return { errors, firstInvalidField, data }
 }
 
+// The first field with an error, in form order (name, age, photo, superpower, about you)
+export function getFirstInvalidField(errors: Partial<Record<CardFormField, string>>): CardFormField | null {
+  return FIELD_ORDER.find((field) => errors[field] !== undefined) ?? null
+}
+
 // Checks every field (text fields + photo): all errors, and the first invalid field in form order
 export function validateCardForm(values: CardFormValues): {
   errors: Partial<Record<CardFormField, string>>
@@ -142,6 +164,5 @@ export function validateCardForm(values: CardFormValues): {
   const errors: Partial<Record<CardFormField, string>> = { ...textResult.errors }
   if (!photo.ok) errors.photo = photo.error
 
-  const firstInvalidField = FIELD_ORDER.find((field) => errors[field] !== undefined) ?? null
-  return { errors, firstInvalidField }
+  return { errors, firstInvalidField: getFirstInvalidField(errors) }
 }

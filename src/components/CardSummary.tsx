@@ -1,10 +1,10 @@
 // A short summary of the answers after "Create my card". The real card replaces it in tasks 9–10.
 import { useEffect, useRef } from 'react'
 import type { CardType } from '../types/pokemon.ts'
-import type { CardTextData } from '../utils/cardForm.ts'
+import type { CardData } from '../utils/cardForm.ts'
 
 interface CardSummaryProps {
-  card: CardTextData
+  card: CardData
   pokemonName: string // already formatted, e.g. "Pikachu"
   cardType: CardType
   onEdit: () => void
@@ -23,6 +23,7 @@ export default function CardSummary({ card, pokemonName, cardType, onEdit }: Car
       <h2 tabIndex={-1} ref={headingRef}>
         Your card
       </h2>
+      <img src={card.photo.dataUrl} alt="Your photo" className="photo-preview" />
       <p className="card-summary-title">
         {card.name}'s {pokemonName} · HP {card.age} · {cardType}
       </p>
