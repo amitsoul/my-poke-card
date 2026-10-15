@@ -1,15 +1,17 @@
-// The first field of the Create card form: the chosen Pokémon, with a "Change" link back to the list.
-// Display only: the page loads the Pokémon and passes it in.
-import { Link } from 'react-router'
+// The first field of the Create card form: the chosen Pokémon, with a "Change" button.
+// Display only: the page loads the Pokémon and decides what "Change" does (maybe warn first).
+import type { Ref } from 'react'
 import type { PokemonDetailsResponse } from '../types/pokemon.ts'
 import { getCardType } from '../utils/cardType.ts'
 import { formatPokemonName, getDetailsImage, getGameTypes } from '../utils/pokemonDetails.ts'
 
 interface FavoritePokemonFieldProps {
   details: PokemonDetailsResponse
+  onChangePokemon: () => void
+  changeButtonRef?: Ref<HTMLButtonElement> // lets the page move focus back to "Change"
 }
 
-export default function FavoritePokemonField({ details }: FavoritePokemonFieldProps) {
+export default function FavoritePokemonField({ details, onChangePokemon, changeButtonRef }: FavoritePokemonFieldProps) {
   const name = formatPokemonName(details.name)
 
   return (
@@ -20,9 +22,9 @@ export default function FavoritePokemonField({ details }: FavoritePokemonFieldPr
         <div className="favorite-info">
           <p className="favorite-name">{name}</p>
           <p>Type: {getCardType(getGameTypes(details))}</p>
-          <Link to="/" className="button">
+          <button type="button" className="button" ref={changeButtonRef} onClick={onChangePokemon}>
             Change
-          </Link>
+          </button>
         </div>
       </div>
     </fieldset>

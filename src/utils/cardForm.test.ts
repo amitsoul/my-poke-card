@@ -6,6 +6,7 @@ import {
   validateName,
   validatePhoto,
   validateSuperpower,
+  validateTextFields,
   type CardFormValues,
   type PhotoFile,
 } from './cardForm.ts'
@@ -197,8 +198,31 @@ describe('validateAboutYou', () => {
     expect(validateAboutYou('I’m Amit')).toEqual({ ok: true, value: "I'm Amit" })
   })
 
+  it('accepts a pasted "é" made of "e" + an accent, and joins it into one letter', () => {
+    const decomposed = 'I love Pokémon' // "e" + combining accent: 2 characters that look like "é"
+    expect(validateAboutYou(decomposed)).toEqual({ ok: true, value: 'I love Pokémon' })
+  })
+
   it('asks for text when it is empty', () => {
     expect(validateAboutYou('')).toEqual({ ok: false, error: 'Please write something about you' })
+  })
+})
+
+describe('validateTextFields', () => {
+  it('returns the cleaned answers and no errors when the 4 text fields are valid', () => {
+    const result = validateTextFields({ name: '  Amit ', age: '030', superpower: 'Super  speed', aboutYou: 'Hi!' })
+    expect(result).toEqual({
+      errors: {},
+      firstInvalidField: null,
+      data: { name: 'Amit', age: 30, superpower: 'Super speed', aboutYou: 'Hi!' },
+    })
+  })
+
+  it('returns 4 errors, the name first and no data, when everything is empty', () => {
+    const result = validateTextFields({ name: '', age: '', superpower: '', aboutYou: '' })
+    expect(Object.keys(result.errors)).toEqual(['name', 'age', 'superpower', 'aboutYou'])
+    expect(result.firstInvalidField).toBe('name')
+    expect(result.data).toBeNull()
   })
 })
 

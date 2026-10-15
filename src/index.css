@@ -258,3 +258,101 @@ body {
     text-align: left;
   }
 }
+
+/* Create card form */
+.card-form {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-field label {
+  font-weight: 600;
+}
+
+.form-field input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.form-field input[aria-invalid='true'] {
+  border-color: #c22c0a;
+}
+
+/* The About you counter, under the input on the right */
+.field-hint {
+  margin: 0;
+  color: #888;
+  font-size: 0.875rem;
+  text-align: right;
+}
+
+.field-error {
+  margin: 0;
+  color: #c22c0a;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.card-form .button {
+  align-self: flex-start;
+}
+
+/* A quieter button, for the safe choice next to a red one */
+.button-secondary {
+  border: 1px solid #e3350d;
+  background: none;
+  color: #e3350d;
+}
+
+.button-secondary:hover {
+  background: rgba(227, 53, 13, 0.08);
+}
+
+/* "Change Pokémon?" warning, right under the favorite Pokémon */
+.change-warning {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 2px solid #e3350d;
+  border-radius: 12px;
+  background: rgba(227, 53, 13, 0.06);
+  text-align: center;
+}
+
+.change-warning p {
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+}
+
+/* The summary after "Create my card" (until the real card in tasks 9–10) */
+.card-summary {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}
+
+.card-summary h2 {
+  margin-top: 0;
+}
+
+.card-summary-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.card-summary-note {
+  color: #888;
+  font-size: 0.875rem;
+}

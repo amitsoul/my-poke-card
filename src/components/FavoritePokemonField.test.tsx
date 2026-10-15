@@ -1,33 +1,29 @@
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router'
-import { describe, expect, it } from 'vitest'
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from 'vitest'
 import { pikachuDetails } from '../test/pokemonFixtures.ts'
 import FavoritePokemonField from './FavoritePokemonField.tsx'
 
-// The "Change" button is a <Link>, which only works inside a router — MemoryRouter is a router for tests
-function renderField() {
-  render(
-    <MemoryRouter>
-      <FavoritePokemonField details={pikachuDetails} />
-    </MemoryRouter>,
-  )
-}
-
 describe('FavoritePokemonField', () => {
   it('is a group labeled "Your favorite Pokémon"', () => {
-    renderField()
+    render(<FavoritePokemonField details={pikachuDetails} onChangePokemon={vi.fn()} />)
     expect(screen.getByRole('group', { name: 'Your favorite Pokémon' })).toBeInTheDocument()
   })
 
   it('shows the Pokémon name, image and card type', () => {
-    renderField()
+    render(<FavoritePokemonField details={pikachuDetails} onChangePokemon={vi.fn()} />)
     expect(screen.getByText('Pikachu')).toBeInTheDocument()
     expect(screen.getByRole('img', { name: 'Pikachu' })).toBeInTheDocument()
     expect(screen.getByText('Type: Lightning')).toBeInTheDocument()
   })
 
-  it('has a "Change" link back to the list', () => {
-    renderField()
-    expect(screen.getByRole('link', { name: 'Change' })).toHaveAttribute('href', '/')
+  it('calls onChangePokemon when "Change" is clicked (the page decides whether to warn)', async () => {
+    const user = userEvent.setup()
+    const handleChangePokemon = vi.fn()
+    render(<FavoritePokemonField details={pikachuDetails} onChangePokemon={handleChangePokemon} />)
+
+    await user.click(screen.getByRole('button', { name: 'Change' }))
+
+    expect(handleChangePokemon).toHaveBeenCalledTimes(1)
   })
 })

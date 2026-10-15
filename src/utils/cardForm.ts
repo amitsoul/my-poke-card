@@ -11,11 +11,22 @@ export interface PhotoFile {
 }
 
 export type CardFormField = 'name' | 'age' | 'photo' | 'superpower' | 'aboutYou'
+export type CardTextField = Exclude<CardFormField, 'photo'>
 
+// What the user typed (before cleaning)
 export interface CardFormValues {
   name: string
   age: string
   photo: PhotoFile | null
+  superpower: string
+  aboutYou: string
+}
+export type CardTextValues = Omit<CardFormValues, 'photo'>
+
+// The cleaned text answers, once every text field is valid (the photo is added in step 8e)
+export interface CardTextData {
+  name: string
+  age: number
   superpower: string
   aboutYou: string
 }
@@ -26,6 +37,7 @@ const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 // The order of the fields on the form — used to find the first invalid one
 const FIELD_ORDER: CardFormField[] = ['name', 'age', 'photo', 'superpower', 'aboutYou']
+const TEXT_FIELD_ORDER: CardTextField[] = ['name', 'age', 'superpower', 'aboutYou']
 
 // Letters with ONE space, hyphen or apostrophe between them; starts and ends with a letter
 const NAME_PATTERN = /^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/
@@ -85,7 +97,8 @@ export function validateSuperpower(raw: string): ValidationResult<string> {
 }
 
 export function validateAboutYou(raw: string): ValidationResult<string> {
-  const aboutYou = straightenApostrophes(raw.trim())
+  // NFC joins a pasted "e" + accent (2 characters) into one "é", so it matches the pattern and counts as 1
+  const aboutYou = straightenApostrophes(raw.normalize('NFC').trim())
   if (aboutYou === '') return fail('Please write something about you')
   if (aboutYou.length > ABOUT_YOU_MAX || !ABOUT_YOU_PATTERN.test(aboutYou)) {
     return fail('English only, up to 80 characters')
@@ -93,24 +106,41 @@ export function validateAboutYou(raw: string): ValidationResult<string> {
   return { ok: true, value: aboutYou }
 }
 
-// Checks every field (for "Create my card"): all errors, and the first invalid field in form order
+// Checks the 4 text fields: all errors, the first invalid field, and the cleaned answers if all are valid
+export function validateTextFields(values: CardTextValues): {
+  errors: Partial<Record<CardTextField, string>>
+  firstInvalidField: CardTextField | null
+  data: CardTextData | null
+} {
+  const name = validateName(values.name)
+  const age = validateAge(values.age)
+  const superpower = validateSuperpower(values.superpower)
+  const aboutYou = validateAboutYou(values.aboutYou)
+
+  const errors: Partial<Record<CardTextField, string>> = {}
+  if (!name.ok) errors.name = name.error
+  if (!age.ok) errors.age = age.error
+  if (!superpower.ok) errors.superpower = superpower.error
+  if (!aboutYou.ok) errors.aboutYou = aboutYou.error
+
+  const firstInvalidField = TEXT_FIELD_ORDER.find((field) => errors[field] !== undefined) ?? null
+  const data =
+    name.ok && age.ok && superpower.ok && aboutYou.ok
+      ? { name: name.value, age: age.value, superpower: superpower.value, aboutYou: aboutYou.value }
+      : null
+  return { errors, firstInvalidField, data }
+}
+
+// Checks every field (text fields + photo): all errors, and the first invalid field in form order
 export function validateCardForm(values: CardFormValues): {
   errors: Partial<Record<CardFormField, string>>
   firstInvalidField: CardFormField | null
 } {
-  const results: Record<CardFormField, ValidationResult<unknown>> = {
-    name: validateName(values.name),
-    age: validateAge(values.age),
-    photo: validatePhoto(values.photo),
-    superpower: validateSuperpower(values.superpower),
-    aboutYou: validateAboutYou(values.aboutYou),
-  }
+  const textResult = validateTextFields(values)
+  const photo = validatePhoto(values.photo)
 
-  const errors: Partial<Record<CardFormField, string>> = {}
-  for (const field of FIELD_ORDER) {
-    const result = results[field]
-    if (!result.ok) errors[field] = result.error
-  }
+  const errors: Partial<Record<CardFormField, string>> = { ...textResult.errors }
+  if (!photo.ok) errors.photo = photo.error
 
   const firstInvalidField = FIELD_ORDER.find((field) => errors[field] !== undefined) ?? null
   return { errors, firstInvalidField }

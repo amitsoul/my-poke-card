@@ -836,3 +836,46 @@
 > 
 > Go ahead: update CARD_SPEC.md "Form fields" with the agreed rules and messages, implement src/utils/cardForm.ts and the tests, run npm test and npm run build, show the results, and remind me to commit.
 > </pasted_content id="91c8">
+
+**12:27 · claude**
+
+> <pasted_content id="91c8">
+> Task 8, step 8d: the text fields, errors, the "Create my card" button and the summary. Follow AGENTS.md. PLAN FIRST: do not write code until I approve.
+> 
+> Scope: on /create/:id, under "Your favorite Pokémon", add the fields Your name, Age (HP), Superpower, About you, using the validators from src/utils/cardForm.ts. The photo field is NOT in this step (8e).
+> 
+> Rules (already in CARD_SPEC.md):
+> - Errors appear on blur or on submit, not while typing.
+> - "Create my card" is always enabled. With problems: show ALL errors and move focus to the first invalid field.
+> - About you has a character counter (typed length / 80).
+> - "Change" warns only if at least one field has a value.
+> 
+> In your plan, tell me:
+> 1. Files and components. I'd like the form to be its own component (not inside the page), so it can be tested with RTL in 8f. Tell me what it gets as props and where the state lives.
+> 2. The photo field doesn't exist yet, but validateCardForm checks it. How will submit work in 8d without blocking on the missing photo, so that 8e only has to add it? Give options and your recommendation.
+> 3. The "Change" warning: options (for example window.confirm vs. a small dialog in the page), pros and cons in simple words, your recommendation. Also: what happens if the form has values and I click "Create card" or "Pokémon" in the nav?
+> 4. Resetting: how you make sure the form starts empty when the Pokémon changes (CreateCardPage is used for both /create and /create/:id).
+> 5. Accessibility: labels, how errors are connected to their input, input types (for example age: type="number" or text with inputMode="numeric"), maxLength.
+> 6. The summary after a successful submit: exactly what it shows, every UI text, and what buttons it has (for example "Edit" back to the form with the values kept). Remember the real card comes in tasks 9–10.
+> 7. Every new UI text (labels, placeholders if any, buttons, warning text), so I can approve the wording.
+> 8. Which tests you suggest for 8d (if any), knowing the full RTL form test is planned for 8f.
+> 
+> After I approve: implement, run npm test and npm run build, show the results, give me a browser checklist (desktop and phone width), and remind me to commit.
+> </pasted_content id="91c8">
+> 
+>   Small fix to include in 8d: in validateAboutYou, normalize the text with .normalize('NFC') before checking, so a decomposed "é" (e + combining accent, e.g. from copy-paste) is accepted too. Add one test for it.
+
+**12:32 · claude**
+
+> <pasted_content id="91c8">
+> Approved, with these decisions:
+> 
+> 1. FormField: yes.
+> 2. Photo: option C (validateTextFields + validateCardForm uses it).
+> 3. Warning: the inline warning with role="alert", as you described. No beforeunload. Leaving through the nav or Back loses the answers without a warning.
+> 4. All texts in section 7: approved.
+> 
+> One edge case to handle: after "Edit", the form is filled again from initialValues but nobody has typed yet. "Change" must still warn in this case. Make sure the page knows the form has values right after Edit (not only after typing), and include this case in the browser checklist.
+> 
+> Go ahead and implement, including the NFC fix and the tests from section 8. Then run npm test and npm run build, show the results, give me the browser checklist (desktop and phone width), and remind me to commit.
+> </pasted_content id="91c8">
