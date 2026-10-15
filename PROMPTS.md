@@ -677,3 +677,24 @@
 > 
 > Check: npm test (all pass), npm run build, linter clean, and the app works the same in the browser. Then show me the npm test summary and explain why moving logic out of a component makes it testable.
 > </pasted_content id="91c8">
+
+**10:28 · claude**
+
+> <pasted_content id="91c8">
+> Committed 7c, and I checked search, filter, Load more and Back to list in the browser — all the same as before.
+> 
+> Step 7d: React Testing Library (bonus) — 2 component tests, no fetch.
+> 1. Install @testing-library/react, @testing-library/jest-dom, @testing-library/user-event and jsdom as dev dependencies (approved).
+> 2. Configure Vitest so component tests run in jsdom (a fake browser), with jest-dom matchers (e.g. toBeInTheDocument, toHaveAttribute) set up once. Keep the existing util tests working. Clean up between tests.
+> 3. src/components/SearchBar.test.tsx:
+>    - it shows the value it receives
+>    - typing a letter calls onChange with that text
+> 4. src/components/CardTypeFilter.test.tsx:
+>    - it shows "All" + the 10 card types
+>    - clicking "Fire" calls onChange with "Fire"; clicking "All" calls onChange with null
+>    - the selected type's button is marked pressed (aria-pressed="true") and the others aren't
+>    Use vi.fn() for the callbacks and find elements the way a user would (by role/label/text), not by CSS class.
+> 5. Typed, no any. npm test, npm run build and the linter must all pass.
+> 
+> Then show me the npm test summary and explain simply: (a) what render, screen and userEvent do, (b) what vi.fn() is and why we need it here, (c) why we find a button by its role and name and not by its CSS class.
+> </pasted_content id="91c8">
