@@ -1,8 +1,9 @@
-// One saved card in My Cards: the card (drawn from the saved snapshot, sticker fixed) + heart and Delete.
+// One saved card in My Cards: the card (drawn from the saved snapshot, sticker fixed) + heart, Download PNG and Delete.
 import { useRef, useState } from 'react'
 import { formatPokemonName } from '../utils/pokemonDetails.ts'
-import { formatCardNumber, type SavedCard } from '../utils/savedCards.ts'
+import { formatCardNumber, getPngFileName, type SavedCard } from '../utils/savedCards.ts'
 import { toTitleCase } from '../utils/text.ts'
+import DownloadPngButton from './DownloadPngButton.tsx'
 import FavoriteButton from './FavoriteButton.tsx'
 import InlineConfirm from './InlineConfirm.tsx'
 import PokeCard from './PokeCard.tsx'
@@ -42,6 +43,7 @@ export default function SavedCardItem({ saved, onToggleFavorite, onDelete }: Sav
         favorite={saved.favorite}
         onToggle={() => onToggleFavorite(saved.number)}
       />
+      <DownloadPngButton fileName={getPngFileName(saved.card.name, saved.pokemon.name, saved.number)} />
       <button
         type="button"
         className="button button-secondary"

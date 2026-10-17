@@ -61,6 +61,9 @@ describe('MyCardsPage', () => {
     expect(within(newest).getByRole('img', { name: 'Pikachu' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /sticker/ })).toBeNull()
     expect(screen.queryByText(/Tip: drag/)).toBeNull()
+    // Every card has its own Download PNG button
+    expect(within(newest).getByRole('button', { name: 'Download PNG' })).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: 'Download PNG' })).toHaveLength(2)
   })
 
   it('no card grabs the focus when the page opens', () => {

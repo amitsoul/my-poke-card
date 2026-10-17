@@ -245,19 +245,11 @@ describe('the favorites filter', () => {
 })
 
 describe('getPngFileName', () => {
-  const valid: SavedCard = { number: 1, savedAt: '2026-10-17T10:00:00.000Z', favorite: false, ...newPikachuCard }
-
   it('"Amit" + Pikachu + MPC 001 → "amits-pikachu-mpc-001.png"', () => {
-    expect(getPngFileName(valid)).toBe('amits-pikachu-mpc-001.png')
+    expect(getPngFileName('Amit', 'pikachu', 1)).toBe('amits-pikachu-mpc-001.png')
   })
 
   it("drops apostrophes and joins everything else with single hyphens (O'Neil's Mr-Mime)", () => {
-    const oNeil: SavedCard = {
-      ...valid,
-      number: 4,
-      card: { ...valid.card, name: "O'Neil" },
-      pokemon: { ...valid.pokemon, name: 'mr-mime' },
-    }
-    expect(getPngFileName(oNeil)).toBe('oneils-mr-mime-mpc-004.png')
+    expect(getPngFileName("O'Neil", 'mr-mime', 4)).toBe('oneils-mr-mime-mpc-004.png')
   })
 })

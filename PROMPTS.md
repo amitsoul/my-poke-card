@@ -1237,3 +1237,15 @@
 > - Tests as planned.
 > Then run npm test and npm run build, show the results, give me a browser checklist (desktop, tablet and phone widths), and remind me to commit.
 > </pasted_content id="91c8">
+
+**10:44 · claude**
+
+> <pasted_content id="91c8">
+> 11c approved. Go ahead with step 11d only, as in your plan:
+> - Install html-to-image with an exact version (npm install html-to-image@1.11.13 --save-exact). It's on the approved list in AGENTS.md.
+> - src/utils/downloadCardPng.ts: capture only .poke-card-frame; always 760×1064 (canvasWidth / canvasHeight); wait for document.fonts.ready before capturing; the Safari-only double capture; toBlob → a temporary <a download> → click → revoke the object URL. The file name from getPngFileName.
+> - Make sure the PNG never includes a focus ring or hover state (the sticker is a <span> on saved cards, but check the frame itself too).
+> - The "Download PNG" button: on the Create page after saving (next to the "Saved…" notice) and on each card in My Cards. While working: "Preparing PNG..." with aria-busy; on failure: "Sorry, the PNG couldn't be created. Please try again."
+> - Tests with vi.mock('html-to-image') and a faked URL.createObjectURL, as planned.
+> Then run npm test and npm run build, show the results, give me a browser checklist (open the PNG and check: fonts, symbols, photo, sticker outline and shadow, MPC number, no tip, no focus ring; Chrome on desktop, and Safari on an iPhone if possible), and remind me to commit.
+> </pasted_content id="91c8">

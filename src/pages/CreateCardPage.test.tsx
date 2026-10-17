@@ -203,9 +203,12 @@ describe('CreateCardPage', () => {
     const user = renderPage('/create/25')
     await fillValidForm(user)
     await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    // Before saving there's no Download (the PNG must have its card number)
+    expect(screen.queryByRole('button', { name: 'Download PNG' })).toBeNull()
 
     await user.click(screen.getByRole('button', { name: 'Save to My Cards' }))
 
+    expect(screen.getByRole('button', { name: 'Download PNG' })).toBeInTheDocument()
     const notice = screen.getByText('Saved as MPC 001 ✓')
     expect(notice).toHaveAttribute('role', 'status') // announced by screen readers
     expect(notice).toHaveFocus()

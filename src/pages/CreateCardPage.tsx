@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import CardForm from '../components/CardForm.tsx'
+import DownloadPngButton from '../components/DownloadPngButton.tsx'
 import FavoritePokemonField from '../components/FavoritePokemonField.tsx'
 import InlineConfirm from '../components/InlineConfirm.tsx'
 import PokeCard from '../components/PokeCard.tsx'
@@ -13,7 +14,7 @@ import type { CardPokemon } from '../types/pokemon.ts'
 import type { CardData, CardFormData, CardFormDraft } from '../utils/cardForm.ts'
 import { toCardPokemon } from '../utils/pokemonDetails.ts'
 import { parsePokemonId } from '../utils/pokemonId.ts'
-import { saveCard } from '../utils/savedCards.ts'
+import { getPngFileName, saveCard } from '../utils/savedCards.ts'
 import { DEFAULT_STICKER_POSITION, type StickerPosition } from '../utils/sticker.ts'
 import NotFoundPage from './NotFoundPage.tsx'
 
@@ -228,7 +229,13 @@ export default function CreateCardPage() {
                   Save to My Cards
                 </button>
               ) : (
-                <SavedNotice cardNumber={session.savedNumber} />
+                <>
+                  <SavedNotice cardNumber={session.savedNumber} />
+                  {/* Only after saving, so the PNG always has its card number */}
+                  <DownloadPngButton
+                    fileName={getPngFileName(session.card.name, state.details.name, session.savedNumber)}
+                  />
+                </>
               )}
               <button
                 type="button"

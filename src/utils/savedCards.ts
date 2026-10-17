@@ -51,9 +51,9 @@ export function filterSavedCards(cards: SavedCard[], show: ShowFilter): SavedCar
   return show === 'favorites' ? cards.filter((saved) => saved.favorite) : cards
 }
 
-// "Amit" + Pikachu + 1 → "amits-pikachu-mpc-001.png"; "O'Neil" + "mr-mime" → "oneils-mr-mime-mpc-004.png"
-export function getPngFileName(saved: SavedCard): string {
-  const slug = `${saved.card.name}s ${saved.pokemon.name} ${formatCardNumber(saved.number)}`
+// "Amit" + "pikachu" + 1 → "amits-pikachu-mpc-001.png"; "O'Neil" + "mr-mime" + 4 → "oneils-mr-mime-mpc-004.png"
+export function getPngFileName(userName: string, pokemonName: string, number: number): string {
+  const slug = `${userName}s ${pokemonName} ${formatCardNumber(number)}`
     .toLowerCase()
     .replace(/['’]/g, '') // "o'neil" → "oneil"
     .replace(/[^a-z0-9]+/g, '-') // spaces, hyphens, anything else → one "-"
