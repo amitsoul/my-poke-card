@@ -45,4 +45,4 @@ Editing a saved card, sharing via link, multiple languages, choosing which moves
 - **Weakness/Resistance:** fixed TCG tables by Type (not game damage relations), in [CARD_SPEC.md](CARD_SPEC.md); one shared helper for the details page and the card.
 - **Units:** height (dm) → ft/in, weight (hg) → lbs; details in [CARD_SPEC.md](CARD_SPEC.md).
 - **Card number rule:** assigned once when the card is created and stored with it, formatted "MPC 001". A counter in localStorage only goes up, so deleting a card never renumbers the others (delete MPC 002 → the next new card is still MPC 004).
-- **Saved card (localStorage):** user name, age/HP, ability, flavor text, resized photo, Pokémon id, card number, created date.
+- **Saved card (localStorage):** each saved card is a full snapshot (so My Cards needs no API) plus a `favorite` flag; details in [CARD_SPEC.md](CARD_SPEC.md#saved-cards).

@@ -125,6 +125,17 @@ Every circle has at least 3:1 contrast with its white icon (WCAG 1.4.11, checked
 - **Hidden cards are dropped on the next write** (save, favorite or delete), because only the valid cards are written back.
 - **Storage full:** the card is not saved and the counter does not change.
 
+## Download PNG
+- Code: `src/utils/downloadCardPng.ts` (with `html-to-image`, approved by the lecturer) and `src/components/DownloadPngButton.tsx`.
+- **Only after saving** (on the Create page next to "Saved as MPC 00X ✓", and on every card in My Cards), so every PNG has its card number.
+- **Only `.poke-card-frame` is captured:** the card itself — not the heading, the tip or the buttons. Anything focused inside it is blurred first, so no focus ring ends up in the PNG.
+- **Always 760 × 1064** (2× the 380×532 design) with `pixelRatio: 1`, on every screen size and device.
+- **Waits for `document.fonts.ready`**, so the PNG uses the Barlow fonts.
+- **Safari and every iPhone browser (WebKit) capture twice** and keep the second image, because WebKit sometimes draws images blank in the first capture.
+- **File name** from `getPngFileName`: "Amit" + Pikachu + MPC 001 → `amits-pikachu-mpc-001.png`.
+- While working: "Preparing PNG..." (`aria-busy`); on failure: "Sorry, the PNG couldn't be created. Please try again."
+- **Open item for task 12:** check the PNG on Safari on a real iPhone (images, fonts, the sticker's outline and shadow).
+
 ## Note on Types
 We use the 10 current TCG Types. "Type" is the card's category (the symbol top-right); "Energy" means Energy cards and attack costs. Fairy was retired from the TCG in 2020, and Fairy Pokémon are printed as Psychic — still true in the 2025–26 Mega Evolution series (e.g. Mega Gardevoir ex). Poison Pokémon are printed as Darkness in the current era.
 

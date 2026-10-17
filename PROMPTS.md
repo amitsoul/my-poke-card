@@ -1249,3 +1249,18 @@
 > - Tests with vi.mock('html-to-image') and a faked URL.createObjectURL, as planned.
 > Then run npm test and npm run build, show the results, give me a browser checklist (open the PNG and check: fonts, symbols, photo, sticker outline and shadow, MPC number, no tip, no focus ring; Chrome on desktop, and Safari on an iPhone if possible), and remind me to commit.
 > </pasted_content id="91c8">
+
+**10:56 · claude**
+
+> <pasted_content id="91c8">
+> 11d approved (I opened the real PNG: 760×1064, Barlow fonts, all symbols, photo, sticker outline + shadow, MPC number, no focus ring). Go ahead with step 11e only: close task 11. Docs only, no code changes.
+> - tasks.md: mark task 11 [x], with a one-line summary of 11a–11d.
+> - docs/requirements-checklist.md: update the component count and list (new since task 10: SavedNotice, MyCardsPage, SavedCardItem, FavoriteButton, InlineConfirm, DownloadPngButton; ChangeWarning was removed). Mark "at least 2 more pages" ✅ (About + My Cards), NavLink nav ✅ (My Cards added), and the localStorage favorites bonus ✅ with a note: "to confirm with the lecturer that favorites inside My Cards count".
+> - CARD_SPEC.md: add a short "Download PNG" section: only .poke-card-frame is captured, always 760×1064 (pixelRatio 1), waits for document.fonts.ready, Safari/iPhone double capture, file name from getPngFileName, available only after saving. Add "iPhone Safari PNG check" as an open item for task 12.
+> - Don't touch my "My note" lines in PROMPTS.md.
+> Then run npm test and npm run build, show me the diff summary, and remind me to commit.
+> </pasted_content id="91c8">
+
+**11:00 · claude**
+
+> Yes, fix PRD.md section 7 in this same commit: replace the out-of-date "Saved card" line with one line saying each saved card is a full snapshot plus a favorite flag, kept in localStorage, and point to the "Saved cards" section in CARD_SPEC.md for the details. Nothing else. Then show me the diff for PRD.md and run npm test and npm run build again.
