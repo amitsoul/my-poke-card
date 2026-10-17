@@ -1300,3 +1300,13 @@
 > - P7 belongs to 12c, don't do it yet.
 > Then run npm test, npm run build and npm run lint, show the results, give me a short browser checklist (tab titles on each page, the favicon in the tab), and wait for my commit.
 > </pasted_content id="91c8">
+
+**18:15 · claude**
+
+> <pasted_content id="91c8">
+> 12b approved. Go ahead with step 12c only: the automated final checks plus P7.
+> - P7: make every test fail if anything calls console.error or console.warn (in src/test/setup.ts, e.g. spy on both in beforeEach and fail in afterEach with the message that was logged). Then run the full suite. If it reveals warnings, DON'T silence or hide them: show me each one (file, test, the message), explain the cause, and propose a fix. Fix only the ones that are real problems in our code; if a test intentionally triggers an error (e.g. a failed fetch that our code logs on purpose), allow it explicitly in that one test, with a comment, and tell me which.
+> - Then run and report: npm test, npm run build, npm run lint, npm audit, a search for any in src/ (: any, as any, <any>), and git log --oneline | wc -l.
+> - Check every task in tasks.md has a "Done when", and every link in PRD.md, CARD_SPEC.md and the checklist points to a file that exists.
+> Show me all results in one table and wait for my commit. No other changes.
+> </pasted_content id="91c8">
