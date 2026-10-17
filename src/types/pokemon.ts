@@ -79,6 +79,17 @@ export interface TypeResponse {
 
 // ---------- Our app ----------
 
+// The Pokémon data a card is drawn from — built from the API on the Create page,
+// and stored as it is with every saved card, so My Cards needs no API
+export interface CardPokemon {
+  id: number
+  name: string // the API's slug, e.g. "pikachu"
+  gameTypes: string[] // in slot order, e.g. ['electric']
+  height: number // decimeters
+  weight: number // hectograms
+  artworkUrl: string
+}
+
 // One Pokémon in the list
 export interface PokemonSummary {
   id: number

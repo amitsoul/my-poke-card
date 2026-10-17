@@ -1165,3 +1165,42 @@
 > - Do NOT write my "My note" in PROMPTS.md. I'll write it myself, including that I used a design tool to make a mockup as a reference only.
 > Then run npm test and npm run build, show the results, and remind me to commit.
 > </pasted_content id="91c8">
+
+## 2026-10-17
+
+**10:05 · claude**
+
+> <pasted_content id="91c8">
+> Task 11: save the card, download PNG, My Cards and favorites. Follow AGENTS.md. PLAN FIRST: do not write code until I approve.
+> 
+> Already decided (CARD_SPEC / my decisions):
+> - Cards are saved in localStorage. Each saved card gets favorite: boolean.
+> - Card number "MPC 001": assigned once when the card is SAVED, from a counter in localStorage that only goes up (never reused, even after a delete).
+> - Download PNG with html-to-image (already approved by my lecturer).
+> - New page /my-cards + NavLink "My Cards" in the nav (after "Create card").
+> - Favorites: a heart button (red = favorite, gray = not), only on saved cards. Filter "All (n)" / "Favorites (n)" kept in the URL as ?show=favorites. Empty favorites text: "No favorites yet. Tap ❤️ on a card to add it."
+> - In My Cards and in the PNG the sticker is fixed (CardSticker without onMove), and the "Tip" line is not shown.
+> 
+> In your plan, tell me:
+> 1. Steps (small, each with its own commit), files, and which parts are pure functions with tests.
+> 2. What exactly is saved per card: a full snapshot (all the card data incl. attacks, genus, rules, photo data URL, artwork URL, sticker position) so My Cards needs no API calls, or only ids? Options + recommendation. Also the storage key, a version number for the saved format, and how you read it safely (broken or old data in localStorage must never crash the app).
+> 3. Storage size: about how many cards fit (each photo is a ~60 KB data URL), and what the user sees if localStorage is full (QuotaExceededError).
+> 4. The Save button: where it appears (on the created card next to Edit?), what happens after saving (message? go to My Cards?), can the same card be saved twice, and what happens to Edit after saving.
+> 5. Download PNG: which element is captured (the card only, without the tip), the PNG size (e.g. pixelRatio for a sharp image), the file name (e.g. "amits-pikachu-mpc-001.png"), fonts and the artwork being included (crossOrigin), a loading state, and an error message if it fails. Can I download from the Create page, from My Cards, or both? Mention any known Safari/iPhone issues.
+> 6. My Cards page: the layout (grid of cards? smaller?), what each card shows, and which buttons (heart, Download, Delete?). Should Delete exist, and if yes, with a confirmation?
+> 7. Edge cases: no saved cards yet (empty state text), a saved card whose data is broken, a very old saved format.
+> 8. Every new UI text, so I can approve the wording.
+> 9. The tests you plan (pure storage functions, the counter, the filter, RTL for My Cards and the heart, and how you fake html-to-image and localStorage).
+> 
+> After I approve each step: implement it, run npm test and npm run build, show the results, give me a browser checklist, and remind me to commit.
+> </pasted_content id="91c8">
+
+**10:10 · claude**
+
+> <pasted_content id="91c8">
+> Approved: steps 11a–11e, the full snapshot (A) with the artwork as a URL, Save locks the sticker, Edit after saving makes a new unsaved card, Delete with the inline confirm, keep the photo at 400 px, the Safari double-capture, no iPhone share sheet for now, and all the texts.
+> 
+> One change: don't use crypto.randomUUID(). It only exists in secure contexts (https or localhost). When I test on my phone with npm run dev -- --host, the address is http://192.168.x.x, so Save would crash there. Use the card number as the id instead (numbers are unique and never reused), so SavedCard has no separate id field. Add a test that two saved cards get different numbers/ids.
+> 
+> Do ONLY step 11a now (savedCards.ts + tests + the localStorage cleanup in setup.ts). No UI changes. Then run npm test and npm run build, show the results, and remind me to commit. I'll send the approval for 11b after review.
+> </pasted_content id="91c8">

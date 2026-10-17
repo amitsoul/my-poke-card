@@ -15,4 +15,10 @@ afterEach(() => {
   vi.unstubAllGlobals()
   // Forget the moves fetched in this test (the move cache lives in memory, across tests)
   clearMoveCache()
+  // Empty the test browser's localStorage (saved cards, the card counter), so no test sees another's cards
+  try {
+    window.localStorage.clear()
+  } catch {
+    // nothing to clean if storage isn't available
+  }
 })
