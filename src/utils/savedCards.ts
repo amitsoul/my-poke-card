@@ -102,7 +102,8 @@ function isCardPokemon(value: unknown): boolean {
     value.gameTypes.every((type) => typeof type === 'string') &&
     isFiniteNumber(value.height) &&
     isFiniteNumber(value.weight) &&
-    typeof value.artworkUrl === 'string'
+    typeof value.artworkUrl === 'string' &&
+    value.artworkUrl.startsWith('https://') // it goes into an <img src>, so only a normal https image link
   )
 }
 

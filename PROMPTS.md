@@ -1204,3 +1204,21 @@
 > 
 > Do ONLY step 11a now (savedCards.ts + tests + the localStorage cleanup in setup.ts). No UI changes. Then run npm test and npm run build, show the results, and remind me to commit. I'll send the approval for 11b after review.
 > </pasted_content id="91c8">
+
+**10:18 · claude**
+
+> <pasted_content id="91c8">
+> 11a approved. Two small additions first:
+> 1. isCardPokemon: also require artworkUrl to start with "https://" (it goes into an <img src>, like the photo, which already must start with data:image/jpeg). Add a test.
+> 2. Document in CARD_SPEC that hidden (broken) cards are dropped on the next write (save, favorite or delete), because only valid cards are written back.
+> 
+> Then go ahead with step 11b only, as in your plan:
+> - toCardPokemon(details) (pure, tested); PokeCard draws from CardPokemon + CardData + PokemonCardInfo, so the same component works on the Create page and (in 11c) in My Cards.
+> - The card number in the bottom line ("MPC 003", right side) when the card is saved; empty before saving.
+> - On /create/:id: "Save to My Cards" next to Edit. If the attacks are still loading or failed: "Please wait until the attacks are loaded." (button stays enabled).
+> - After saving: the status "Saved as MPC 003 ✓" (role="status", focus moves to it) + a link "View in My Cards" (the route comes in 11c, so for now the link may lead to the 404 page; that's fine). The sticker becomes fixed and the tip disappears. No second Save.
+> - Edit after saving → the form with the answers; "Create my card" makes a new, unsaved card (a new number when saved). "Change" after saving: no warning.
+> - Save errors: the two texts from the plan.
+> - Tests as planned.
+> Then run npm test and npm run build, show the results, give me a browser checklist (including DevTools → Application → Local Storage to see the saved JSON and the counter), and remind me to commit.
+> </pasted_content id="91c8">

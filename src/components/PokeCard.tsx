@@ -1,15 +1,17 @@
 // The personal card in the "Classic" design (CARD_SPEC.md "Card design"), every field in the "Layout" order.
 // All sizes are design pixels × --u (CSS), so the card shrinks as one piece on narrow screens.
-// The photo fills the window, with the Pokémon as a sticker on top (moving it: step 10d).
-// The card number (MPC 001) comes in task 11.
-import { useEffect, useRef, type CSSProperties } from 'react'
+// The photo fills the window, with the Pokémon as a sticker on top.
+// It draws from plain data (CardPokemon + CardData + the card info), so the same component works on the
+// Create page (data from the API) and in My Cards (data from a saved card).
+import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
 import type { PokemonCardInfoState } from '../hooks/usePokemonCardInfo.ts'
-import type { PokemonDetailsResponse } from '../types/pokemon.ts'
+import type { CardPokemon } from '../types/pokemon.ts'
 import type { CardData } from '../utils/cardForm.ts'
+import { formatCardNumber } from '../utils/savedCards.ts'
 import type { StickerPosition } from '../utils/sticker.ts'
 import { formatDexNumber, formatHeight, formatWeight, getCardRules } from '../utils/cardRules.ts'
 import { getNameFontSize, TYPE_THEME } from '../utils/cardTheme.ts'
-import { formatPokemonName, getDetailsImage, getGameTypes } from '../utils/pokemonDetails.ts'
+import { formatPokemonName } from '../utils/pokemonDetails.ts'
 import { toTitleCase } from '../utils/text.ts'
 import AttacksBlock from './AttacksBlock.tsx'
 import CardSticker from './CardSticker.tsx'
@@ -17,17 +19,26 @@ import TypeSymbol from './TypeSymbol.tsx'
 import WeaknessRow from './WeaknessRow.tsx'
 
 interface PokeCardProps {
-  card: CardData // the user's answers and photo
-  details: PokemonDetailsResponse // the chosen Pokémon
+  card: CardData // the user's answers, photo and sticker position
+  pokemon: CardPokemon // the chosen Pokémon
   cardInfo: PokemonCardInfoState // genus + attacks (may still be loading, or have failed)
   onRetryCardInfo: () => void
-  onEdit: () => void
-  onStickerMove?: (position: StickerPosition) => void // only on the created card: then the sticker can be moved
+  onStickerMove?: (position: StickerPosition) => void // only on a created, not yet saved card: then the sticker can move
+  cardNumber?: number // once saved: shown as "MPC 003" at the bottom right
+  children?: ReactNode // the buttons under the card (Save / Edit on the Create page)
 }
 
 export const CARD_DESIGNER = 'Amit Soul'
 
-export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onEdit, onStickerMove }: PokeCardProps) {
+export default function PokeCard({
+  card,
+  pokemon,
+  cardInfo,
+  onRetryCardInfo,
+  onStickerMove,
+  cardNumber,
+  children,
+}: PokeCardProps) {
   const headingRef = useRef<HTMLHeadingElement>(null)
 
   // Once, when the card appears: move focus to its heading, so keyboard and screen-reader users know it worked
@@ -35,14 +46,14 @@ export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onE
     headingRef.current?.focus()
   }, [])
 
-  const pokemonName = formatPokemonName(details.name)
+  const pokemonName = formatPokemonName(pokemon.name)
   // The user's name in Title Case, like the Ability ("amit" → "Amit's Ivysaur"); the stored value stays as typed
   const cardName = `${toTitleCase(card.name)}'s ${pokemonName}`
-  const rules = getCardRules(getGameTypes(details), details.weight)
+  const rules = getCardRules(pokemon.gameTypes, pokemon.weight)
   const theme = TYPE_THEME[rules.cardType]
   const genus = cardInfo.status === 'ready' ? cardInfo.info.genus : null
   // "NO. 0025 · Mouse Pokémon · HT 1'04" · WT 13.2 lbs" — the genus is left out while loading or when there is none
-  const dexStrip = [formatDexNumber(details.id), genus, `HT ${formatHeight(details.height)}`, `WT ${formatWeight(details.weight)}`]
+  const dexStrip = [formatDexNumber(pokemon.id), genus, `HT ${formatHeight(pokemon.height)}`, `WT ${formatWeight(pokemon.weight)}`]
     .filter((part) => part !== null)
     .join(' · ')
   // The Type's colors, as CSS variables for the panel and the strip
@@ -76,7 +87,7 @@ export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onE
             <div className="poke-card-window">
               <img className="poke-card-photo" src={card.photo.dataUrl} alt="Your photo" />
               <CardSticker
-                src={getDetailsImage(details)}
+                src={pokemon.artworkUrl}
                 pokemonName={pokemonName}
                 position={card.stickerPosition}
                 onMove={onStickerMove}
@@ -101,8 +112,8 @@ export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onE
 
             <p className="poke-card-bottom">
               <span>Card design: {CARD_DESIGNER} · Fan-made · Not an official Pokémon card</span>
-              {/* Room for the card number "MPC 001" (task 11) */}
-              <span className="poke-card-number" />
+              {/* The card number once the card is saved ("MPC 003"); empty before */}
+              <span className="poke-card-number">{cardNumber === undefined ? '' : formatCardNumber(cardNumber)}</span>
             </p>
           </div>
         </div>
@@ -113,9 +124,7 @@ export default function PokeCard({ card, details, cardInfo, onRetryCardInfo, onE
         <p className="sticker-tip">Tip: drag the Pokémon sticker to place it on your photo.</p>
       )}
 
-      <button type="button" className="button" onClick={onEdit}>
-        Edit
-      </button>
+      {children !== undefined && <div className="card-actions">{children}</div>}
     </article>
   )
 }

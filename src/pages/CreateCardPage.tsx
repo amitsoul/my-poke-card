@@ -6,10 +6,14 @@ import CardForm from '../components/CardForm.tsx'
 import ChangeWarning from '../components/ChangeWarning.tsx'
 import FavoritePokemonField from '../components/FavoritePokemonField.tsx'
 import PokeCard from '../components/PokeCard.tsx'
+import SavedNotice from '../components/SavedNotice.tsx'
 import { usePokemonCardInfo } from '../hooks/usePokemonCardInfo.ts'
 import { usePokemonDetails } from '../hooks/usePokemonDetails.ts'
+import type { CardPokemon } from '../types/pokemon.ts'
 import type { CardData, CardFormData, CardFormDraft } from '../utils/cardForm.ts'
+import { toCardPokemon } from '../utils/pokemonDetails.ts'
 import { parsePokemonId } from '../utils/pokemonId.ts'
+import { saveCard } from '../utils/savedCards.ts'
 import { DEFAULT_STICKER_POSITION, type StickerPosition } from '../utils/sticker.ts'
 import NotFoundPage from './NotFoundPage.tsx'
 
@@ -23,6 +27,8 @@ interface CreateSession {
   isWarningOpen: boolean
   // Where the sticker sits. Kept through "Edit" → "Create my card", so the card keeps its look.
   stickerPosition: StickerPosition
+  savedNumber: number | null // set once this card is saved (then: no second Save, the sticker is fixed)
+  saveProblem: 'wait' | 'full' | 'blocked' | null // why the last Save didn't work
 }
 
 function freshSession(pokemonId: number): CreateSession {
@@ -33,6 +39,8 @@ function freshSession(pokemonId: number): CreateSession {
     editValues: undefined,
     isWarningOpen: false,
     stickerPosition: DEFAULT_STICKER_POSITION,
+    savedNumber: null,
+    saveProblem: null,
   }
 }
 
@@ -94,13 +102,51 @@ export default function CreateCardPage() {
   // The form's answers + the sticker position (the default for a new card, the kept one after "Edit")
   function handleSubmit(formData: CardFormData) {
     const card: CardData = { ...formData, stickerPosition: session.stickerPosition }
-    updateSession({ card, hasValues: true, isWarningOpen: false })
+    // A new card is never saved yet (even after Edit of a saved one: saving it again gives a new number)
+    updateSession({ card, hasValues: true, isWarningOpen: false, savedNumber: null, saveProblem: null })
   }
 
   // Back to the form with the answers kept. The form is filled but nobody typed yet,
   // so the page sets hasValues here — "Change" must still warn.
   function handleEdit(card: CardData) {
-    updateSession({ card: null, editValues: toFormValues(card), hasValues: true })
+    updateSession({ card: null, editValues: toFormValues(card), hasValues: true, savedNumber: null, saveProblem: null })
+  }
+
+  // Save the card with its genus and attacks. Without them (still loading or failed) we don't save.
+  function handleSave(card: CardData, pokemon: CardPokemon) {
+    if (cardInfo.state.status !== 'ready') {
+      updateSession({ saveProblem: 'wait' })
+      return
+    }
+    const result = saveCard({ card, pokemon, info: cardInfo.state.info })
+    if (result.ok) {
+      // Saved: nothing can be lost any more, so "Change" no longer warns
+      updateSession({ savedNumber: result.saved.number, saveProblem: null, hasValues: false, isWarningOpen: false })
+    } else {
+      updateSession({ saveProblem: result.error })
+    }
+  }
+
+  // The message under the buttons after a Save that didn't work
+  function renderSaveProblem() {
+    if (session.saveProblem === 'wait' && cardInfo.state.status !== 'ready') {
+      return <p role="alert" className="save-message">Please wait until the attacks are loaded.</p>
+    }
+    if (session.saveProblem === 'full') {
+      return (
+        <p role="alert" className="save-message">
+          Your browser's storage is full. Delete some cards in <Link to="/my-cards">My Cards</Link>, then try again.
+        </p>
+      )
+    }
+    if (session.saveProblem === 'blocked') {
+      return (
+        <p role="alert" className="save-message">
+          Cards can't be saved in this browser (storage is blocked or full).
+        </p>
+      )
+    }
+    return null
   }
 
   return (
@@ -149,17 +195,44 @@ export default function CreateCardPage() {
           ) : (
             <PokeCard
               card={session.card}
-              details={state.details}
+              pokemon={toCardPokemon(state.details)}
               cardInfo={cardInfo.state}
               onRetryCardInfo={cardInfo.retry}
-              // A moved sticker is saved in the card AND in the session, so Edit → Create keeps it
-              onStickerMove={(stickerPosition) => {
-                if (session.card !== null) updateSession({ stickerPosition, card: { ...session.card, stickerPosition } })
-              }}
-              onEdit={() => {
-                if (session.card !== null) handleEdit(session.card)
-              }}
-            />
+              // The sticker can move until the card is saved. A moved sticker is kept in the card AND the session,
+              // so Edit → Create keeps it.
+              onStickerMove={
+                session.savedNumber !== null
+                  ? undefined
+                  : (stickerPosition) => {
+                      if (session.card !== null) updateSession({ stickerPosition, card: { ...session.card, stickerPosition } })
+                    }
+              }
+              cardNumber={session.savedNumber ?? undefined}
+            >
+              {session.savedNumber === null ? (
+                <button
+                  type="button"
+                  className="button"
+                  onClick={() => {
+                    if (session.card !== null) handleSave(session.card, toCardPokemon(state.details))
+                  }}
+                >
+                  Save to My Cards
+                </button>
+              ) : (
+                <SavedNotice cardNumber={session.savedNumber} />
+              )}
+              <button
+                type="button"
+                className="button button-secondary"
+                onClick={() => {
+                  if (session.card !== null) handleEdit(session.card)
+                }}
+              >
+                Edit
+              </button>
+              {renderSaveProblem()}
+            </PokeCard>
           )}
         </>
       )}

@@ -4,9 +4,10 @@ import { describe, expect, it, vi } from 'vitest'
 import type { PokemonCardInfoState } from '../hooks/usePokemonCardInfo.ts'
 import { getAttackRows, getWeaknessValue } from '../test/cardQueries.ts'
 import { pikachuDetails } from '../test/pokemonFixtures.ts'
-import type { PokemonDetailsResponse } from '../types/pokemon.ts'
+import type { CardPokemon } from '../types/pokemon.ts'
 import type { CardData } from '../utils/cardForm.ts'
 import { TYPE_THEME } from '../utils/cardTheme.ts'
+import { toCardPokemon } from '../utils/pokemonDetails.ts'
 import { DEFAULT_STICKER_POSITION } from '../utils/sticker.ts'
 import PokeCard from './PokeCard.tsx'
 
@@ -18,6 +19,8 @@ const card: CardData = {
   photo: { dataUrl: 'data:image/jpeg;base64,AAAA', type: 'image/jpeg', size: 3 },
   stickerPosition: DEFAULT_STICKER_POSITION,
 }
+
+const pikachu: CardPokemon = toCardPokemon(pikachuDetails)
 
 const readyInfo: PokemonCardInfoState = {
   status: 'ready',
@@ -32,11 +35,17 @@ const readyInfo: PokemonCardInfoState = {
 
 function renderCard(
   cardInfo: PokemonCardInfoState,
-  options: { details?: PokemonDetailsResponse; cardData?: CardData } = {},
+  options: { pokemon?: CardPokemon; cardData?: CardData; cardNumber?: number } = {},
 ) {
-  const handlers = { onRetryCardInfo: vi.fn(), onEdit: vi.fn() }
+  const handlers = { onRetryCardInfo: vi.fn() }
   const { container } = render(
-    <PokeCard card={options.cardData ?? card} details={options.details ?? pikachuDetails} cardInfo={cardInfo} {...handlers} />,
+    <PokeCard
+      card={options.cardData ?? card}
+      pokemon={options.pokemon ?? pikachu}
+      cardInfo={cardInfo}
+      cardNumber={options.cardNumber}
+      {...handlers}
+    />,
   )
   return { ...handlers, container, cardElement: screen.getByRole('article', { name: 'Your card' }) }
 }
@@ -157,10 +166,9 @@ describe('PokeCard', () => {
     render(
       <PokeCard
         card={card}
-        details={pikachuDetails}
+        pokemon={pikachu}
         cardInfo={readyInfo}
         onRetryCardInfo={vi.fn()}
-        onEdit={vi.fn()}
         onStickerMove={vi.fn()}
       />,
     )
@@ -179,8 +187,8 @@ describe('PokeCard', () => {
   })
 
   it('a very long name (41 characters) gets 14 design px, and HP and the Type symbol are still in the header', () => {
-    const squawkabilly: PokemonDetailsResponse = { ...pikachuDetails, id: 931, name: 'squawkabilly-green-plumage' }
-    const { container } = renderCard(readyInfo, { details: squawkabilly, cardData: { ...card, name: 'Bartholomewz' } })
+    const squawkabilly: CardPokemon = { ...pikachu, id: 931, name: 'squawkabilly-green-plumage' }
+    const { container } = renderCard(readyInfo, { pokemon: squawkabilly, cardData: { ...card, name: 'Bartholomewz' } })
     const header = part(container, 'poke-card-header') as HTMLElement
 
     expect(within(header).getByText("Bartholomewz's Squawkabilly-Green-Plumage")).toHaveStyle({
@@ -215,10 +223,27 @@ describe('PokeCard', () => {
     expect(onRetryCardInfo).toHaveBeenCalledTimes(1)
   })
 
-  it('"Edit" calls onEdit', async () => {
+  it('shows the buttons it is given under the card (children)', async () => {
     const user = userEvent.setup()
-    const { onEdit } = renderCard(readyInfo)
+    const onEdit = vi.fn()
+    render(
+      <PokeCard card={card} pokemon={pikachu} cardInfo={readyInfo} onRetryCardInfo={vi.fn()}>
+        <button type="button" onClick={onEdit}>
+          Edit
+        </button>
+      </PokeCard>,
+    )
     await user.click(screen.getByRole('button', { name: 'Edit' }))
     expect(onEdit).toHaveBeenCalledTimes(1)
+  })
+
+  it('shows the card number at the bottom right once saved ("MPC 003"), and nothing before', () => {
+    const { container, rerender } = render(
+      <PokeCard card={card} pokemon={pikachu} cardInfo={readyInfo} onRetryCardInfo={vi.fn()} />,
+    )
+    expect(part(container, 'poke-card-number')).toBeEmptyDOMElement()
+
+    rerender(<PokeCard card={card} pokemon={pikachu} cardInfo={readyInfo} onRetryCardInfo={vi.fn()} cardNumber={3} />)
+    expect(part(container, 'poke-card-number')).toHaveTextContent('MPC 003')
   })
 })

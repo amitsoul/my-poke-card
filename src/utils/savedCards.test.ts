@@ -215,6 +215,8 @@ describe('isSavedCard', () => {
     expect(isSavedCard({ ...valid, card: { ...valid.card, photo: { ...valid.card.photo, dataUrl: 'javascript:alert(1)' } } })).toBe(false)
     expect(isSavedCard({ ...valid, info: { ...valid.info, attacks: [{ name: 'X', damage: 10, cost: ['Fairy'] }] } })).toBe(false)
     expect(isSavedCard({ ...valid, pokemon: { ...valid.pokemon, gameTypes: 'electric' } })).toBe(false)
+    expect(isSavedCard({ ...valid, pokemon: { ...valid.pokemon, artworkUrl: 'javascript:alert(1)' } })).toBe(false)
+    expect(isSavedCard({ ...valid, pokemon: { ...valid.pokemon, artworkUrl: 'http://example.com/25.png' } })).toBe(false)
     expect(isSavedCard(null)).toBe(false)
   })
 })

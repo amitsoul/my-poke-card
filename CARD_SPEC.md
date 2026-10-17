@@ -117,6 +117,14 @@ Every circle has at least 3:1 contrast with its white icon (WCAG 1.4.11, checked
 - After the card is created, the user can move it: drag with mouse or finger (Pointer Events), or arrow keys when it is focused (2% per press, 10% with Shift). It always stays fully inside the photo window.
 - The position is stored in percent (e.g. `{ x: 70, y: 65 }`) with the card data, so the saved card and the PNG (task 11) show it in the same place. Edit keeps it. No reset, no resizing.
 
+## Saved cards
+- Saved in the browser's localStorage under `my-poke-card/cards` as `{ "version": 1, "cards": [...] }`; the last card number given is under `my-poke-card/card-counter`. Code: `src/utils/savedCards.ts`.
+- Each saved card is a full snapshot (the answers, the photo, the sticker position, the Pokémon's id/name/game types/height/weight/artwork URL, and its genus and attacks), so My Cards needs no API. Type, Weakness, Resistance and Retreat are worked out again when the card is drawn.
+- **Card number:** given once, when the card is saved: (the higher of the counter and the highest saved number) + 1, shown as "MPC 001". It is also the card's id. A number is never reused, even after a delete.
+- **Reading safely:** broken JSON or another format → no cards and a note; each card is checked field by field (the photo must be a `data:image/jpeg` URL and the artwork an `https://` link, because both go into an `<img src>`); broken cards are hidden and counted.
+- **Hidden cards are dropped on the next write** (save, favorite or delete), because only the valid cards are written back.
+- **Storage full:** the card is not saved and the counter does not change.
+
 ## Note on Types
 We use the 10 current TCG Types. "Type" is the card's category (the symbol top-right); "Energy" means Energy cards and attack costs. Fairy was retired from the TCG in 2020, and Fairy Pokémon are printed as Psychic — still true in the 2025–26 Mega Evolution series (e.g. Mega Gardevoir ex). Poison Pokémon are printed as Darkness in the current era.
 

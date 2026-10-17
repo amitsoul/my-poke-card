@@ -8,6 +8,7 @@ import { getAttackRows, getWeaknessValue } from '../test/cardQueries.ts'
 import { moveResponse, speciesResponse, stubPokeApi } from '../test/fakeApi.ts'
 import { charmanderDetails, pikachuDetails } from '../test/pokemonFixtures.ts'
 import { resizePhoto } from '../utils/photo.ts'
+import { COUNTER_KEY, loadSavedCards } from '../utils/savedCards.ts'
 import { DEFAULT_STICKER_POSITION } from '../utils/sticker.ts'
 import CreateCardPage from './CreateCardPage.tsx'
 
@@ -194,5 +195,111 @@ describe('CreateCardPage', () => {
   it('shows "Pokémon not found" for /create/99999 (the API answers 404)', async () => {
     renderPage('/create/99999')
     expect(await screen.findByText('Pokémon not found')).toBeInTheDocument()
+  })
+
+  // ---------- Saving (task 11) ----------
+
+  it('Save → "Saved as MPC 001 ✓" (focused), the number on the card, the sticker fixed, the card in storage', async () => {
+    const user = renderPage('/create/25')
+    await fillValidForm(user)
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+
+    await user.click(screen.getByRole('button', { name: 'Save to My Cards' }))
+
+    const notice = screen.getByText('Saved as MPC 001 ✓')
+    expect(notice).toHaveAttribute('role', 'status') // announced by screen readers
+    expect(notice).toHaveFocus()
+    expect(screen.getByRole('link', { name: 'View in My Cards' })).toHaveAttribute('href', '/my-cards')
+    const card = screen.getByRole('article', { name: 'Your card' })
+    expect(within(card).getByText('MPC 001')).toBeInTheDocument()
+    // Saved: the sticker is fixed (an image, not a button), the tip is gone, and there's no second Save
+    expect(screen.queryByRole('button', { name: 'Pikachu sticker' })).toBeNull()
+    expect(within(card).getByRole('img', { name: 'Pikachu' })).toBeInTheDocument()
+    expect(screen.queryByText(/Tip: drag the Pokémon sticker/)).toBeNull()
+    expect(screen.queryByRole('button', { name: 'Save to My Cards' })).toBeNull()
+
+    // In localStorage: the full snapshot, number 1, not a favorite
+    const { cards } = loadSavedCards()
+    expect(cards).toHaveLength(1)
+    expect(cards[0]).toMatchObject({
+      number: 1,
+      favorite: false,
+      card: { name: 'Amit', age: 30, superpower: 'Super speed' },
+      pokemon: { id: 25, name: 'pikachu', gameTypes: ['electric'] },
+      info: { genus: 'Mouse Pokémon' },
+    })
+    expect(cards[0].info.attacks.map((attack) => attack.name)).toEqual(['Thunder Shock', 'Quick Attack'])
+    expect(window.localStorage.getItem(COUNTER_KEY)).toBe('1')
+  })
+
+  it('Edit after saving → a new, unsaved card; saving it gives MPC 002', async () => {
+    const user = renderPage('/create/25')
+    await fillValidForm(user)
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    await user.click(screen.getByRole('button', { name: 'Save to My Cards' }))
+
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
+    expect(screen.getByLabelText('Your name')).toHaveValue('Amit')
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+
+    // Not saved yet: no number on the card, the sticker can move again, Save is back
+    expect(screen.queryByText(/^MPC \d+$/)).toBeNull()
+    expect(screen.getByRole('button', { name: 'Pikachu sticker' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Save to My Cards' }))
+    expect(screen.getByText('Saved as MPC 002 ✓')).toBeInTheDocument()
+    expect(loadSavedCards().cards.map((saved) => saved.number)).toEqual([2, 1])
+  })
+
+  it('after saving, "Change" goes to the list without a warning (nothing is lost)', async () => {
+    const user = renderPage('/create/25')
+    await fillValidForm(user)
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    await user.click(screen.getByRole('button', { name: 'Save to My Cards' }))
+
+    await user.click(screen.getByRole('button', { name: 'Change' }))
+
+    expect(screen.getByText('LIST PAGE')).toBeInTheDocument()
+  })
+
+  it('Save while the attacks are still loading → "Please wait…", and nothing is saved', async () => {
+    // The Pokémon loads, but its species and moves never answer
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((input: RequestInfo | URL) =>
+        String(input).endsWith('/pokemon/25')
+          ? Promise.resolve(new Response(JSON.stringify(pikachuDetails), { status: 200 }))
+          : new Promise<Response>(() => {}),
+      ),
+    )
+    const user = renderPage('/create/25')
+    await fillValidForm(user)
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+
+    await user.click(screen.getByRole('button', { name: 'Save to My Cards' }))
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Please wait until the attacks are loaded.')
+    expect(screen.getByRole('button', { name: 'Save to My Cards' })).toBeEnabled() // still enabled
+    expect(loadSavedCards().cards).toHaveLength(0)
+  })
+
+  it('a full storage → the "storage is full" message with a link to My Cards; nothing is saved', async () => {
+    const user = renderPage('/create/25')
+    await fillValidForm(user)
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    const setItem = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('The quota has been exceeded.', 'QuotaExceededError')
+    })
+    try {
+      await user.click(screen.getByRole('button', { name: 'Save to My Cards' }))
+    } finally {
+      setItem.mockRestore() // the real localStorage again, for the next tests
+    }
+
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      "Your browser's storage is full. Delete some cards in My Cards, then try again.",
+    )
+    expect(within(screen.getByRole('alert')).getByRole('link', { name: 'My Cards' })).toHaveAttribute('href', '/my-cards')
+    expect(screen.getByRole('button', { name: 'Save to My Cards' })).toBeInTheDocument()
+    expect(loadSavedCards().cards).toHaveLength(0)
   })
 })

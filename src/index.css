@@ -411,8 +411,33 @@ body {
   margin: 0 0 0.75rem;
 }
 
-.poke-card > .button {
+/* The buttons under the card: Save / Edit (Create page), and later heart / Download / Delete (My Cards) */
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  max-width: 380px;
   margin-top: 1rem;
+}
+
+.saved-notice {
+  margin: 0;
+  color: #1e7b34; /* green: 5.3:1 on white */
+  font-weight: 700;
+}
+
+.saved-notice-link {
+  color: inherit;
+  font-weight: 600;
+}
+
+/* A Save that didn't work: on its own line under the buttons */
+.save-message {
+  flex-basis: 100%;
+  margin: 0;
+  color: #c22c0a;
+  font-weight: 600;
 }
 
 /* The tip under the card (only where the sticker can move) */

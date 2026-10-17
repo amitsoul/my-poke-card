@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { pikachuDetails } from '../test/pokemonFixtures.ts'
 import type { PokemonDetailsResponse } from '../types/pokemon.ts'
-import { formatPokemonName, getDetailsImage, getGameTypes } from './pokemonDetails.ts'
+import { formatPokemonName, getDetailsImage, getGameTypes, toCardPokemon } from './pokemonDetails.ts'
 
 describe('formatPokemonName', () => {
   it('capitalizes a simple name ("pikachu" → "Pikachu")', () => {
@@ -44,5 +44,19 @@ describe('getDetailsImage', () => {
     expect(getDetailsImage(noArtwork)).toBe(
       'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
     )
+  })
+})
+
+describe('toCardPokemon', () => {
+  it('keeps only what the card needs: id, name, game types in slot order, height, weight, artwork', () => {
+    expect(toCardPokemon(pikachuDetails)).toEqual({
+      id: 25,
+      name: 'pikachu',
+      gameTypes: ['electric'],
+      height: 4,
+      weight: 60,
+      artworkUrl:
+        'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png',
+    })
   })
 })
