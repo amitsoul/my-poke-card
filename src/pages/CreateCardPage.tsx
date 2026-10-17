@@ -3,8 +3,8 @@
 import { useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import CardForm from '../components/CardForm.tsx'
-import ChangeWarning from '../components/ChangeWarning.tsx'
 import FavoritePokemonField from '../components/FavoritePokemonField.tsx'
+import InlineConfirm from '../components/InlineConfirm.tsx'
 import PokeCard from '../components/PokeCard.tsx'
 import SavedNotice from '../components/SavedNotice.tsx'
 import { usePokemonCardInfo } from '../hooks/usePokemonCardInfo.ts'
@@ -182,7 +182,15 @@ export default function CreateCardPage() {
             changeButtonRef={changeButtonRef}
           />
 
-          {session.isWarningOpen && <ChangeWarning onConfirm={() => navigate('/')} onCancel={handleKeepEditing} />}
+          {session.isWarningOpen && (
+            <InlineConfirm
+              message="Change Pokémon? Your answers will be cleared."
+              confirmLabel="Yes, change"
+              cancelLabel="Keep editing"
+              onConfirm={() => navigate('/')}
+              onCancel={handleKeepEditing}
+            />
+          )}
 
           {session.card === null ? (
             // key: a different Pokémon gets a brand-new, empty form

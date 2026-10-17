@@ -385,8 +385,8 @@ body {
   background: rgba(227, 53, 13, 0.08);
 }
 
-/* "Change Pokémon?" warning, right under the favorite Pokémon */
-.change-warning {
+/* The inline "are you sure?" box ("Change Pokémon?", "Delete MPC 002?") */
+.inline-confirm {
   margin-top: 1rem;
   padding: 1rem;
   border: 2px solid #e3350d;
@@ -395,7 +395,7 @@ body {
   text-align: center;
 }
 
-.change-warning p {
+.inline-confirm p {
   margin: 0 0 0.75rem;
   font-weight: 600;
 }
@@ -430,6 +430,62 @@ body {
 .saved-notice-link {
   color: inherit;
   font-weight: 600;
+}
+
+/* My Cards */
+.my-cards-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* The saved cards: as many columns of at least 260px as fit (phone 1, tablet 2, desktop 3) */
+.my-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each card heading in the grid ("MPC 001 · Amit's Pikachu") is smaller than the page heading */
+.my-cards-grid .poke-card {
+  margin-top: 0;
+}
+
+.my-cards-grid .poke-card h2 {
+  font-size: 1.1rem;
+}
+
+.status-note {
+  margin: 0 0 1rem;
+  color: #666;
+}
+
+/* The heart: gray when not a favorite, red when it is (both ≥3:1 on white) */
+.favorite-button {
+  display: inline-flex;
+  padding: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  background: none;
+  color: #767676;
+  cursor: pointer;
+}
+
+.favorite-button svg {
+  fill: currentColor;
+}
+
+.favorite-button.is-favorite {
+  border-color: #c22c0a;
+  color: #c22c0a;
+}
+
+.favorite-button:hover {
+  border-color: #888;
 }
 
 /* A Save that didn't work: on its own line under the buttons */

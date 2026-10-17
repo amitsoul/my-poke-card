@@ -3,7 +3,7 @@
 // The photo fills the window, with the Pokémon as a sticker on top.
 // It draws from plain data (CardPokemon + CardData + the card info), so the same component works on the
 // Create page (data from the API) and in My Cards (data from a saved card).
-import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useId, useRef, type CSSProperties, type ReactNode } from 'react'
 import type { PokemonCardInfoState } from '../hooks/usePokemonCardInfo.ts'
 import type { CardPokemon } from '../types/pokemon.ts'
 import type { CardData } from '../utils/cardForm.ts'
@@ -26,6 +26,8 @@ interface PokeCardProps {
   onStickerMove?: (position: StickerPosition) => void // only on a created, not yet saved card: then the sticker can move
   cardNumber?: number // once saved: shown as "MPC 003" at the bottom right
   children?: ReactNode // the buttons under the card (Save / Edit on the Create page)
+  heading?: string // default "Your card"; My Cards uses e.g. "MPC 001 · Amit's Pikachu"
+  focusOnMount?: boolean // default true; false in My Cards, where many cards appear at once
 }
 
 export const CARD_DESIGNER = 'Amit Soul'
@@ -38,13 +40,16 @@ export default function PokeCard({
   onStickerMove,
   cardNumber,
   children,
+  heading = 'Your card',
+  focusOnMount = true,
 }: PokeCardProps) {
   const headingRef = useRef<HTMLHeadingElement>(null)
+  const headingId = useId() // unique, because My Cards shows many cards on one page
 
-  // Once, when the card appears: move focus to its heading, so keyboard and screen-reader users know it worked
+  // When the card appears (Create page): move focus to its heading, so keyboard and screen-reader users know it worked
   useEffect(() => {
-    headingRef.current?.focus()
-  }, [])
+    if (focusOnMount) headingRef.current?.focus()
+  }, [focusOnMount])
 
   const pokemonName = formatPokemonName(pokemon.name)
   // The user's name in Title Case, like the Ability ("amit" → "Amit's Ivysaur"); the stored value stays as typed
@@ -60,9 +65,9 @@ export default function PokeCard({
   const typeColors = { '--type-tint': theme.tint, '--type-strip': theme.stripTint } as CSSProperties
 
   return (
-    <article className="poke-card" aria-labelledby="poke-card-heading">
-      <h2 id="poke-card-heading" tabIndex={-1} ref={headingRef}>
-        Your card
+    <article className="poke-card" aria-labelledby={headingId}>
+      <h2 id={headingId} tabIndex={-1} ref={headingRef}>
+        {heading}
       </h2>
 
       {/* The container: its width decides --u (1 design pixel) for everything inside */}

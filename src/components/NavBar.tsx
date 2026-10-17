@@ -26,6 +26,9 @@ export default function NavBar() {
       >
         Create card
       </NavLink>
+      <NavLink to="/my-cards" className="nav-link">
+        My Cards
+      </NavLink>
     </nav>
   )
 }

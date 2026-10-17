@@ -4,6 +4,7 @@ import NavBar from './components/NavBar.tsx'
 import PokemonListPage from './pages/PokemonListPage.tsx'
 import PokemonDetailsPage from './pages/PokemonDetailsPage.tsx'
 import CreateCardPage from './pages/CreateCardPage.tsx'
+import MyCardsPage from './pages/MyCardsPage.tsx'
 import NotFoundPage from './pages/NotFoundPage.tsx'
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/pokemon/:id" element={<PokemonDetailsPage />} />
           <Route path="/create" element={<CreateCardPage />} />
           <Route path="/create/:id" element={<CreateCardPage />} />
+          <Route path="/my-cards" element={<MyCardsPage />} />
           {/* "*" = any URL that no other route matches */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

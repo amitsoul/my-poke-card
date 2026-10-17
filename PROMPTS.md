@@ -1222,3 +1222,18 @@
 > - Tests as planned.
 > Then run npm test and npm run build, show the results, give me a browser checklist (including DevTools → Application → Local Storage to see the saved JSON and the counter), and remind me to commit.
 > </pasted_content id="91c8">
+
+**10:33 · claude**
+
+> <pasted_content id="91c8">
+> 11b approved (keep Save red and Edit outlined). Go ahead with step 11c only, as in your plan:
+> - Route /my-cards + NavLink "My Cards" after "Create card".
+> - MyCardsPage: heading "My Cards", the grid (repeat(auto-fill, minmax(260px, 1fr)), max 380px per card), newest first, each card drawn with PokeCard from the snapshot (sticker fixed, no tip) + the number.
+> - SavedCardItem + FavoriteButton: the heart as a toggle button (aria-pressed, name "Favorite MPC 001"), red / gray.
+> - Filter: "All (n)" / "Favorites (n)" as toggle buttons, kept in ?show=favorites (opening that URL directly works; any other value = All).
+> - Delete with the inline confirm ("Delete MPC 002? This can't be undone." [Yes, delete] [Keep it]), focus on "Keep it"; after deleting, focus moves to the page heading. The number is never reused.
+> - Empty states and problem notes exactly as in the plan; a failed heart/delete write is undone on screen with "That change couldn't be saved."
+> - No Download button yet (that's 11d).
+> - Tests as planned.
+> Then run npm test and npm run build, show the results, give me a browser checklist (desktop, tablet and phone widths), and remind me to commit.
+> </pasted_content id="91c8">

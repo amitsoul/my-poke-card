@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { newPikachuCard } from '../test/cardFixtures.ts'
 import { FakeStorage } from '../test/fakeStorage.ts'
 import {
   CARDS_KEY,
@@ -15,30 +16,6 @@ import {
   setFavorite,
   type SavedCard,
 } from './savedCards.ts'
-
-// What the Create page saves: the answers + photo + sticker, the Pokémon, and its genus and attacks
-const newPikachuCard = {
-  card: {
-    name: 'Amit',
-    age: 30,
-    superpower: 'Super speed',
-    aboutYou: 'I love Pokémon cards!',
-    photo: { dataUrl: 'data:image/jpeg;base64,AAAA', type: 'image/jpeg' as const, size: 3 },
-    stickerPosition: { x: 69.8, y: 52 },
-  },
-  pokemon: {
-    id: 25,
-    name: 'pikachu',
-    gameTypes: ['electric'],
-    height: 4,
-    weight: 60,
-    artworkUrl: 'https://example.com/25.png',
-  },
-  info: {
-    genus: 'Mouse Pokémon',
-    attacks: [{ name: 'Thunder Shock', damage: 40, cost: ['Lightning' as const, 'Colorless' as const] }],
-  },
-}
 
 // Save a card and return its number (fails the test if saving fails)
 function saveNumber(storage: Storage): number {
