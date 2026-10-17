@@ -1,6 +1,7 @@
-// The app layout: the nav menu on every page, and below it the page that matches the URL.
+// The app layout: the nav menu on every page, below it the page that matches the URL, and the footer.
 import { Route, Routes } from 'react-router'
 import NavBar from './components/NavBar.tsx'
+import SiteFooter from './components/SiteFooter.tsx'
 import PokemonListPage from './pages/PokemonListPage.tsx'
 import PokemonDetailsPage from './pages/PokemonDetailsPage.tsx'
 import CreateCardPage from './pages/CreateCardPage.tsx'
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
+      <SiteFooter />
     </>
   )
 }

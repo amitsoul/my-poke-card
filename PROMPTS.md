@@ -1264,3 +1264,28 @@
 **11:00 · claude**
 
 > Yes, fix PRD.md section 7 in this same commit: replace the out-of-date "Saved card" line with one line saying each saved card is a full snapshot plus a favorite flag, kept in localStorage, and point to the "Saved cards" section in CARD_SPEC.md for the details. Nothing else. Then show me the diff for PRD.md and run npm test and npm run build again.
+
+**17:38 · claude**
+
+> <pasted_content id="91c8">
+> Task 11 is closed. Now task 12, PLAN FIRST, no code or file changes yet.
+> Split it into small steps (12a, 12b, ...) with a commit after each. Cover:
+> 1. README.md: what the app does, the pages, how to install and run it (npm install, npm run dev, npm run dev -- --host for a phone), how to run the tests (npm test, npm run test:ui) and the build, the API (PokéAPI), the tech stack, where the docs are (PRD, CARD_SPEC, checklist, tasks, PROMPTS), and the fan-made disclaimer (Pokémon is a trademark of Nintendo/Game Freak/The Pokémon Company; this is a non-commercial student project). Also the Fairy → Psychic note. Suggest whether screenshots belong in it, as options for me.
+> 2. A final pass over every row of docs/requirements-checklist.md: for each one, say how you'll prove it (a file, a test, or a manual check I do).
+> 3. A manual check list for me: desktop Chrome, a phone (the details page, the 404 page, Create with a photo, drag, Save, My Cards, Download PNG), and Safari on a real iPhone for the PNG.
+> 4. Polish candidates, as options only, I decide: e.g. the empty gap between the flavor box and the bottom line on cards with 2 attacks, anything else you noticed. Nothing gets changed without my approval.
+> Also check: no console errors, npm audit, lint, no any.
+> Show me the plan and wait for my approval.
+> </pasted_content id="91c8">
+
+**17:43 · claude**
+
+> <pasted_content id="91c8">
+> Approved, with these decisions:
+> - Steps 12a–12f as planned, a commit after each.
+> - 12a: the site footer on all pages ("Fan-made · Not an official Pokémon card", plus "Data from PokéAPI") with tests; it must stay outside .poke-card-frame so it never appears in the PNG. Color scheme A1: light only (color-scheme: light, explicit background and text colors).
+> - README: screenshots option B (docs/screenshots/: list, Create with a card, My Cards, plus one real downloaded card PNG). I'll take them myself with a photo I'm happy to publish. Keep a short English "How the prompt log works" section and replace the rest of the template README.
+> - Polish (12b): P2 yes (a title per page), P3 yes, P4a (our own icon: the Colorless star in a yellow circle), P7 yes (tests fail on console.error/warning; fix anything it reveals and tell me what it was).
+> - Not doing: P1 (keep the space), P5 (keep kg on the details page, lbs on the card), P6 (keep), P8 (not now).
+> Start with 12a only. Show the results and a browser checklist, then wait for my commit.
+> </pasted_content id="91c8">

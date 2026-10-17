@@ -66,12 +66,35 @@
 :root {
   font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   line-height: 1.5;
-  color-scheme: light dark;
+  /* Light only: every color in this file was chosen for a white background,
+     so a phone or computer in dark mode still gets dark text on white */
+  color-scheme: light;
+  color: #1a1a1a;
+  background: #fff;
 }
 
+/* A column: the footer stays at the bottom of the window even on a short page */
 body {
   margin: 0;
   min-height: 100vh;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* margin: auto in a column would shrink them to their content, so they keep the full width */
+#root > .navbar,
+#root > .app,
+#root > .site-footer {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#root > .app {
+  flex: 1;
 }
 
 .app {
@@ -105,6 +128,25 @@ body {
 .nav-link.active {
   background: #e3350d;
   color: white;
+}
+
+/* Site footer: small gray text under every page (#595959 is 7:1 on white) */
+.site-footer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+  color: #595959;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.site-footer p {
+  margin: 0.25rem 0;
+}
+
+.site-footer a {
+  color: inherit;
 }
 
 /* Loading and error messages */
