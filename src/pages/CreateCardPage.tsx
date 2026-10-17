@@ -12,10 +12,11 @@ import { usePokemonCardInfo } from '../hooks/usePokemonCardInfo.ts'
 import { usePokemonDetails } from '../hooks/usePokemonDetails.ts'
 import type { CardPokemon } from '../types/pokemon.ts'
 import type { CardData, CardFormData, CardFormDraft } from '../utils/cardForm.ts'
-import { toCardPokemon } from '../utils/pokemonDetails.ts'
+import { formatPokemonName, toCardPokemon } from '../utils/pokemonDetails.ts'
 import { parsePokemonId } from '../utils/pokemonId.ts'
 import { getPngFileName, saveCard } from '../utils/savedCards.ts'
 import { DEFAULT_STICKER_POSITION, type StickerPosition } from '../utils/sticker.ts'
+import { getPageTitle } from '../utils/text.ts'
 import NotFoundPage from './NotFoundPage.tsx'
 
 // What the page remembers about the form — together with the Pokémon it belongs to.
@@ -71,6 +72,7 @@ export default function CreateCardPage() {
   if (id === undefined) {
     return (
       <section className="status">
+        <title>{getPageTitle('Create card')}</title>
         <h1>Choose your favorite Pokémon</h1>
         <p>Pick a Pokémon from the list, then tap "Create my card" on its page.</p>
         <Link to="/" className="button">
@@ -152,6 +154,12 @@ export default function CreateCardPage() {
 
   return (
     <div className="create-page">
+      {/* With the Pokémon's name once it's loaded: "Create card with Pikachu" */}
+      <title>
+        {getPageTitle(
+          state.status === 'ready' ? `Create card with ${formatPokemonName(state.details.name)}` : 'Create card',
+        )}
+      </title>
       <h1>Create your card</h1>
 
       {state.status === 'loading' && <p className="status">Loading your Pokémon...</p>}

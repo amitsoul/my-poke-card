@@ -5,3 +5,8 @@
 export function toTitleCase(text: string): string {
   return text.replace(/(^|[ '-])(\p{L})/gu, (_match, separator: string, letter: string) => separator + letter.toUpperCase())
 }
+
+// The browser tab title for a page: "My Cards" → "My Cards · My Poke Card"
+export function getPageTitle(page: string): string {
+  return `${page} · My Poke Card`
+}

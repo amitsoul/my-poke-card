@@ -64,6 +64,23 @@ describe('PokemonDetailsPage — attacks and Weakness', () => {
     expect(screen.getByRole('link', { name: 'Create my card with Pikachu' })).toBeInTheDocument()
   })
 
+  it('the tab title: "Pokémon details" while loading, then the Pokémon name', async () => {
+    stubPokeApi({ pokemon: [pikachuDetails], moves: PIKACHU_MOVES, species: speciesResponse('Mouse Pokémon') })
+    renderPage()
+    expect(document.title).toBe('Pokémon details · My Poke Card')
+
+    await screen.findByRole('heading', { name: 'Pikachu' })
+    expect(document.title).toBe('Pikachu · My Poke Card')
+  })
+
+  it('the tab title after a failed load stays general', async () => {
+    vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new TypeError('Failed to fetch'))))
+    renderPage()
+
+    await screen.findByRole('button', { name: 'Try again' })
+    expect(document.title).toBe('Pokémon details · My Poke Card')
+  })
+
   it('a failed attack request shows the error (the page stays); "Try again" then shows the attacks', async () => {
     stubPokeApi({
       pokemon: [pikachuDetails],

@@ -1289,3 +1289,14 @@
 > - Not doing: P1 (keep the space), P5 (keep kg on the details page, lbs on the card), P6 (keep), P8 (not now).
 > Start with 12a only. Show the results and a browser checklist, then wait for my commit.
 > </pasted_content id="91c8">
+
+**18:06 · claude**
+
+> <pasted_content id="91c8">
+> 12a approved. Go ahead with step 12b only: the polish I approved, nothing else.
+> - P2: a document title per page, in the form "<page> · My Poke Card": the list "Pokémon · My Poke Card", details "<Name> · My Poke Card" (after the data loads; while loading or on error a sensible fallback), Create "Create card · My Poke Card" (with the Pokémon name once chosen if simple), My Cards "My Cards · My Poke Card", 404 "Page not found · My Poke Card". Use React 19's <title> in the page component if it works with our setup; otherwise a small hook. Tests for at least the list, details, My Cards and 404 titles.
+> - P3: package.json "name": "my-poke-card" (and package-lock.json to match).
+> - P4a: our own favicon: the Colorless star in a yellow circle, drawn by us as an SVG in public/, matching our TypeSymbol style. Remove the Vite logo file if nothing else uses it.
+> - P7 belongs to 12c, don't do it yet.
+> Then run npm test, npm run build and npm run lint, show the results, give me a short browser checklist (tab titles on each page, the favicon in the tab), and wait for my commit.
+> </pasted_content id="91c8">

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { toTitleCase } from './text.ts'
+import { getPageTitle, toTitleCase } from './text.ts'
 
 describe('toTitleCase', () => {
   it('capitalizes the first letter of every word ("super speed" → "Super Speed")', () => {
@@ -19,5 +19,12 @@ describe('toTitleCase', () => {
   it('keeps the other letters as typed', () => {
     expect(toTitleCase('super SPEED')).toBe('Super SPEED')
     expect(toTitleCase('Fly')).toBe('Fly')
+  })
+})
+
+describe('getPageTitle', () => {
+  it('puts the page first and the app name after it', () => {
+    expect(getPageTitle('My Cards')).toBe('My Cards · My Poke Card')
+    expect(getPageTitle('Pikachu')).toBe('Pikachu · My Poke Card')
   })
 })

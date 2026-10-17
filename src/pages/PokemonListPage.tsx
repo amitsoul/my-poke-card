@@ -14,6 +14,7 @@ import type {
 import { API_URL, fetchJson, getArtworkUrl, getIdFromUrl } from '../utils/api.ts'
 import { CARD_TYPES, parseCardType } from '../utils/cardType.ts'
 import { filterPokemon, normalizeSearch } from '../utils/filterPokemon.ts'
+import { getPageTitle } from '../utils/text.ts'
 
 const PAGE_SIZE = 50
 
@@ -190,6 +191,7 @@ export default function PokemonListPage() {
 
   return (
     <>
+      <title>{getPageTitle('Pokémon')}</title>
       <h1>My Poke Card</h1>
 
       {isLoading && <p className="status">Loading Pokémon...</p>}

@@ -51,6 +51,11 @@ describe('MyCardsPage', () => {
     expect(screen.getByRole('link', { name: 'Create your first card' })).toHaveAttribute('href', '/create')
   })
 
+  it('the tab title is "My Cards · My Poke Card"', () => {
+    renderPage()
+    expect(document.title).toBe('My Cards · My Poke Card')
+  })
+
   it('shows the saved cards, newest first, each with its number; the sticker is fixed and there is no tip', () => {
     seedCards(2)
     renderPage()

@@ -197,6 +197,14 @@ describe('CreateCardPage', () => {
     expect(await screen.findByText('Pokémon not found')).toBeInTheDocument()
   })
 
+  it('the tab title: "Create card" while loading, then with the Pokémon name', async () => {
+    renderPage('/create/25')
+    expect(document.title).toBe('Create card · My Poke Card')
+
+    await screen.findByRole('button', { name: 'Change' })
+    expect(document.title).toBe('Create card with Pikachu · My Poke Card')
+  })
+
   // ---------- Saving (task 11) ----------
 
   it('Save → "Saved as MPC 001 ✓" (focused), the number on the card, the sticker fixed, the card in storage', async () => {

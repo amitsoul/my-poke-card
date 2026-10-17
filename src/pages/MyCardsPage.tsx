@@ -13,6 +13,7 @@ import {
   type LoadResult,
   type ShowFilter,
 } from '../utils/savedCards.ts'
+import { getPageTitle } from '../utils/text.ts'
 
 // "1 saved card couldn't be read and is hidden." / "2 saved cards couldn't be read and are hidden."
 function hiddenCardsNote(count: number): string {
@@ -60,6 +61,7 @@ export default function MyCardsPage() {
 
   return (
     <div className="my-cards-page">
+      <title>{getPageTitle('My Cards')}</title>
       <h1 tabIndex={-1} ref={headingRef}>
         My Cards
       </h1>

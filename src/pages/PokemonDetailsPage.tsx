@@ -9,6 +9,7 @@ import { getCardRules } from '../utils/cardRules.ts'
 import { parsePokemonId } from '../utils/pokemonId.ts'
 import { getBackToListUrl } from '../utils/navigation.ts'
 import { formatPokemonName, getGameTypes } from '../utils/pokemonDetails.ts'
+import { getPageTitle } from '../utils/text.ts'
 import NotFoundPage from './NotFoundPage.tsx'
 
 export default function PokemonDetailsPage() {
@@ -26,8 +27,17 @@ export default function PokemonDetailsPage() {
   // Weakness / Resistance / Retreat — from the game types and weight, so no API is needed
   const rules = state.status === 'ready' ? getCardRules(getGameTypes(state.details), state.details.weight) : null
 
+  // The tab title: the Pokémon's name once it's loaded; a general title while loading or after an error
+  const pageName =
+    state.status === 'ready'
+      ? formatPokemonName(state.details.name)
+      : state.status === 'not-found'
+        ? 'Pokémon not found'
+        : 'Pokémon details'
+
   return (
     <div className="details-page">
+      <title>{getPageTitle(pageName)}</title>
       {/* In the not-found state the red button below is the only way back, so this link is hidden */}
       {state.status !== 'not-found' && (
         <Link to={backToListUrl} className="back-link">
