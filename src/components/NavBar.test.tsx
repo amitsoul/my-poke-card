@@ -20,6 +20,14 @@ function activeLinks(): string[] {
 }
 
 describe('NavBar', () => {
+  it('is the page header (banner landmark) with the logo as a link to the landing page', () => {
+    renderAt('/pokemon')
+    const header = screen.getByRole('banner')
+    expect(header).toContainElement(screen.getByRole('navigation', { name: 'Main' }))
+    // The link's name comes from the logo's aria-label
+    expect(screen.getByRole('link', { name: 'My Poké Card' })).toHaveAttribute('href', '/')
+  })
+
   it('has the three links with their pages', () => {
     renderAt('/')
     expect(screen.getByRole('link', { name: 'Find a Pokémon' })).toHaveAttribute('href', '/pokemon')

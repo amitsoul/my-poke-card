@@ -67,10 +67,10 @@ describe('PokemonDetailsPage — attacks and Weakness', () => {
   it('the tab title: "Pokémon details" while loading, then the Pokémon name', async () => {
     stubPokeApi({ pokemon: [pikachuDetails], moves: PIKACHU_MOVES, species: speciesResponse('Mouse Pokémon') })
     renderPage()
-    expect(document.title).toBe('Pokémon details · My Poke Card')
+    expect(document.title).toBe('Pokémon details · My Poké Card')
 
     await screen.findByRole('heading', { name: 'Pikachu' })
-    expect(document.title).toBe('Pikachu · My Poke Card')
+    expect(document.title).toBe('Pikachu · My Poké Card')
   })
 
   it('"Back to list" goes to the list at /pokemon, with the search the list was opened with', async () => {
@@ -92,7 +92,7 @@ describe('PokemonDetailsPage — attacks and Weakness', () => {
     renderPage()
 
     await screen.findByRole('button', { name: 'Try again' })
-    expect(document.title).toBe('Pokémon details · My Poke Card')
+    expect(document.title).toBe('Pokémon details · My Poké Card')
   })
 
   it('a failed attack request shows the error (the page stays); "Try again" then shows the attacks', async () => {

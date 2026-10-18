@@ -86,7 +86,7 @@ body {
 }
 
 /* margin: auto in a column would shrink them to their content, so they keep the full width */
-#root > .navbar,
+#root > .site-header,
 #root > .app,
 #root > .site-footer {
   width: 100%;
@@ -103,11 +103,34 @@ body {
   padding: 2rem 1rem;
 }
 
-/* Nav menu: same width as the page; the current page's link is highlighted */
-.navbar {
+/* Site header: the logo and the nav menu, side by side when they fit. On a narrow screen
+   (a phone at 320px) the logo gets its own row and the links wrap below it. */
+.site-header {
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem 1rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+}
+
+.logo-link {
+  display: block;
+  border-radius: 12px; /* the focus ring follows the logo's round shape */
+}
+
+/* 48px high (about 223px wide); the soft shadow under the sticker */
+.logo {
+  display: block;
+  height: 48px;
+  width: auto;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
+}
+
+/* Nav menu: the current page's link is highlighted */
+.navbar {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;

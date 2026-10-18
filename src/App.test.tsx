@@ -29,7 +29,7 @@ describe('App layout', () => {
     renderApp('/')
 
     expect(screen.getByRole('heading', { level: 1, name: 'Turn yourself into a Pokémon card' })).toBeInTheDocument()
-    expect(document.title).toBe('My Poke Card')
+    expect(document.title).toBe('My Poké Card')
     expect(screen.getByRole('link', { name: 'Create your card' })).toHaveAttribute('href', '/create')
     // The nav has "Find a Pokémon" too, so the one inside <main> is checked
     const main = screen.getByRole('main')
@@ -45,12 +45,12 @@ describe('App layout', () => {
     // The list never answers here: the title and heading are there from the first render, before any data
     vi.stubGlobal('fetch', vi.fn(() => new Promise<Response>(() => {})))
     renderApp('/pokemon')
-    expect(document.title).toBe('Find a Pokémon · My Poke Card')
+    expect(document.title).toBe('Find a Pokémon · My Poké Card')
     expect(screen.getByRole('heading', { level: 1, name: 'Find a Pokémon' })).toBeInTheDocument()
 
     cleanup()
     renderApp('/abc')
-    expect(document.title).toBe('Page not found · My Poke Card')
+    expect(document.title).toBe('Page not found · My Poké Card')
     expect(screen.getByRole('link', { name: 'Back to the Pokémon list' })).toHaveAttribute('href', '/pokemon')
   })
 

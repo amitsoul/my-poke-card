@@ -1427,3 +1427,25 @@
 **15:24 · claude**
 
 > The 2 new PNGs (MPC 006 and MPC 009) are in png-after. Compare them with the baselines.
+
+**15:30 · claude**
+
+> <pasted_content id="91c8">
+> R1 is committed. Go ahead with R2 only: the name, the logo, the favicon and the <header>, as in your plan and my decisions (N1, L2).
+> - APP_NAME becomes "My Poké Card"; index.html title too; PRD and CARD_SPEC titles.
+> - Logo.tsx: logo 51 drawn as SVG paths from Lilita One (you may download the font and install fontTools in the scratchpad only), with a short comment on how the paths were made. Soft blue #4A78A8 letters, cream #FFF6DE frame with a white sticker edge and a soft shadow, yellow #E9B949 star as the "o". role="img" + aria-label "My Poké Card", inside a link to "/".
+> - Lilita One's OFL text in src/assets/fonts/, and a credit line ready for the README.
+> - Favicon: blue #4A78A8 circle with the yellow star. Show it to me at 16px in /dev/preview; if the star looks weak, add the thin darker-yellow outline.
+> - <header> around the logo and the nav; at 320px the logo on its own row and the links wrap below.
+> - Tests as planned (Logo, NavBar logo link, title format).
+> Then run npm test, npm run build and npm run lint, give me a browser checklist, and wait for my PNG check. Delete /dev/preview before I commit and tell me it's gone.
+> </pasted_content id="91c8">
+
+**15:40 · claude**
+
+> <pasted_content id="91c8">
+> Favicon: C (cream outline). The 2 new PNGs (MPC 006 and MPC 009) are in png-after.
+> Please: 1) compare them pixel-by-pixel to png-baseline and report the result,
+> 2) set favicon.svg to variant C, 3) delete /dev/preview (route + DevPreviewPage) and confirm it's gone,
+> 4) run vitest, build and lint. Don't commit — I'll do it.
+> </pasted_content id="91c8">

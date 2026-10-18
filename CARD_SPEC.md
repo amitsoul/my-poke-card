@@ -1,4 +1,4 @@
-# Card spec — My Poke Card
+# Card spec — My Poké Card
 
 > How the personal card looks and how every value on it is calculated. Linked from [PRD.md](PRD.md).
 > Rules follow real Pokémon TCG cards, not the video games.

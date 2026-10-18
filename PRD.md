@@ -1,15 +1,15 @@
-# PRD — My Poke Card
+# PRD — My Poké Card
 
 > One page. No code.
 
 ## 1. Pitch
-My Poke Card lets Pokémon fans browse real Pokémon and turn themselves into a personal Pokémon-style trading card that they can download and keep.
+My Poké Card lets Pokémon fans browse real Pokémon and turn themselves into a personal Pokémon-style trading card that they can download and keep.
 
 ## 2. Who it is for
 Kids, teens and adult fans who love Pokémon cards. They want to find their favorite Pokémon, see what makes it special, and get a fun card of themselves "teamed up" with it to share with friends. Why: real cards can't have *you* on them, and this app makes one in under a minute with no sign-up.
 
 ## 3. Screens (pages and URLs)
-A nav menu (NavLink) on every page: **Find a Pokémon** (`/pokemon`) · **Create card** (`/create`) · **My Cards** (`/my-cards`).
+A header on every page: the logo "My Poké Card" (a link to `/`) and a nav menu (NavLink): **Find a Pokémon** (`/pokemon`) · **Create card** (`/create`) · **My Cards** (`/my-cards`).
 - **`/` Landing page** — What the app does, with "Create your card" → `/create` and "Find a Pokémon" → `/pokemon`.
 - **`/pokemon` Pokémon list** — A grid of Pokémon (name + image) with a search box (by name), a Type filter and "Load more". Clicking a Pokémon opens its details page.
 - **`/pokemon/:id` Details** — The id comes from the URL (`useParams`). Official artwork, number, Type, weight, attacks, Weakness/Resistance, and a "Create my card with <Pokémon>" button → `/create/:id`.

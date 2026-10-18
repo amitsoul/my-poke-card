@@ -7,9 +7,9 @@ export function toTitleCase(text: string): string {
 }
 
 // The app's name, as shown on the landing page tab and after every page's name
-export const APP_NAME = 'My Poke Card'
+export const APP_NAME = 'My Poké Card'
 
-// The browser tab title for a page: "My Cards" → "My Cards · My Poke Card"
+// The browser tab title for a page: "My Cards" → "My Cards · My Poké Card"
 export function getPageTitle(page: string): string {
   return `${page} · ${APP_NAME}`
 }

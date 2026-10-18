@@ -199,10 +199,10 @@ describe('CreateCardPage', () => {
 
   it('the tab title: "Create card" while loading, then with the Pokémon name', async () => {
     renderPage('/create/25')
-    expect(document.title).toBe('Create card · My Poke Card')
+    expect(document.title).toBe('Create card · My Poké Card')
 
     await screen.findByRole('button', { name: 'Change' })
-    expect(document.title).toBe('Create card with Pikachu · My Poke Card')
+    expect(document.title).toBe('Create card with Pikachu · My Poké Card')
   })
 
   // ---------- Saving (task 11) ----------
