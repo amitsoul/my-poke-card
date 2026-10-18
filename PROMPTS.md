@@ -1449,3 +1449,47 @@
 > 2) set favicon.svg to variant C, 3) delete /dev/preview (route + DevPreviewPage) and confirm it's gone,
 > 4) run vitest, build and lint. Don't commit — I'll do it.
 > </pasted_content id="91c8">
+
+**15:49 · claude**
+
+> <pasted_content id="91c8">
+> R3 — the "Sticker Scrapbook" look (direction B). Plan first, no code until I approve.
+> 
+> Scope (site look only):
+> - Page background: paper #FDF6EC, optional light confetti dots (max ~8% opacity, must not reduce text contrast).
+> - Buttons: primary red #C22C0A with white text; secondary yellow #EECB47 with dark text #1E1B14 and a #A8861C edge. Show the contrast ratio of each.
+> - Panels/sections: white "sticker" style (white border + soft shadow), like the logo.
+> - Tilt: only page headings and decorative elements may tilt (about 1°). Real Pokémon cards and the user's cards never tilt.
+> - Focus ring: #1A1A1A, clearly visible on paper, red and yellow.
+> - Contrast fix: replace #888 grey text with #595959 (list every place).
+> 
+> Hard rules:
+> - Do NOT change any .poke-card rules or anything that affects the card or the PNG. The PNG must stay pixel-identical (I'll re-check MPC 006 and MPC 009 in png-after).
+> - Class selectors only, no global element rules that could reach the card.
+> - English UI only. No new dependencies.
+> - The landing page content is NOT part of R3 (that's R4).
+> 
+> In the plan: list the files you'll change, the new CSS classes, which tests you'll add or update, and any decisions I need to make (give options + your recommendation). You may add /dev/preview temporarily for me to check; delete it before I commit.
+> </pasted_content id="91c8">
+
+**15:55 · claude**
+
+> <pasted_content id="91c8">
+> Approved. Decisions:
+> D1: b (confetti only in side margins on ≥1280px, never behind text).
+> D2: a (sticker label titles). Make sure long titles wrap cleanly at 320px.
+> D3: a (#767676 input borders).
+> D4: a (list items: white stickers, no tilt).
+> D5: a.
+> Edit button: yes, yellow is fine — the mockup replaces the task-11 "outlined" decision. Add a one-line note about it where that decision is recorded.
+> 
+> One change to the CSS test: split each selector on commas and check every part (so ".home h2, img" fails), and include rules inside @media blocks.
+> 
+> Go ahead. Add /dev/preview as planned; when done, tell me what to check and I'll download MPC 006 and MPC 009 into png-after.
+> </pasted_content id="91c8">
+
+**16:07 · claude**
+
+> The 2 new PNGs (MPC 006 and MPC 009) are in png-after. Compare them to png-baseline.
+> .status: keep the "Loading…" lines plain text (no panel) — give them their own class; error boxes stay as white panels.
+> Then delete /dev/preview, confirm it's gone, and run test, build and lint. Don't commit.

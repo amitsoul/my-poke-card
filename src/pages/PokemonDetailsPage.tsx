@@ -45,7 +45,7 @@ export default function PokemonDetailsPage() {
         </Link>
       )}
 
-      {state.status === 'loading' && <p className="status">Loading details...</p>}
+      {state.status === 'loading' && <p className="loading-text">Loading details...</p>}
 
       {/* A valid number, but the API has no such Pokémon (e.g. /pokemon/99999) */}
       {state.status === 'not-found' && (

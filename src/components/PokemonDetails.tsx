@@ -16,7 +16,7 @@ export default function PokemonDetails({ details }: PokemonDetailsProps) {
     <section className="pokemon-details">
       {/* crossOrigin on EVERY artwork image: the browser then caches one CORS version, which the PNG export (task 11) can read */}
       <img src={getDetailsImage(details)} alt={name} width="250" height="250" crossOrigin="anonymous" />
-      <h1 className="pokemon-name">{name}</h1>
+      <h1 className="pokemon-name page-title">{name}</h1>
       <p className="pokemon-number">{number}</p>
       <p className="pokemon-card-type">Type: {getCardType(getGameTypes(details))}</p>
       <p className="pokemon-weight">Weight: {(details.weight / 10).toFixed(1)} kg</p>

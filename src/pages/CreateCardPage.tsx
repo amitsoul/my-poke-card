@@ -73,7 +73,7 @@ export default function CreateCardPage() {
     return (
       <section className="status">
         <title>{getPageTitle('Create card')}</title>
-        <h1>Choose your favorite Pokémon</h1>
+        <h1 className="page-title">Choose your favorite Pokémon</h1>
         <p>Pick a Pokémon from the list, then tap "Create my card" on its page.</p>
         <Link to="/pokemon" className="button">
           Go to the Pokémon list
@@ -160,9 +160,9 @@ export default function CreateCardPage() {
           state.status === 'ready' ? `Create card with ${formatPokemonName(state.details.name)}` : 'Create card',
         )}
       </title>
-      <h1>Create your card</h1>
+      <h1 className="page-title">Create your card</h1>
 
-      {state.status === 'loading' && <p className="status">Loading your Pokémon...</p>}
+      {state.status === 'loading' && <p className="loading-text">Loading your Pokémon...</p>}
 
       {/* A valid number, but the API has no such Pokémon (e.g. /create/99999) */}
       {state.status === 'not-found' && (

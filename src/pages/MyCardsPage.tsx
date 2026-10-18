@@ -62,7 +62,7 @@ export default function MyCardsPage() {
   return (
     <div className="my-cards-page">
       <title>{getPageTitle('My Cards')}</title>
-      <h1 tabIndex={-1} ref={headingRef}>
+      <h1 className="page-title" tabIndex={-1} ref={headingRef}>
         My Cards
       </h1>
 

@@ -10,5 +10,7 @@ export default defineConfig({
     environment: 'jsdom',
     // Runs before every test file: jest-dom matchers + cleanup between tests
     setupFiles: ['./src/test/setup.ts'],
+    // Vitest leaves CSS files empty by default; src/indexCss.test.ts reads index.css's text
+    css: { include: [/index\.css/] },
   },
 })

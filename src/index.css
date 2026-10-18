@@ -66,11 +66,23 @@
 :root {
   font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   line-height: 1.5;
-  /* Light only: every color in this file was chosen for a white background,
-     so a phone or computer in dark mode still gets dark text on white */
+  /* Light only: every color in this file was chosen for a light background,
+     so a phone or computer in dark mode still gets dark text on paper */
   color-scheme: light;
   color: #1a1a1a;
-  background: #fff;
+  background: var(--site-paper); /* not inherited, so it never reaches the card */
+
+  /* The site look "Sticker Scrapbook" (task 12). Named --site-… so they never clash with the card's variables. */
+  --site-paper: #fdf6ec;
+  --site-red: #c22c0a; /* white text on it: 5.74:1 */
+  --site-red-hover: #a32509;
+  --site-yellow: #eecb47; /* dark text #1e1b14 on it: 10.86:1 */
+  --site-yellow-hover: #e3bc2c;
+  --site-yellow-edge: #a8861c; /* 3.21:1 on the paper, so the yellow button's shape is clear */
+  --site-text-dark: #1e1b14;
+  --site-focus: #1a1a1a; /* 16.22:1 on the paper */
+  --site-sticker-shadow: 0 2px 6px rgba(30, 27, 20, 0.18);
+  --site-sticker-shadow-raised: 0 4px 10px rgba(30, 27, 20, 0.22);
 }
 
 /* A column: the footer stays at the bottom of the window even on a short page */
@@ -178,6 +190,12 @@ body {
   text-align: center;
 }
 
+/* "Loading…" lines: plain text with the same spacing (no panel, unlike .status) */
+.loading-text {
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
 /* Used on <button> and on <Link>, so it also removes the link underline */
 .button {
   display: inline-block;
@@ -215,7 +233,7 @@ body {
   width: 100%;
   margin-bottom: 1rem;
   padding: 0.6rem 0.9rem;
-  border: 1px solid #ccc;
+  border: 1px solid #767676; /* was #ccc (1.5:1); a field's edge needs 3:1, this is 4.2:1 on the paper */
   border-radius: 8px;
   font: inherit;
 }
@@ -311,7 +329,7 @@ body {
 
 .pokemon-number {
   margin: 0.25rem 0;
-  color: #888;
+  color: #595959; /* was #888 (3.3:1 on the paper); now 6.5:1 */
 }
 
 .pokemon-card-type {
@@ -411,7 +429,7 @@ body {
   box-sizing: border-box;
   width: 100%;
   padding: 0.6rem 0.9rem;
-  border: 1px solid #ccc;
+  border: 1px solid #767676; /* was #ccc (1.5:1); a field's edge needs 3:1, this is 4.2:1 on the paper */
   border-radius: 8px;
   font: inherit;
 }
@@ -423,7 +441,7 @@ body {
 /* The About you counter, under the input on the right */
 .field-hint {
   margin: 0;
-  color: #888;
+  color: #595959; /* was #888 (3.3:1 on the paper); now 6.5:1 */
   font-size: 0.875rem;
   text-align: right;
 }
@@ -891,7 +909,7 @@ body {
 
 /* The hidden input has the keyboard focus → show it on the visible button */
 .photo-field input:focus-visible ~ .photo-actions .photo-button {
-  outline: 3px solid #1a73e8;
+  outline: 3px solid var(--site-focus);
   outline-offset: 2px;
 }
 
@@ -1000,3 +1018,177 @@ body {
   margin: 0 0 0.5rem;
 }
 
+
+/* ---------- Site look: "Sticker Scrapbook" (task 12) ----------
+   Warm paper, white "sticker" panels with a soft shadow, a red and a yellow button, tilted page titles.
+   Class selectors only (checked by src/indexCss.test.ts). Nothing here reaches the card: the only class
+   that also lives inside the card is .button (the attacks' "Try again"), so its rules skip .poke-card-frame. */
+
+/* Page titles: a cream sticker label like the logo, tilted 1°. Long titles wrap inside the label. */
+.page-title {
+  display: inline-block;
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 0 0 1.25rem;
+  padding: 0.2rem 0.9rem;
+  border: 3px solid #fff;
+  border-radius: 10px;
+  background: #fff6de;
+  box-shadow: var(--site-sticker-shadow);
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.15;
+  overflow-wrap: break-word;
+  transform: rotate(-1deg);
+}
+
+/* Buttons (outside the card): red, with a white sticker edge and a soft shadow */
+.button:not(.poke-card-frame *) {
+  border: 3px solid #fff;
+  border-radius: 10px;
+  background: var(--site-red);
+  box-shadow: var(--site-sticker-shadow);
+}
+
+.button:not(.poke-card-frame *):hover {
+  background: var(--site-red-hover);
+}
+
+/* The secondary button: yellow with dark text, and a thin darker edge so its shape shows on the paper.
+   Task 11 had it outlined in red; the approved mockup (task 12) makes it yellow. */
+.button-secondary:not(.poke-card-frame *) {
+  background: var(--site-yellow);
+  color: var(--site-text-dark);
+  box-shadow:
+    0 0 0 1px var(--site-yellow-edge),
+    var(--site-sticker-shadow);
+}
+
+.button-secondary:not(.poke-card-frame *):hover {
+  background: var(--site-yellow-hover);
+}
+
+/* Nav links, Type chips and the My Cards filter: white sticker pills; the current one is red */
+.nav-link,
+.card-type-button {
+  border: 2px solid #fff;
+  background: #fff;
+  box-shadow: var(--site-sticker-shadow);
+}
+
+.nav-link:hover,
+.card-type-button:hover {
+  border-color: #fff;
+  background: #fff1ec;
+}
+
+.nav-link.active,
+.card-type-button.selected {
+  border-color: #fff;
+  background: var(--site-red);
+  color: #fff;
+}
+
+/* Pokémon in the list: white stickers, never tilted (they show real Pokémon) */
+.pokemon-card {
+  border: 4px solid #fff;
+  background: #fff;
+  box-shadow: var(--site-sticker-shadow);
+}
+
+.pokemon-card:hover {
+  border-color: #fff;
+  box-shadow: var(--site-sticker-shadow-raised);
+}
+
+/* Panels: white stickers */
+.status,
+.pokemon-details,
+.pokemon-battle,
+.favorite-field,
+.card-form,
+.inline-confirm {
+  border: 4px solid #fff;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: var(--site-sticker-shadow);
+}
+
+.card-form {
+  padding: 1rem;
+}
+
+/* The "are you sure?" box keeps a red edge, so it still reads as a warning */
+.inline-confirm {
+  border-color: var(--site-red);
+}
+
+/* A small lift on hover — only for people who haven't asked for less motion */
+@media (prefers-reduced-motion: no-preference) {
+  .button:not(.poke-card-frame *),
+  .pokemon-card {
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .button:not(.poke-card-frame *):hover,
+  .pokemon-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* One clear focus ring for keyboard users (outside the card): dark, 3px, 2px away from the element,
+   so it sits on the paper or a white panel (16:1 or more), never touching the red */
+.button:not(.poke-card-frame *):focus-visible,
+.nav-link:focus-visible,
+.logo-link:focus-visible,
+.card-type-button:focus-visible,
+.pokemon-card:focus-visible,
+.back-link:focus-visible,
+.favorite-button:focus-visible,
+.search-bar:focus-visible,
+.form-field input:focus-visible,
+.saved-notice-link:focus-visible,
+.site-footer a:focus-visible {
+  outline: 3px solid var(--site-focus);
+  outline-offset: 2px;
+}
+
+/* Confetti: a few faint dots in the Type colors, only in the empty side margins of a wide window
+   (the content is at most 1200px wide), so they are never behind text. Max 8% strength. */
+@media (min-width: 1280px) {
+  #root::before,
+  #root::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    width: calc((100vw - 1200px) / 2 - 1rem);
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle, rgba(210, 70, 30, 0.08) 0 6px, transparent 7px),
+      radial-gradient(circle, rgba(42, 120, 196, 0.08) 0 5px, transparent 6px),
+      radial-gradient(circle, rgba(166, 124, 0, 0.08) 0 7px, transparent 8px),
+      radial-gradient(circle, rgba(62, 142, 58, 0.08) 0 5px, transparent 6px),
+      radial-gradient(circle, rgba(142, 75, 168, 0.08) 0 6px, transparent 7px);
+    background-size: 180px 240px;
+    background-position:
+      20px 30px,
+      110px 90px,
+      50px 150px,
+      140px 200px,
+      80px 230px;
+  }
+
+  #root::before {
+    left: 0;
+  }
+
+  #root::after {
+    right: 0;
+    transform: scaleX(-1); /* the same dots, mirrored */
+  }
+}

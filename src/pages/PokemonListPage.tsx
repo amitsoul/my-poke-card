@@ -192,9 +192,9 @@ export default function PokemonListPage() {
   return (
     <>
       <title>{getPageTitle('Find a Pokémon')}</title>
-      <h1>Find a Pokémon</h1>
+      <h1 className="page-title">Find a Pokémon</h1>
 
-      {isLoading && <p className="status">Loading Pokémon...</p>}
+      {isLoading && <p className="loading-text">Loading Pokémon...</p>}
 
       {!isLoading && hasError && (
         <div className="status">
@@ -210,7 +210,7 @@ export default function PokemonListPage() {
           <SearchBar value={searchText} onChange={handleSearchChange} />
           <CardTypeFilter selectedCardType={selectedCardType} onChange={handleCardTypeChange} />
 
-          {isCardTypeLoading && <p className="status">Loading {selectedCardType} Pokémon...</p>}
+          {isCardTypeLoading && <p className="loading-text">Loading {selectedCardType} Pokémon...</p>}
 
           {hasCardTypeError && (
             <div className="status">
