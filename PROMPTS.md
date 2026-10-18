@@ -1343,3 +1343,24 @@
 **10:25 · claude**
 
 > 12e1 looks good: all circles are round, every icon is complete, and the Darkness crescent shows on Arbok. Delete the preview page now, re-run the tests and the build, and confirm it's gone. The C2-b line in CARD_SPEC can go in the 12e3 commit.
+
+**10:35 · claude**
+
+> <pasted_content id="91c8">
+> 12e1 is committed. Go ahead with step 12e2 only: the card tints.
+> - The new tint + stripTint for all 10 Types as in your swatch, and R1: the card's red text (HP, Ability) becomes #8B2318.
+> - Tests: ΔE76 ≥ 12 between every pair of tints; contrast ≥ 4.5 for the dark text on every tint and strip, and for the red text on every tint. Keep the color-math helpers short and commented, I need to explain them.
+> - CARD_SPEC: the new color table, and one line on why (Types looked alike) and how it's tested.
+> - Put the temporary /dev/preview page back so I can see all 10 tints on real cards (with the real symbols and the strip), the same way as before. Delete it again after I've looked, and tell me when it's gone.
+> Then run npm test, npm run build and npm run lint, and wait for me.
+> </pasted_content id="91c8">
+
+**10:48 · claude**
+
+> 12e2 looks good on /dev/preview [or: change the … tint].
+> One more thing before you delete the preview: I checked the symbol circle against its own card's tint — Metal is 2.89:1 and Fire 2.98:1, below the 3:1 for graphics (WCAG 1.4.11). Darken those two circle colors slightly (keep the white icon ≥ 3:1 too), add a test "each Type's symbol has ≥ 3:1 against its own tint", and show me the two on the preview.
+> Then delete the preview, re-run the checks, and confirm it's gone.
+
+**10:51 · claude**
+
+> Looks good, keep all 10 tints. Delete the preview now, re-run the checks, and confirm it's gone.

@@ -83,10 +83,10 @@ Filled on `/create/:id` after a Pokémon is chosen. All fields are required and 
 - **Fonts** (self-hosted from Google Fonts, SIL Open Font License, `src/assets/fonts/OFL.txt`): "Barlow Condensed" 600/700 for the name, HP, attack names and damage; "Barlow" 400/600/700 for everything else. Text #1E1B14.
 - **Parts** (sizes in design pixels):
   - Frame: yellow #F2C94C, 12 thick, radius 18. Panel: radius 8, padding 10 12 8, a column with 7 between the parts, background = the Type's tint.
-  - Header: "BASIC" tag (10 bold italic, light background, 1px border #8C7F5A) · name (Barlow Condensed bold, 23 → 19 → 16 → 14 for longer names, at most 2 lines) · "HP" 11 + number 24, both #A12B1F · Type symbol 26. Only the name shrinks or wraps.
+  - Header: "BASIC" tag (10 bold italic, light background, 1px border #8C7F5A) · name (Barlow Condensed bold, 23 → 19 → 16 → 14 for longer names, at most 2 lines) · "HP" 11 + number 24, both #8B2318 · Type symbol 26. Only the name shrinks or wraps.
   - Window: 204 high, 4px gold border #C9A94A; the photo fills it, the sticker on top.
   - Pokédex strip: 10.5 italic semibold, centered, on the Type's darker strip tint.
-  - Ability: the label "Ability" (11 bold italic, white on #A12B1F) + the superpower (19 bold #A12B1F, shown in Title Case).
+  - Ability: the label "Ability" (11 bold italic, white on #8B2318) + the superpower (19 bold #8B2318, shown in Title Case).
   - Attacks: one row each — cost symbols 20 (the column is as wide as the attack with the most symbols on this card), name 19 bold, damage 22 bold on the right, a thin line under each row.
   - Weakness / Resistance / Retreat: 3 equal centered columns; label 9 bold uppercase with letter-spacing; value = a 16 symbol + "×2" / "−30", or "none"; Retreat = that many Colorless symbols.
   - Flavor text: a box with a 1px border #B9A66A, 11.5 italic, in quotes, exactly as typed.
@@ -98,18 +98,20 @@ Our own SVG icons inspired by the originals: a colored circle with a white icon 
 
 | Type | Circle | Panel tint | Strip tint (a bit darker) |
 |---|---|---|---|
-| Grass | #3E8E3A | #DCEBC8 | #C6DDAA |
-| Fire | #D9481F | #F8D6C8 | #F0BDA8 |
-| Water | #2A78C4 | #D2E5F6 | #B5D3EE |
-| Lightning | #A67C00 | #FAEDB4 | #F2DC86 |
-| Psychic | #8E4BA8 | #E8D9EE | #D7C0E2 |
-| Fighting | #A3521F | #EBD3C0 | #DDBBA0 |
-| Darkness | #3B3F4A | #D9D9DD | #C2C3C9 |
-| Metal | #6F7C86 | #E1E5E8 | #CBD2D7 |
-| Dragon | #7D6619 | #ECE3C3 | #DDD0A2 |
-| Colorless | #8A877C | #ECEBE6 | #DAD8D0 |
+| Grass | #3E8E3A | #D3EBBE | #BCDE9E |
+| Fire | #D2461E | #FBCDC2 | #F6B2A2 |
+| Water | #2A78C4 | #C4DEFB | #A5CBF3 |
+| Lightning | #A67C00 | #FFF1A0 | #F9E26B |
+| Psychic | #8E4BA8 | #EED2F2 | #E0B6E8 |
+| Fighting | #A3521F | #E3CBA8 | #D4B488 |
+| Darkness | #3B3F4A | #C3C2DA | #ADACC9 |
+| Metal | #69767F | #CFD5D8 | #B9C2C7 |
+| Dragon | #7D6619 | #D6D29C | #C2BD7E |
+| Colorless | #8A877C | #FAF4DF | #EFE6C6 |
 
-Every circle has at least 3:1 contrast with its white icon (WCAG 1.4.11, checked by a test). Lightning was #C99A00 in the mockup (only about 2.6:1), so it is darkened to #A67C00.
+Every circle has at least 3:1 contrast with its white icon and with its own card's tint (WCAG 1.4.11, checked by tests). Lightning was #C99A00 in the mockup (only about 2.6:1), so it is darkened to #A67C00. With the new tints, Fire (#D9481F, 2.98:1) and Metal (#6F7C86, 2.89:1) were just below 3:1 on their tint, so they are a little darker too.
+
+The tints were changed in task 12e2 because some Types looked alike (Darkness / Metal / Colorless gray, Fire / Fighting peach, Lightning / Dragon yellow). Tests check that every pair of tints is clearly different (ΔE76, the distance between two colors in CIELAB, at least 12), and that the dark text #1E1B14 has at least 4.5:1 on every tint and strip and the red #8B2318 (HP, Ability) at least 4.5:1 on every tint.
 
 ## The sticker
 - The official artwork (transparent background) with a white outline that follows the Pokémon's shape plus a small shadow (CSS `filter: drop-shadow`, no library).

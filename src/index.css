@@ -561,7 +561,7 @@ body {
   padding: calc(12 * var(--u));
   border-radius: calc(18 * var(--u));
   background: #f2c94c; /* the yellow frame, on every card */
-  color: #1e1b14;
+  color: #1e1b14; /* CARD_TEXT_COLOR in src/utils/cardTheme.ts */
   font-family: 'Barlow', system-ui, sans-serif;
   font-size: calc(12 * var(--u));
   line-height: 1.2;
@@ -618,7 +618,7 @@ body {
 
 .poke-card-hp {
   flex-shrink: 0;
-  color: #a12b1f;
+  color: #8b2318; /* CARD_RED in src/utils/cardTheme.ts: at least 4.5:1 on every tint (tested) */
   font-weight: 700;
   white-space: nowrap;
 }
@@ -731,7 +731,7 @@ body {
   flex-shrink: 0;
   padding: calc(1 * var(--u)) calc(6 * var(--u));
   border-radius: calc(3 * var(--u));
-  background: #a12b1f;
+  background: #8b2318;
   color: #fff;
   font-size: calc(11 * var(--u));
   font-weight: 700;
@@ -739,7 +739,7 @@ body {
 }
 
 .poke-card-ability-text {
-  color: #a12b1f;
+  color: #8b2318;
   font-size: calc(19 * var(--u));
   font-weight: 700;
   line-height: 1.1;

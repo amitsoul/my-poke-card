@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { CARD_TYPES } from './cardType.ts'
-import { contrastRatio, getNameFontSize, TYPE_THEME } from './cardTheme.ts'
+import {
+  CARD_RED,
+  CARD_TEXT_COLOR,
+  colorDistance,
+  contrastRatio,
+  getNameFontSize,
+  TYPE_THEME,
+} from './cardTheme.ts'
 
 describe('contrastRatio', () => {
   it('gives the known WCAG values: black on white is 21, a color with itself is 1', () => {
@@ -29,17 +36,53 @@ describe('TYPE_THEME', () => {
     }
   })
 
+  // The symbols sit on the card's panel, so each circle must also stand out from its own tint
+  it("each Type's symbol has at least 3:1 against its own tint (WCAG 1.4.11)", () => {
+    for (const [cardType, theme] of Object.entries(TYPE_THEME)) {
+      expect(contrastRatio(theme.color, theme.tint), `${cardType} ${theme.color} on ${theme.tint}`).toBeGreaterThanOrEqual(3)
+    }
+  })
+
   it('every Type has its own circle color', () => {
     const colors = Object.values(TYPE_THEME).map((theme) => theme.color)
     expect(new Set(colors).size).toBe(10)
   })
 
-  it('the strip is a bit darker than the panel, and both stay light enough for the dark text', () => {
+  it('the strip is a bit darker than the panel', () => {
     for (const [cardType, theme] of Object.entries(TYPE_THEME)) {
       expect(contrastRatio('#FFFFFF', theme.stripTint), cardType).toBeGreaterThan(contrastRatio('#FFFFFF', theme.tint))
-      // The card's text color #1E1B14 must stay very readable on the strip (WCAG AA for text: 4.5:1)
-      expect(contrastRatio('#1E1B14', theme.stripTint), cardType).toBeGreaterThanOrEqual(4.5)
     }
+  })
+
+  // WCAG AA for normal text: at least 4.5:1
+  it('the dark text is readable on every tint and strip, and the red HP/Ability text on every tint', () => {
+    for (const [cardType, theme] of Object.entries(TYPE_THEME)) {
+      expect(contrastRatio(CARD_TEXT_COLOR, theme.tint), `${cardType} tint`).toBeGreaterThanOrEqual(4.5)
+      expect(contrastRatio(CARD_TEXT_COLOR, theme.stripTint), `${cardType} strip`).toBeGreaterThanOrEqual(4.5)
+      expect(contrastRatio(CARD_RED, theme.tint), `${cardType} red`).toBeGreaterThanOrEqual(4.5)
+    }
+  })
+
+  // Before task 12e2, Darkness/Metal (4.2), Fire/Fighting (4.9) and Metal/Colorless (5.0) looked alike
+  it('no two Types have tints that look alike (ΔE76 at least 12 for every pair)', () => {
+    const themes = Object.entries(TYPE_THEME)
+    for (const [index, [typeA, themeA]] of themes.entries()) {
+      for (const [typeB, themeB] of themes.slice(index + 1)) {
+        expect(colorDistance(themeA.tint, themeB.tint), `${typeA} / ${typeB}`).toBeGreaterThanOrEqual(12)
+      }
+    }
+  })
+})
+
+describe('colorDistance (ΔE76)', () => {
+  it('is 0 for the same color and 100 between black and white (lightness 0 → 100)', () => {
+    expect(colorDistance('#3E8E3A', '#3E8E3A')).toBe(0)
+    expect(colorDistance('#000000', '#FFFFFF')).toBeCloseTo(100, 1)
+  })
+
+  it('a tiny step is small, a different color is big', () => {
+    expect(colorDistance('#808080', '#828282')).toBeLessThan(1)
+    expect(colorDistance('#FBCDC2', '#C4DEFB')).toBeGreaterThan(20) // the Fire and Water tints
   })
 })
 
