@@ -637,6 +637,13 @@ body {
   display: flex;
 }
 
+/* Every Type symbol: a row that is a fraction of a pixel too narrow must not squeeze it,
+   and nothing at its edge is cut off */
+.type-symbol {
+  flex-shrink: 0;
+  overflow: visible;
+}
+
 .poke-card-type .type-symbol {
   width: calc(26 * var(--u));
   height: calc(26 * var(--u));

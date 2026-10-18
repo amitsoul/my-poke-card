@@ -94,7 +94,7 @@ Filled on `/create/:id` after a Pokémon is chosen. All fields are required and 
 - **Names on the card:** the user's name and the superpower are shown in Title Case (a capital after a space, hyphen or apostrophe: "o'neil" → "O'Neil"); the stored values stay as typed.
 
 ## Type symbols and colors
-Our own SVG icons inspired by the originals: a colored circle with a white icon — Grass leaf, Fire flame, Water droplet, Lightning bolt, Psychic eye, Fighting fist, Darkness crescent, Metal triangle, Dragon claw, Colorless star. No official logos or copyright lines. Each symbol has an accessible name ("Lightning"). Used for the Type, attack costs, Weakness, Resistance and Retreat (on the card and the details page). In code: `src/components/TypeSymbol.tsx` and `src/utils/cardTheme.ts`.
+Our own SVG icons inspired by the originals: a colored circle with a white icon — Grass leaf, Fire flame, Water droplet, Lightning bolt, Psychic eye, Fighting fist, Darkness crescent, Metal triangle, Dragon claw, Colorless star. No official logos or copyright lines. Each symbol has an accessible name ("Lightning"). Used for the Type, attack costs, Weakness, Resistance and Retreat (on the card and the details page). On a 32×32 grid the circle has radius 15 (never touching the edge, so it isn't cut at small sizes) and every icon stays inside radius 12, drawn only with straight lines and Bézier curves (checked by a test). In code: `src/components/TypeSymbol.tsx` and `src/utils/cardTheme.ts`.
 
 | Type | Circle | Panel tint | Strip tint (a bit darker) |
 |---|---|---|---|

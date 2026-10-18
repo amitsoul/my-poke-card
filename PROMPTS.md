@@ -1310,3 +1310,36 @@
 > - Check every task in tasks.md has a "Done when", and every link in PRD.md, CARD_SPEC.md and the checklist points to a file that exists.
 > Show me all results in one table and wait for my commit. No other changes.
 > </pasted_content id="91c8">
+
+## 2026-10-18
+
+**10:01 · claude**
+
+> <pasted_content id="91c8">
+> Before the site redesign, I found card problems. PLAN FIRST, no code yet. Split into small steps (12e1, 12e2, ...) with a commit after each.
+> 
+> 1. Type symbols are clipped: on the cards (especially the small ones: Weakness, Retreat, costs) the circles look flattened at the edges and some icons look cut (e.g. the top of the Fire flame). I think it's because the circle is r=16 in a 32×32 viewBox, touching the edges, and our cqw sizes are fractional pixels. Fix so every circle is complete and every icon sits inside its circle with a margin, at all 3 sizes (26, 20, 16 design px).
+> 2. The Darkness icon is invisible (Arbok shows an empty dark circle): the crescent path's two arcs are the same line, so it has no area. Redraw it.
+>    For 1+2: give me a way to SEE all 10 symbols at all 3 sizes side by side in the browser before I approve (e.g. a temporary dev-only page that you remove before the commit, or another idea), and tell me how you'll keep it from breaking again.
+> 3. B1 – card colors: Darkness / Metal / Colorless look the same gray, Fire / Fighting the same peach, Lightning / Dragon the same yellow. Choose new tint + stripTint for all 10 Types so each Type is clearly different, keep the text readable (contrast ≥ 4.5:1 for the dark text on the tint), and add a test that no two tints are too close (explain the measure you use). Show me a before/after swatch of all 10 before I approve.
+> 4. Sticker margin: the sticker's white outline and shadow get cut when it's dragged to the window edge (Spearow's feet, Altaria's tail). Keep a small margin in clampStickerPosition so the outline always fits.
+> 5. C2 – attacks: today we take the FIRST two damaging level-up moves, so Charmander and Charmeleon both get Scratch + Ember. New rule: attack 1 = the first damaging level-up move (as now), attack 2 = the STRONGEST damaging level-up move (highest power; tell me your tie rule), different from attack 1. Keep the Ditto and Struggle fallbacks. Tell me how many move requests this needs (our cap is 20) for Charmander, Charmeleon, Pikachu, Mew, Ditto and Magikarp, and how you'd stay within the cap. The details page should use the same rule. Saved cards keep their snapshot (old cards don't change), say if you agree. Update CARD_SPEC and the tests.
+> 
+> Show me the plan with options where there's a choice, and wait for my approval.
+> </pasted_content id="91c8">
+
+**10:16 · claude**
+
+> <pasted_content id="91c8">
+> Decisions:
+> - Preview: V1 (/dev/preview). Make sure it's deleted before every commit, and tell me each time that it's gone.
+> - Tints: approved as in the swatch [or: approved except …]. Red: R1 (#8B2318).
+> - Sticker margin: S1.
+> - Attacks: C2-b, keep today's rule. Your data shows C2 doesn't separate evolutions, and it adds cost-4 attacks and more requests, so it's not worth it. Remove 12e4 from the plan. Note in CARD_SPEC (one line, in the attacks section) why we kept the rule: evolutions share early level-up moves, and that's accepted.
+> - 12e1 test: keep the "icon inside its circle" test short and readable (I need to explain it in my defense). If parsing the SVG paths gets long, propose a simpler way first.
+> Start with 12e1 only. Show me /dev/preview and the results, and wait for my commit.
+> </pasted_content id="91c8">
+
+**10:25 · claude**
+
+> 12e1 looks good: all circles are round, every icon is complete, and the Darkness crescent shows on Arbok. Delete the preview page now, re-run the tests and the build, and confirm it's gone. The C2-b line in CARD_SPEC can go in the 12e3 commit.
