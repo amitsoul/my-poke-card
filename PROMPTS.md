@@ -1364,3 +1364,20 @@
 **10:51 · claude**
 
 > Looks good, keep all 10 tints. Delete the preview now, re-run the checks, and confirm it's gone.
+
+**10:56 · claude**
+
+> <pasted_content id="91c8">
+> 12e2 is committed. Go ahead with step 12e3 only: the sticker margin (S1).
+> - clampStickerPosition keeps exact per-side margins computed from the CSS filter numbers (outline 2px, shadow 2px down + 3px blur), explained in a comment, so the white outline and shadow always fit inside the window.
+> - Move the starting position up so the shadow fits from the start.
+> - Old saved cards keep their saved position (no migration).
+> - Tests for the new limits (each side, and the starting position).
+> - CARD_SPEC: the margin and the new starting position, plus the one line in the attacks section on why we kept today's rule (C2-b: evolutions share early level-up moves, and that's accepted).
+> - Put /dev/preview back with the sticker in all 4 corners for Spearow, Altaria and Pikachu, so I can check nothing is cut. Delete it again after I've looked and tell me when it's gone.
+> Then run npm test, npm run build and npm run lint, and wait for me.
+> </pasted_content id="91c8">
+
+**11:02 · claude**
+
+> 12e3 looks good: nothing is cut in any corner, and old cards stayed where they were. Delete the preview now, re-run the checks, and confirm it's gone.

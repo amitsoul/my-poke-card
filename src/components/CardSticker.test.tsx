@@ -1,13 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
-import { STICKER_SIZE, type StickerPosition } from '../utils/sticker.ts'
+import { STICKER_LIMITS, type StickerPosition } from '../utils/sticker.ts'
 import CardSticker from './CardSticker.tsx'
 
 const ARTWORK = 'https://example.com/25.png'
 const START = { x: 40, y: 30 }
-const MAX_X = 100 - STICKER_SIZE.width
-const MAX_Y = 100 - STICKER_SIZE.height
+const { minX: MIN_X, maxX: MAX_X, minY: MIN_Y, maxY: MAX_Y } = STICKER_LIMITS
 
 // The sticker inside a 324×196 photo window. jsdom has no real layout, so the window's size is faked.
 function renderMovable(position = START) {
@@ -65,10 +64,10 @@ describe('CardSticker — movable (with onMove)', () => {
 
   it('the arrow keys never move it out of the window', async () => {
     const user = userEvent.setup()
-    const atTopLeft = renderMovable({ x: 0, y: 0 })
+    const atTopLeft = renderMovable({ x: MIN_X, y: MIN_Y })
     atTopLeft.sticker.focus()
     await user.keyboard('{ArrowLeft}{ArrowUp}')
-    expect(atTopLeft.onMove).toHaveBeenLastCalledWith({ x: 0, y: 0 })
+    expect(atTopLeft.onMove).toHaveBeenLastCalledWith({ x: MIN_X, y: MIN_Y })
   })
 
   it('the arrow keys never move it out at the bottom right either', async () => {
@@ -106,7 +105,7 @@ describe('CardSticker — movable (with onMove)', () => {
     fireEvent.pointerDown(sticker, { pointerId: 1, clientX: 100, clientY: 100 })
     fireEvent.pointerMove(sticker, { pointerId: 1, clientX: 2000, clientY: -2000 })
 
-    expect(onMove).toHaveBeenLastCalledWith({ x: MAX_X, y: 0 })
+    expect(onMove).toHaveBeenLastCalledWith({ x: MAX_X, y: MIN_Y })
   })
 
   it('stops following the pointer after it is released', () => {

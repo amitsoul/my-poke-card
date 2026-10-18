@@ -42,6 +42,7 @@ Filled on `/create/:id` after a Pokémon is chosen. All fields are required and 
 **Attacks** — the Pokémon's moves that have power (from `/move/{name}`), in this order:
 - **Order:** first the moves it learns by **leveling up**, lowest level first (ties keep the API's order); then all its other moves, in the API's order. *Why:* the API lists moves starting with old TM moves, so "the first 2" in API order gave Pikachu Mega Punch + Pay Day. In level-up order Pikachu gets **Thunder Shock + Quick Attack**, like its real cards.
 - 2 or more with power → the first 2 in that order. Only 1 → show 1 attack. At most 20 moves are checked (in batches of 4, stopping when 2 are found).
+- *Kept on purpose (task 12):* evolutions share their early level-up moves, so e.g. Charmander and Charmeleon both get Scratch + Ember. That's accepted: "the strongest move" as attack 2 was checked against PokéAPI and gave the same pair to whole lines too (Scratch + Flare Blitz), with cost-4 attacks and up to 20 move requests per Pokémon.
 - None with power (e.g. Ditto) → show its first move in that order, with no damage number, cost 1 Colorless.
 - No moves at all → **Struggle**, 50 damage, cost 2 Colorless (in the games, the attack a Pokémon uses when it has no moves). Its cost is **all Colorless** because Struggle has no type — an exception to "the first symbol is the card's Type".
 - Moves with variable power (`power: null`, e.g. Seismic Toss) count as "no power".
@@ -115,8 +116,8 @@ The tints were changed in task 12e2 because some Types looked alike (Darkness / 
 
 ## The sticker
 - The official artwork (transparent background) with a white outline that follows the Pokémon's shape plus a small shadow (CSS `filter: drop-shadow`, no library).
-- Fixed size: 45% of the window's height, square. Starts at the bottom right, 3% from the edges.
-- After the card is created, the user can move it: drag with mouse or finger (Pointer Events), or arrow keys when it is focused (2% per press, 10% with Shift). It always stays fully inside the photo window.
+- Fixed size: 45% of the window's height, square. Starts at the bottom right, with 5 design px of free space to the right of and below its shadow (10px from the right edge, 12px from the bottom).
+- After the card is created, the user can move it: drag with mouse or finger (Pointer Events), or arrow keys when it is focused (2% per press, 10% with Shift). It always stays fully inside the photo window **with its outline and shadow**: the white outline adds 2 design px on every side, and the shadow moves 2px down with a 3px blur, so the sticker keeps 5px from the left and right edges, 3px from the top and 7px from the bottom (`STICKER_MARGIN` in `src/utils/sticker.ts`, tested). Cards saved before this margin keep their saved position.
 - The position is stored in percent (e.g. `{ x: 70, y: 65 }`) with the card data, so the saved card and the PNG (task 11) show it in the same place. Edit keeps it. No reset, no resizing.
 
 ## Saved cards

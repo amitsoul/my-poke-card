@@ -4,12 +4,16 @@ import {
   DEFAULT_STICKER_POSITION,
   moveStickerBy,
   pixelsToPercent,
-  STICKER_GAP,
+  STICKER_LIMITS,
+  STICKER_MARGIN,
   STICKER_SIZE,
 } from './sticker.ts'
 
-const MAX_X = 100 - STICKER_SIZE.width // the right edge of the sticker touches the window's right edge
-const MAX_Y = 100 - STICKER_SIZE.height
+const { minX: MIN_X, maxX: MAX_X, minY: MIN_Y, maxY: MAX_Y } = STICKER_LIMITS
+
+// % of the 324×196 window → design pixels, to compare with the CSS filter's numbers
+const toPixelsX = (percent: number) => (percent / 100) * 324
+const toPixelsY = (percent: number) => (percent / 100) * 196
 
 describe('STICKER_SIZE / DEFAULT_STICKER_POSITION', () => {
   it('is 45% of the window height and square (≈ 27.2% of the window width)', () => {
@@ -17,13 +21,23 @@ describe('STICKER_SIZE / DEFAULT_STICKER_POSITION', () => {
     expect(STICKER_SIZE.width).toBeCloseTo(27.22, 2)
   })
 
-  it('starts at the bottom right, 3% from the right and bottom edges', () => {
-    expect(DEFAULT_STICKER_POSITION.x + STICKER_SIZE.width + STICKER_GAP).toBeCloseTo(100, 10)
-    expect(DEFAULT_STICKER_POSITION.y + STICKER_SIZE.height + STICKER_GAP).toBeCloseTo(100, 10)
+  it('starts at the bottom right, with 5 design px free beyond the shadow (right 5 + 5, bottom 7 + 5)', () => {
+    expect(toPixelsX(100 - DEFAULT_STICKER_POSITION.x - STICKER_SIZE.width)).toBeCloseTo(10, 10)
+    expect(toPixelsY(100 - DEFAULT_STICKER_POSITION.y - STICKER_SIZE.height)).toBeCloseTo(12, 10)
   })
 
-  it('the starting position is inside the window', () => {
+  it('the starting position is inside the limits, so its shadow fits from the start', () => {
     expect(clampStickerPosition(DEFAULT_STICKER_POSITION)).toEqual(DEFAULT_STICKER_POSITION)
+  })
+})
+
+describe('STICKER_MARGIN', () => {
+  // From the filter in index.css: a 2px outline, then a shadow 2px lower with a 3px blur
+  it('is the room the outline and shadow need on each side, in design px: 5 left/right, 3 top, 7 bottom', () => {
+    expect(toPixelsX(STICKER_MARGIN.left)).toBeCloseTo(5, 10)
+    expect(toPixelsX(STICKER_MARGIN.right)).toBeCloseTo(5, 10)
+    expect(toPixelsY(STICKER_MARGIN.top)).toBeCloseTo(3, 10)
+    expect(toPixelsY(STICKER_MARGIN.bottom)).toBeCloseTo(7, 10)
   })
 })
 
@@ -32,15 +46,22 @@ describe('clampStickerPosition', () => {
     expect(clampStickerPosition({ x: 30, y: 20 })).toEqual({ x: 30, y: 20 })
   })
 
-  it('pulls the sticker back from each edge', () => {
-    expect(clampStickerPosition({ x: -10, y: 20 })).toEqual({ x: 0, y: 20 }) // left
-    expect(clampStickerPosition({ x: 30, y: -5 })).toEqual({ x: 30, y: 0 }) // top
-    expect(clampStickerPosition({ x: 95, y: 20 })).toEqual({ x: MAX_X, y: 20 }) // right
-    expect(clampStickerPosition({ x: 30, y: 90 })).toEqual({ x: 30, y: MAX_Y }) // bottom
+  it('keeps the margin from each edge: the sticker can no longer touch the window edge', () => {
+    expect(clampStickerPosition({ x: 0, y: 20 })).toEqual({ x: MIN_X, y: 20 }) // left
+    expect(clampStickerPosition({ x: 30, y: 0 })).toEqual({ x: 30, y: MIN_Y }) // top
+    expect(clampStickerPosition({ x: 100 - STICKER_SIZE.width, y: 20 })).toEqual({ x: MAX_X, y: 20 }) // right
+    expect(clampStickerPosition({ x: 30, y: 100 - STICKER_SIZE.height })).toEqual({ x: 30, y: MAX_Y }) // bottom
+  })
+
+  it('at each limit, the space left to the window edge is exactly the margin', () => {
+    expect(MIN_X).toBeCloseTo(STICKER_MARGIN.left, 10)
+    expect(100 - MAX_X - STICKER_SIZE.width).toBeCloseTo(STICKER_MARGIN.right, 10)
+    expect(MIN_Y).toBeCloseTo(STICKER_MARGIN.top, 10)
+    expect(100 - MAX_Y - STICKER_SIZE.height).toBeCloseTo(STICKER_MARGIN.bottom, 10)
   })
 
   it('pulls the sticker back into the corners', () => {
-    expect(clampStickerPosition({ x: -50, y: -50 })).toEqual({ x: 0, y: 0 })
+    expect(clampStickerPosition({ x: -50, y: -50 })).toEqual({ x: MIN_X, y: MIN_Y })
     expect(clampStickerPosition({ x: 500, y: 500 })).toEqual({ x: MAX_X, y: MAX_Y })
   })
 })
@@ -51,7 +72,7 @@ describe('moveStickerBy', () => {
   })
 
   it('never moves it out of the window', () => {
-    expect(moveStickerBy({ x: 1, y: 1 }, -10, -10)).toEqual({ x: 0, y: 0 })
+    expect(moveStickerBy({ x: 3, y: 3 }, -10, -10)).toEqual({ x: MIN_X, y: MIN_Y })
     expect(moveStickerBy({ x: MAX_X - 1, y: MAX_Y - 1 }, 10, 10)).toEqual({ x: MAX_X, y: MAX_Y })
   })
 })

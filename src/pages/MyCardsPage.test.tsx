@@ -71,6 +71,15 @@ describe('MyCardsPage', () => {
     expect(screen.getAllByRole('button', { name: 'Download PNG' })).toHaveLength(2)
   })
 
+  it('an old card saved at the window edge (before the sticker margin) keeps its saved position', () => {
+    saveCard({ ...newPikachuCard, card: { ...newPikachuCard.card, stickerPosition: { x: 0, y: 0 } } })
+    renderPage()
+
+    const card = screen.getByRole('article', { name: "MPC 001 · Amit's Pikachu" })
+    const sticker = within(card).getByRole('img', { name: 'Pikachu' }).closest('.poke-card-sticker')
+    expect(sticker).toHaveStyle({ left: '0%', top: '0%' })
+  })
+
   it('no card grabs the focus when the page opens', () => {
     seedCards(2)
     renderPage()
