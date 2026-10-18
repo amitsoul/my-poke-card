@@ -45,6 +45,17 @@ describe('src/index.css', () => {
     for (const selector of selectors) expect(selector).toMatch(ALLOWED_START)
   })
 
+  // The card name hides overflow (2-line limit), which used to cut the bottoms of g, j, p, q, y.
+  // Its padding gives them room, and the same negative margin takes the space back, top and bottom,
+  // so nothing on the card moves (checked on real cards; here only that the two cancel out).
+  it('the card name has room for g, j, p, q, y without moving: padding and negative margin cancel out', () => {
+    const rule = css.match(/\.poke-card-name\s*\{([^}]*)\}/)?.[1] ?? ''
+    const padding = rule.match(/\bpadding:\s*([\d.]+em) 0;/)?.[1]
+    const margin = rule.match(/\bmargin:\s*(-[\d.]+em) 0;/)?.[1]
+    expect(padding).toBe('0.1em')
+    expect(margin).toBe(`-${padding}`)
+  })
+
   it('the check itself catches an element rule, also after a comma and inside @media', () => {
     expect(allSelectors('.home h2, img { color: red }')).toEqual(['.home h2', 'img'])
     expect(allSelectors('@media (min-width: 1px) { .a, p { margin: 0 } }')).toEqual(['.a', 'p'])

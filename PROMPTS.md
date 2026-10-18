@@ -1536,3 +1536,18 @@
 > After the fix, MPC 009 will change on purpose. Don't overwrite png-baseline: when I approve the new MPC 009,
 > I'll save it in a new folder png-baseline-2, and later checks compare MPC 009 against that one.
 > </pasted_content id="91c8">
+
+**16:49 · claude**
+
+> Pushed. Go ahead with step 2 (the descender fix, option A).
+
+**16:59 · claude**
+
+> <pasted_content id="91c8">
+> The 2 new PNGs (MPC 006 and MPC 009) are in png-after.
+> Compare MPC 006 to png-baseline (must be identical) and MPC 009 to png-baseline (report the box of changed pixels).
+> 
+> Also: in MPC 009 I see a thin white vertical strip (about 1–2px) on the RIGHT side of the photo,
+> between the photo and the gold frame. Top, bottom and left are fine.
+> Check whether that strip is also in png-baseline (old bug) or new. Don't fix it yet — tell me the cause and options.
+> </pasted_content id="91c8">

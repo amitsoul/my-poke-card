@@ -655,6 +655,13 @@ body {
   -webkit-line-clamp: 2;
   line-clamp: 2;
   overflow: hidden;
+  /* Room for g, j, p, q, y: with line-height 1.05 the hidden overflow cut up to 0.082em off their bottoms.
+     The padding makes the visible area 0.1em bigger; the same negative margin takes that space back.
+     Both at the top AND the bottom: the header centers the name, so a padding only at the bottom
+     moved the text up by half of it. Symmetric, the text stays exactly where it was.
+     (It can't show a 3rd line: its tallest letters start 0.22em below its top.) */
+  padding: 0.1em 0;
+  margin: -0.1em 0;
 }
 
 .poke-card-hp {
