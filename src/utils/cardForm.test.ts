@@ -14,7 +14,7 @@ import {
 } from './cardForm.ts'
 
 const MB = 1024 * 1024
-const NAME_ERROR = 'Use English letters only (2–12)'
+const NAME_ERROR = 'Use English letters only (2–16)'
 const AGE_ERROR = 'Age must be 1–120'
 const SUPERPOWER_ERROR = 'English letters only (3–20)'
 const ABOUT_YOU_ERROR = 'English only, up to 80 characters'
@@ -43,9 +43,24 @@ describe('validateName', () => {
     expect(validateName('Mary  Ann')).toEqual({ ok: true, value: 'Mary Ann' })
   })
 
-  it('accepts 2 and 12 characters (the limits)', () => {
+  it('accepts " & " between two names (a space on each side), also with extra spaces typed', () => {
+    expect(validateName('Amit & Amit')).toEqual({ ok: true, value: 'Amit & Amit' })
+    expect(validateName('Philip & Charlie')).toEqual({ ok: true, value: 'Philip & Charlie' })
+    expect(validateName('Mary-Ann & Bo')).toEqual({ ok: true, value: 'Mary-Ann & Bo' })
+    expect(validateName('Amit  &  Amit')).toEqual({ ok: true, value: 'Amit & Amit' })
+  })
+
+  it('rejects "&" without a space on both sides, at the start or end, or twice in a row', () => {
+    for (const name of ['Amit&Amit', 'Amit &Amit', 'Amit& Amit', '& Amit', 'Amit &', 'Amit & & Bo', 'Amit && Bo', '&']) {
+      expect(validateName(name), name).toEqual({ ok: false, error: NAME_ERROR })
+    }
+  })
+
+  it('accepts 2 and 16 characters (the limits; spaces and "&" count too)', () => {
     expect(validateName('Jo').ok).toBe(true)
-    expect(validateName('Bartholomewz').ok).toBe(true)
+    expect(validateName('Bartholomewzzzzz').ok).toBe(true) // 16 letters
+    expect(validateName('Wwwwwww & Wwwwww').ok).toBe(true) // 16 with " & "
+    expect(validateName('Maximilian Woods').ok).toBe(true)
   })
 
   it('asks for a name when it is empty or only spaces', () => {
@@ -53,9 +68,10 @@ describe('validateName', () => {
     expect(validateName('   ')).toEqual({ ok: false, error: 'Please enter your name' })
   })
 
-  it('rejects 1 or 13 characters', () => {
+  it('rejects 1 or 17 characters', () => {
     expect(validateName('A')).toEqual({ ok: false, error: NAME_ERROR })
-    expect(validateName('Bartholomewzz')).toEqual({ ok: false, error: NAME_ERROR })
+    expect(validateName('Bartholomewzzzzzz')).toEqual({ ok: false, error: NAME_ERROR }) // 17 letters
+    expect(validateName('Philip & Charlies')).toEqual({ ok: false, error: NAME_ERROR }) // 17 with " & "
   })
 
   it('rejects digits and non-English letters', () => {

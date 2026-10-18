@@ -151,6 +151,15 @@ describe('CreateCardPage', () => {
     expect(screen.getByLabelText('Your name')).toHaveValue('amit')
   })
 
+  it('accepts two names with " & " (16 characters) and shows them on the card in Title Case', async () => {
+    const user = renderPage('/create/25')
+    await fillValidForm(user, 'philip & charlie')
+
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    const card = screen.getByRole('article', { name: 'Your card' })
+    expect(within(card).getByText("Philip & Charlie's Pikachu")).toBeInTheDocument()
+  })
+
   it('a moved sticker stays after Edit → Create; a different Pokémon starts at the default again', async () => {
     const user = renderPage('/create/25')
     await fillValidForm(user)

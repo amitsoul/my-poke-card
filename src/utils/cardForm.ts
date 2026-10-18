@@ -62,8 +62,11 @@ const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const FIELD_ORDER: CardFormField[] = ['name', 'age', 'photo', 'superpower', 'aboutYou']
 const TEXT_FIELD_ORDER: CardTextField[] = ['name', 'age', 'superpower', 'aboutYou']
 
-// Letters with ONE space, hyphen or apostrophe between them; starts and ends with a letter
-const NAME_PATTERN = /^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/
+// Letters with ONE space, hyphen or apostrophe between them, or " & " (with a space on each side) for two names
+// ("Philip & Charlie"); starts and ends with a letter
+const NAME_PATTERN = /^[A-Za-z]+(?:(?:[ '-]| & )[A-Za-z]+)*$/
+const NAME_MIN = 2
+const NAME_MAX = 16
 // Letters with ONE space or hyphen between them; starts and ends with a letter
 const SUPERPOWER_PATTERN = /^[A-Za-z]+(?:[ -][A-Za-z]+)*$/
 // English letters, é/É (as in "Pokémon"), numbers, spaces and . , ! ? ' -
@@ -87,8 +90,8 @@ function fail<T>(error: string): ValidationResult<T> {
 export function validateName(raw: string): ValidationResult<string> {
   const name = straightenApostrophes(trimAndJoinSpaces(raw))
   if (name === '') return fail('Please enter your name')
-  if (name.length < 2 || name.length > 12 || !NAME_PATTERN.test(name)) {
-    return fail('Use English letters only (2–12)')
+  if (name.length < NAME_MIN || name.length > NAME_MAX || !NAME_PATTERN.test(name)) {
+    return fail(`Use English letters only (${NAME_MIN}–${NAME_MAX})`)
   }
   return { ok: true, value: name }
 }

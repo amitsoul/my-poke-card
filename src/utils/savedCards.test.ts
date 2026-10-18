@@ -252,4 +252,11 @@ describe('getPngFileName', () => {
   it("drops apostrophes and joins everything else with single hyphens (O'Neil's Mr-Mime)", () => {
     expect(getPngFileName("O'Neil", 'mr-mime', 4)).toBe('oneils-mr-mime-mpc-004.png')
   })
+
+  // Only a–z, 0–9 and "-" remain, so the name is safe on Windows (which forbids < > : " / \ | ? *),
+  // on iPhone and in a link: "&" has a special meaning in URLs, so it never ends up in the file name
+  it('turns "&" into a hyphen too ("Amit & Amit" → "amit-amits-…")', () => {
+    expect(getPngFileName('Amit & Amit', 'squirtle', 1)).toBe('amit-amits-squirtle-mpc-001.png')
+    expect(getPngFileName('Philip & Charlie', 'pikachu', 2)).toBe('philip-charlies-pikachu-mpc-002.png')
+  })
 })

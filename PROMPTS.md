@@ -1493,3 +1493,46 @@
 > The 2 new PNGs (MPC 006 and MPC 009) are in png-after. Compare them to png-baseline.
 > .status: keep the "Loading…" lines plain text (no panel) — give them their own class; error boxes stay as white panels.
 > Then delete /dev/preview, confirm it's gone, and run test, build and lint. Don't commit.
+
+**16:24 · claude**
+
+> <pasted_content id="91c8">
+> - Card 1: name "Amit & Amit", Pokémon Squirtle (#7), image sample-couple.
+> - Card 2: name "Philip & Charlie", Pokémon Pikachu (#25), image sample-cats.
+> 
+> These names don't pass today's name rule. As a separate first step (its own commit, before the landing page):
+> allow " & " between words (spaces around it, only between letters) and raise the name limit from 12 to 16.
+> - Check on the real card that a 16-character name fits next to the HP without overlapping or wrapping,
+>   using a wide one (e.g. "Maximilian Woods" and "Wwwwwww & Wwwwww"). If it doesn't fit, tell me before changing the card.
+> - Check the PNG file name with "&" works on Windows and iPhone.
+> - Update the error message, the tests, PRD and CARD_SPEC.
+> - The PNG of MPC 006 and MPC 009 must stay identical.
+> </pasted_content id="91c8">
+
+**16:40 · claude**
+
+> <pasted_content id="91c8">
+> Bug found: the card name clips letters with descenders (the "y" in "Amit & Amit's Ivysaur" is cut at the bottom).
+> Cause: .poke-card-name has line-height 1.05 + overflow: hidden (for the 2-line clamp).
+> This is older than the " & " change; it affects any Pokémon with g, j, p, q, y.
+> 
+> Plan first, no code until I approve:
+> - Fix it so descenders show, without moving anything else on the card
+>   (e.g. padding-bottom + equal negative margin-bottom, or your better option).
+> - Check it on real cards: one line and the 2-line case, with names like "Amit & Amit's Ivysaur", "Jigglypuff", "Gyarados".
+> - MPC 006 and MPC 009 must stay pixel-identical (their names have no descenders, so the layout must not shift).
+> - Add this as part of the same uncommitted name-rule step, or tell me if it should be its own commit.
+> </pasted_content id="91c8">
+
+**16:43 · claude**
+
+> <pasted_content id="91c8">
+> Approved: option A, the extra CSS test, and a separate commit.
+> 
+> Step 1 (name rule): the 2 new PNGs (MPC 006 and MPC 009) are in png-after. Compare them to png-baseline.
+> Then delete /dev/preview, confirm it's gone, run test, build and lint. Don't commit — I'll commit the name rule first.
+> 
+> Step 2 (descender fix): start only after I tell you the name-rule commit is pushed.
+> After the fix, MPC 009 will change on purpose. Don't overwrite png-baseline: when I approve the new MPC 009,
+> I'll save it in a new folder png-baseline-2, and later checks compare MPC 009 against that one.
+> </pasted_content id="91c8">
