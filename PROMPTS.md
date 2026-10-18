@@ -1551,3 +1551,16 @@
 > between the photo and the gold frame. Top, bottom and left are fine.
 > Check whether that strip is also in png-baseline (old bug) or new. Don't fix it yet — tell me the cause and options.
 > </pasted_content id="91c8">
+
+**17:18 · claude**
+
+> <pasted_content id="91c8">
+> Descender fix committed and pushed. MPC 009 is saved in png-baseline-2.
+> 
+> Strip fix: O1, but symmetric — the photo 1px wider on EACH side (e.g. width: calc(100% + 2px); margin-left: -1px),
+> so the crop stays centered. Plan first if anything else is needed; otherwise go ahead.
+> - Verify with the same setup: 5 widths × 3 display scales, no white column anywhere.
+> - Then I'll download MPC 006 and MPC 009 into png-after. Compare each to its latest approved version
+>   (MPC 006 → png-baseline, MPC 009 → png-baseline-2) and report that only the photo area changed.
+> - Its own commit. Don't commit — I will.
+> </pasted_content id="91c8">

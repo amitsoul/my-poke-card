@@ -56,6 +56,16 @@ describe('src/index.css', () => {
     expect(margin).toBe(`-${padding}`)
   })
 
+  // With display scaling, the browser could round the photo's right edge down and the window's white showed
+  // as a thin strip in the PNG. The photo is a little wider than the window, centered (checked on real captures)
+  it('the card photo reaches past both sides of the window by the same amount, so no gap and a centered crop', () => {
+    const rule = css.match(/\.poke-card-photo\s*\{([^}]*)\}/)?.[1] ?? ''
+    const extra = Number(rule.match(/\bwidth:\s*calc\(100% \+ (\d+)px\);/)?.[1])
+    const marginLeft = Number(rule.match(/\bmargin-left:\s*(-\d+)px;/)?.[1])
+    expect(extra).toBe(2)
+    expect(marginLeft).toBe(-extra / 2)
+  })
+
   it('the check itself catches an element rule, also after a comma and inside @media', () => {
     expect(allSelectors('.home h2, img { color: red }')).toEqual(['.home h2', 'img'])
     expect(allSelectors('@media (min-width: 1px) { .a, p { margin: 0 } }')).toEqual(['.a', 'p'])

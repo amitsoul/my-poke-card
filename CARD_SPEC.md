@@ -85,7 +85,7 @@ Filled on `/create/:id` after a Pokémon is chosen. All fields are required and 
 - **Parts** (sizes in design pixels):
   - Frame: yellow #F2C94C, 12 thick, radius 18. Panel: radius 8, padding 10 12 8, a column with 7 between the parts, background = the Type's tint.
   - Header: "BASIC" tag (10 bold italic, light background, 1px border #8C7F5A) · name (Barlow Condensed bold, 23 → 19 → 16 → 14 for longer names, at most 2 lines; letters that go below the line — g, j, p, q, y — are never cut off) · "HP" 11 + number 24, both #8B2318 · Type symbol 26. Only the name shrinks or wraps.
-  - Window: 204 high, 4px gold border #C9A94A; the photo fills it, the sticker on top.
+  - Window: 204 high, 4px gold border #C9A94A; the photo fills it (1px past each side, hidden by the window, so no white gap appears at any card width or display scale), the sticker on top.
   - Pokédex strip: 10.5 italic semibold, centered, on the Type's darker strip tint.
   - Ability: the label "Ability" (11 bold italic, white on #8B2318) + the superpower (19 bold #8B2318, shown in Title Case).
   - Attacks: one row each — cost symbols 20 (the column is as wide as the attack with the most symbols on this card), name 19 bold, damage 22 bold on the right, a thin line under each row.

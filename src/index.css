@@ -710,7 +710,11 @@ body {
 
 .poke-card-photo {
   display: block;
-  width: 100%;
+  /* 1px wider on each side than the window (whose hidden overflow cuts the extra off). At a fractional
+     card width with display scaling (125%, 150%) the browser rounded the photo's right edge down, and the
+     window's white showed as a thin strip in the PNG. Centered, so the crop stays in the middle. */
+  width: calc(100% + 2px);
+  margin-left: -1px;
   height: 100%;
   object-fit: cover; /* fills the whole window; a tall or wide photo is cropped, never stretched */
 }
