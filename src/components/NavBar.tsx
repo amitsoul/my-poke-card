@@ -3,22 +3,20 @@ import { NavLink, useMatch } from 'react-router'
 import { parsePokemonId } from '../utils/pokemonId.ts'
 
 export default function NavBar() {
-  // NavLink to "/" is only active on exactly "/", but a details page is part of "Pokémon" too.
-  // Only a real details page counts: /pokemon/abc shows the 404 page, so "Pokémon" isn't highlighted there.
+  // A NavLink is also active on the pages below it: "/pokemon" on /pokemon/25, "/create" on /create/25.
+  // But /pokemon/abc and /create/abc show the 404 page, so their link isn't highlighted there.
   const detailsMatch = useMatch('/pokemon/:id')
-  const isOnDetailsPage = detailsMatch !== null && parsePokemonId(detailsMatch.params.id) !== null
-
-  // NavLink to "/create" is also active on /create/25 by itself. Same rule: not on /create/abc (the 404 page).
+  const isOnInvalidDetailsPage = detailsMatch !== null && parsePokemonId(detailsMatch.params.id) === null
   const createMatch = useMatch('/create/:id')
   const isOnInvalidCreatePage = createMatch !== null && parsePokemonId(createMatch.params.id) === null
 
   return (
     <nav className="navbar" aria-label="Main">
       <NavLink
-        to="/"
-        className={({ isActive }) => (isActive || isOnDetailsPage ? 'nav-link active' : 'nav-link')}
+        to="/pokemon"
+        className={({ isActive }) => (isActive && !isOnInvalidDetailsPage ? 'nav-link active' : 'nav-link')}
       >
-        Pokémon
+        Find a Pokémon
       </NavLink>
       <NavLink
         to="/create"

@@ -9,8 +9,9 @@ My Poke Card lets Pokémon fans browse real Pokémon and turn themselves into a 
 Kids, teens and adult fans who love Pokémon cards. They want to find their favorite Pokémon, see what makes it special, and get a fun card of themselves "teamed up" with it to share with friends. Why: real cards can't have *you* on them, and this app makes one in under a minute with no sign-up.
 
 ## 3. Screens (pages and URLs)
-A nav menu (NavLink) on every page: **Pokémon** (`/`) · **Create card** (`/create`) · **My Cards** (`/my-cards`).
-- **`/` Pokémon list** — A grid of Pokémon (name + image) with a search box (by name), a Type filter and "Load more". Clicking a Pokémon opens its details page.
+A nav menu (NavLink) on every page: **Find a Pokémon** (`/pokemon`) · **Create card** (`/create`) · **My Cards** (`/my-cards`).
+- **`/` Landing page** — What the app does, with "Create your card" → `/create` and "Find a Pokémon" → `/pokemon`.
+- **`/pokemon` Pokémon list** — A grid of Pokémon (name + image) with a search box (by name), a Type filter and "Load more". Clicking a Pokémon opens its details page.
 - **`/pokemon/:id` Details** — The id comes from the URL (`useParams`). Official artwork, number, Type, weight, attacks, Weakness/Resistance, and a "Create my card with <Pokémon>" button → `/create/:id`.
 - **`/create` and `/create/:id` Create card** — First field: "Your favorite Pokémon" (image, name, Type, "Change" → back to the list, with a warning if answers would be lost). Without a Pokémon (`/create`), only "Choose your favorite Pokémon" with a button to the list. Then: Your name, Age (HP), Photo, Superpower, About you — English only, rules and errors in [CARD_SPEC.md](CARD_SPEC.md#form-fields-create-card-page). After "Create my card": the card replaces the form, with Edit, Save and Download PNG. `/create/abc` → 404; `/create/99999` → "Pokémon not found".
 - **`/my-cards` My Cards** — Saved cards from localStorage: view, download, delete. A heart on each card marks it as a favorite (bonus; only after saving), and an "All (n)" / "Favorites (n)" filter is kept in the URL (`/my-cards?show=favorites`).
@@ -27,7 +28,7 @@ A nav menu (NavLink) on every page: **Pokémon** (`/`) · **Create card** (`/cre
 Every network call shows loading and error states. Works on phone, tablet and desktop. All UI text is in English. The footer and README carry "Fan-made · Not an official Pokémon card". Requirement status: [docs/requirements-checklist.md](docs/requirements-checklist.md).
 
 ## 5. Acceptance criteria
-- When I open `/` and type "pika", I see only Pokémon whose name contains "pika"; when I pick "Fire", I see only Fire Pokémon.
+- When I open `/pokemon` and type "pika", I see only Pokémon whose name contains "pika"; when I pick "Fire", I see only Fire Pokémon.
 - When I click Pikachu, the URL becomes `/pokemon/25` and I see its artwork, Type, attacks and Weakness/Resistance; opening `/pokemon/25` directly shows the same page.
 - When I click "Create my card with Pikachu" on `/pokemon/25`, I reach `/create/25` with Pikachu chosen; age 150 or a name with digits shows an error when I leave the field, and I can't create the card; as "Amit", age 30, I see "Amit's Pikachu", "HP 30", a light-yellow Lightning panel with the bolt symbol, and Pikachu as a sticker on my photo that I can drag.
 - When I save that card and click "My Cards" in the menu, I see it as "MPC 001", and Download gives a PNG of it.

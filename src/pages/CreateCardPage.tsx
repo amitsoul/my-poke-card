@@ -75,7 +75,7 @@ export default function CreateCardPage() {
         <title>{getPageTitle('Create card')}</title>
         <h1>Choose your favorite Pokémon</h1>
         <p>Pick a Pokémon from the list, then tap "Create my card" on its page.</p>
-        <Link to="/" className="button">
+        <Link to="/pokemon" className="button">
           Go to the Pokémon list
         </Link>
       </section>
@@ -94,7 +94,7 @@ export default function CreateCardPage() {
 
   function handleChangePokemon() {
     if (session.hasValues) updateSession({ isWarningOpen: true })
-    else navigate('/')
+    else navigate('/pokemon')
   }
 
   function handleKeepEditing() {
@@ -168,7 +168,7 @@ export default function CreateCardPage() {
       {state.status === 'not-found' && (
         <div className="status">
           <p>Pokémon not found</p>
-          <Link to="/" className="button">
+          <Link to="/pokemon" className="button">
             Back to the list
           </Link>
         </div>
@@ -196,7 +196,7 @@ export default function CreateCardPage() {
               message="Change Pokémon? Your answers will be cleared."
               confirmLabel="Yes, change"
               cancelLabel="Keep editing"
-              onConfirm={() => navigate('/')}
+              onConfirm={() => navigate('/pokemon')}
               onCancel={handleKeepEditing}
             />
           )}

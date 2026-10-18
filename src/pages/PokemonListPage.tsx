@@ -1,4 +1,4 @@
-// Page "/": the Pokémon list, with search, card type filter and "Load more".
+// Page "/pokemon": the Pokémon list, with search, card type filter and "Load more".
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router'
 import PokemonList from '../components/PokemonList.tsx'
@@ -191,8 +191,8 @@ export default function PokemonListPage() {
 
   return (
     <>
-      <title>{getPageTitle('Pokémon')}</title>
-      <h1>My Poke Card</h1>
+      <title>{getPageTitle('Find a Pokémon')}</title>
+      <h1>Find a Pokémon</h1>
 
       {isLoading && <p className="status">Loading Pokémon...</p>}
 

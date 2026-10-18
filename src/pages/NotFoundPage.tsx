@@ -9,7 +9,7 @@ export default function NotFoundPage() {
       <title>{getPageTitle('Page not found')}</title>
       <h1>Page not found</h1>
       <p>We couldn't find this page. Maybe the link is broken or the address has a typo.</p>
-      <Link to="/" className="button">
+      <Link to="/pokemon" className="button">
         Back to the Pokémon list
       </Link>
     </section>

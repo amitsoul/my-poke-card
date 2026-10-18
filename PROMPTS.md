@@ -1381,3 +1381,49 @@
 **11:02 · claude**
 
 > 12e3 looks good: nothing is cut in any corner, and old cards stayed where they were. Delete the preview now, re-run the checks, and confirm it's gone.
+
+**11:08 · claude**
+
+> 12e3 is committed. 12d (manual checks) is already done: I checked everything on desktop Chrome and on my iPhone, including the PNG in Safari. Record that in 12f when we close task 12.
+> Next is the site redesign (landing page, logo, new look). Don't start yet: I'm preparing a design mockup first and will send you a plan request after I approve it.
+
+**12:45 · claude**
+
+> <pasted_content id="91c8">
+> Site redesign, part of task 12 (we can't add a task 13). PLAN FIRST, no code yet. Split into small steps with a commit after each.
+> I approved a mockup (I'll describe it; it's a reference only, the code is ours):
+> - Look "B · Sticker Scrapbook": warm paper background #FDF6EC with a few faint Type-color confetti dots; buttons, cards and headings look like stickers (white 3–4px border, soft shadow, slight tilt); primary button red #C22C0A, secondary yellow #EECB47; headings in Barlow Condensed. The card itself (PokeCard) does NOT change.
+> - New landing page at "/": hero ("Turn yourself into a Pokémon card", buttons "Create your card" → /create and "Find a Pokémon" → /pokemon, two sample saved-style cards tilted), "How it works" (3 sticker cards linking to Find a Pokémon / Create card / My Cards), "About me" (I'll write the text; a placeholder until then; photo optional).
+> - The list moves from "/" to "/pokemon" (details stay /pokemon/:id). Every link, Back button, test and doc that points to the list must follow.
+> - Nav: logo (links to /) · Find a Pokémon · Create card · My Cards.
+> - Logo "51": "My Poké Card" on one gently arched line, font Lilita One (self-hosted like Barlow, OFL), letters soft blue #4A78A8, a cream #FFF6DE frame with a white sticker edge and soft shadow, and a yellow star #E9B949 instead of the "o". Our own SVG, accessible name "My Poké Card". Favicon: blue circle #4A78A8 with a yellow star.
+> - [Display name "My Poké Card" everywhere: yes/no]
+> For each step: what changes, which files, which tests change or are added, accessibility (contrast, focus, landmarks, reduced motion for the tilts if needed), how the PNG stays exactly the same, and the risks. Options where there is a choice. Wait for my approval.
+> </pasted_content id="91c8">
+
+**12:59 · claude**
+
+> <pasted_content id="91c8">
+> Approved, with these decisions:
+> - Steps R1–R4 as planned, a commit after each, and the PNG pixel check after each step.
+> - N1: "My Poké Card" in all visible text; the package name stays my-poke-card.
+> - L2: yes, you may download the Lilita One font file (OFL) and install fontTools in the scratchpad only. Credit Lilita One in the README and keep its OFL text in src/assets/fonts/. In Logo.tsx, add a short comment on how the paths were made, so I can explain it.
+> - Tilt-1.
+> - Sample cards: my own illustrated images — card 1 a drawing of me and my partner, card 2 a drawing of our cats. I'll provide the image files before R4 (or ask you to draw simple SVG illustrations from my description). Names and Pokémon: I'll tell you before R4.
+> - U1: ignore old bookmarks.
+> - Yellow button: yes, the darker edge #A8861C.
+> - Favicon: show me it at 16px in the preview; if the star looks weak, add the thin darker-yellow outline.
+> Tell me the exact folder where I should put the 2 baseline PNGs. I'll download them from My Cards now, then you start R1 only.
+> </pasted_content id="91c8">
+
+**13:31 · claude**
+
+> The 2 baseline PNGs are in png-baseline: MPC 006 and MPC 009. Check them and start R1.
+
+**15:03 · claude**
+
+> You stopped at the session limit. Before continuing, show me where R1 stands: git status, which files you already changed, and what's left. Then finish R1 only, run npm test, npm run build and npm run lint, and give me the browser checklist. Don't commit; wait for my PNG check.
+
+**15:24 · claude**
+
+> The 2 new PNGs (MPC 006 and MPC 009) are in png-after. Compare them with the baselines.

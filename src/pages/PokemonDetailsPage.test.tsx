@@ -73,6 +73,20 @@ describe('PokemonDetailsPage — attacks and Weakness', () => {
     expect(document.title).toBe('Pikachu · My Poke Card')
   })
 
+  it('"Back to list" goes to the list at /pokemon, with the search the list was opened with', async () => {
+    stubPokeApi({ pokemon: [pikachuDetails], moves: PIKACHU_MOVES, species: speciesResponse('Mouse Pokémon') })
+    render(
+      <MemoryRouter initialEntries={[{ pathname: '/pokemon/25', state: { listSearch: '?q=pika' } }]}>
+        <Routes>
+          <Route path="/pokemon/:id" element={<PokemonDetailsPage />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    expect(await screen.findByRole('link', { name: '← Back to list' })).toHaveAttribute('href', '/pokemon?q=pika')
+    await screen.findByText('Thunder Shock') // let the attacks finish loading before the test ends
+  })
+
   it('the tab title after a failed load stays general', async () => {
     vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new TypeError('Failed to fetch'))))
     renderPage()

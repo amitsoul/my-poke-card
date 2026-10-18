@@ -42,14 +42,14 @@ beforeEach(() => {
 })
 
 // FAKE #3 — the router. MemoryRouter keeps the URL in memory instead of the address bar.
-// "/" is a placeholder, so we can see where "Change" leads. The link outside the routes changes
+// "/pokemon" (the list) is a placeholder, so we can see where "Change" leads. The link outside the routes changes
 // the Pokémon in the URL while the page stays on screen.
 function renderPage(path: string) {
   render(
     <MemoryRouter initialEntries={[path]}>
       <Link to="/create/4">Go to Charmander</Link>
       <Routes>
-        <Route path="/" element={<p>LIST PAGE</p>} />
+        <Route path="/pokemon" element={<p>LIST PAGE</p>} />
         <Route path="/create/:id" element={<CreateCardPage />} />
       </Routes>
     </MemoryRouter>,

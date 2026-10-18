@@ -2,6 +2,7 @@
 import { Route, Routes } from 'react-router'
 import NavBar from './components/NavBar.tsx'
 import SiteFooter from './components/SiteFooter.tsx'
+import HomePage from './pages/HomePage.tsx'
 import PokemonListPage from './pages/PokemonListPage.tsx'
 import PokemonDetailsPage from './pages/PokemonDetailsPage.tsx'
 import CreateCardPage from './pages/CreateCardPage.tsx'
@@ -14,7 +15,8 @@ export default function App() {
       <NavBar />
       <main className="app">
         <Routes>
-          <Route path="/" element={<PokemonListPage />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/pokemon" element={<PokemonListPage />} />
           <Route path="/pokemon/:id" element={<PokemonDetailsPage />} />
           <Route path="/create" element={<CreateCardPage />} />
           <Route path="/create/:id" element={<CreateCardPage />} />
