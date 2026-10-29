@@ -159,6 +159,5 @@ Every prompt sent to the coding agent is added to [PROMPTS.md](PROMPTS.md) autom
 - `.claude/settings.json` (Claude Code) and `.codex/hooks.json` (Codex) register a **`UserPromptSubmit` hook**: a command the agent runs each time a prompt is sent.
 - The hook runs `scripts/log-prompt.mjs`, which appends the prompt to `PROMPTS.md` with the date, the time and the agent's name. Empty prompts and agent commands (like `/clear`) are skipped. If anything goes wrong, the script exits quietly, so it never breaks the session.
 - To check it: send the agent any message, then run `tail -n 20 PROMPTS.md`.
-- After each task, a short **"My note"** is added by hand: what was checked and what was changed.
 
 Everything typed to the agent ends up in `PROMPTS.md`, which is public in this repository, so it should never contain passwords, keys or other people's personal details.

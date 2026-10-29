@@ -1709,3 +1709,14 @@
 > 
 > Mark rows A and B ✅ with these notes, then run the link check, test, build and lint. Don't commit.
 > </pasted_content id="91c8">
+
+**18:13 · claude**
+
+> <pasted_content id="91c8">
+> One small fix in README.md, "How the prompt log works":
+> remove the line "After each task, a short "My note" is added by hand: what was checked and what was changed."
+> I didn't write My notes, so the README must not say they exist. Don't add My notes anywhere, and don't edit PROMPTS.md.
+> Keep the sample cards (src/data/sampleCards.ts) as they are.
+> Run the link check, test, build and lint. Don't commit.
+> Suggested commit: "docs: README prompt-log section matches the actual log"
+> </pasted_content id="91c8">
