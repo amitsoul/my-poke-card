@@ -1665,3 +1665,47 @@
 > 
 > Show me every screenshot before it goes into the repo. Then write the README, run the link check on it, and run test, build and lint. Don't commit.
 > </pasted_content id="91c8">
+
+**15:31 · claude**
+
+> <pasted_content id="91c8">
+> 12e is pushed. Next: 12f — closing task 12. Plan first, no changes until I approve.
+> 
+> Include:
+> - tasks.md: task 12 marked done, with a "Done when" line like the other tasks.
+> - tasks.md task 8: its "Done when" still says "Use English letters only (2–12)"; the rule is now 2–16 with " & ". Propose how to record that (edit, or a short note that it changed in task 12).
+> - docs/requirements-checklist.md: the two rows still open — "npm run dev with no console errors" (⏳) and "Works on narrow screens" (✅/⏳: details and 404 pages not yet checked on a phone).
+>   Give me a short manual checklist for both (which pages, which widths, what to look for), so I can do it and then you mark them ✅.
+> - Record 12d (desktop + iPhone checks, incl. the PNG in Safari) where it belongs, and CARD_SPEC's iPhone PNG item.
+> - Scan all docs (PRD, CARD_SPEC, tasks, checklist, AGENTS, README) for anything else outdated after R1–R4 and the fixes (routes, name rule, colors, test counts). List what you find.
+> 
+> List the files and the decisions I need to make (options + your recommendation).
+> </pasted_content id="91c8">
+
+**15:45 · claude**
+
+> <pasted_content id="91c8">
+> Approved. Decisions:
+> D1: a (keep the old text, add a "Changed in task 12" line under tasks 6 and 8).
+> D2: a (exact counts per file).
+> D3: a (PRD says the footer and README carry a fan-made disclaimer).
+> D4: a (keep the favorites row; I haven't asked the lecturer yet).
+> D5: a (one closing commit).
+> 
+> Go ahead with everything except rows A and B. I'm doing the two manual checks now and will send you the results;
+> mark A and B only after that. Then run the link check, test, build and lint. Don't commit.
+> </pasted_content id="91c8">
+
+**17:55 · claude**
+
+> <pasted_content id="91c8">
+> Manual checks done (by Claude in the desktop app's browser on my dev server, a separate browser profile):
+> Row A — console: full flow (list search/filter/Load more, details, Create with photo, drag, Edit, Create, Save, Download PNG,
+> My Cards heart/Favorites/Delete Keep it + Yes, /abc, /pokemon/abc, /create/abc): no errors or warnings from our code.
+> Only /pokemon/99999 shows two browser "404" lines (the API's answer; two because of StrictMode in dev) and the page shows "Pokémon not found".
+> Row B — narrow screens: at 320, 375 and 768px no page scrolls sideways (/, /pokemon, /pokemon/25, /pokemon/99999, /create/25, /abc, /create/abc, /my-cards).
+> At 320px the details page's Attacks box and Weakness row fit, and "Create my card with Pikachu" is 45px tall. The 404 page looks right.
+> Real iPhone: checked in 12d (before the redesign).
+> 
+> Mark rows A and B ✅ with these notes, then run the link check, test, build and lint. Don't commit.
+> </pasted_content id="91c8">

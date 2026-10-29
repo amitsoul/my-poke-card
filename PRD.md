@@ -25,7 +25,7 @@ A header on every page: the logo "My Poké Card" (a link to `/`) and a nav menu 
 5. Vitest tests (5+) on the real logic: Type mapping, search/filter, Weakness/Resistance, units, attack damage/cost, form validation.
 
 **Tech:** React + Vite + TypeScript (types for API data and all props, no `any`), React Router, Vitest + `@vitest/ui`, React Testing Library (bonus), own CSS. Approved libraries: `react-router`, `typescript`, `vitest`, `@vitest/ui`, `html-to-image` (re-confirmed by the lecturer, 14/10/2026), `@testing-library/react`, `@testing-library/dom`, `@testing-library/jest-dom`, `@testing-library/user-event`, `jsdom`. No server, DB, login, Redux, Next.js, UI libraries or API keys.
-Every network call shows loading and error states. Works on phone, tablet and desktop. All UI text is in English. The footer and README carry "Fan-made · Not an official Pokémon card". Requirement status: [docs/requirements-checklist.md](docs/requirements-checklist.md).
+Every network call shows loading and error states. Works on phone, tablet and desktop. All UI text is in English. The footer and README carry a fan-made disclaimer. Requirement status: [docs/requirements-checklist.md](docs/requirements-checklist.md).
 
 ## 5. Acceptance criteria
 - When I open `/pokemon` and type "pika", I see only Pokémon whose name contains "pika"; when I pick "Fire", I see only Fire Pokémon.

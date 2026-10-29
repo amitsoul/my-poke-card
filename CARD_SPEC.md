@@ -137,7 +137,7 @@ The tints were changed in task 12e2 because some Types looked alike (Darkness / 
 - **Safari and every iPhone browser (WebKit) capture twice** and keep the second image, because WebKit sometimes draws images blank in the first capture.
 - **File name** from `getPngFileName`: "Amit" + Pikachu + MPC 001 → `amits-pikachu-mpc-001.png`.
 - While working: "Preparing PNG..." (`aria-busy`); on failure: "Sorry, the PNG couldn't be created. Please try again."
-- **Open item for task 12:** check the PNG on Safari on a real iPhone (images, fonts, the sticker's outline and shadow).
+- **Checked in task 12 on a real iPhone in Safari:** the photo, the artwork, the fonts, the symbols, the sticker's outline and shadow, and the card number are all in the PNG.
 
 ## Note on Types
 We use the 10 current TCG Types. "Type" is the card's category (the symbol top-right); "Energy" means Energy cards and attack costs. Fairy was retired from the TCG in 2020, and Fairy Pokémon are printed as Psychic — still true in the 2025–26 Mega Evolution series (e.g. Mega Gardevoir ex). Poison Pokémon are printed as Darkness in the current era.
