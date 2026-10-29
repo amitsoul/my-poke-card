@@ -1564,3 +1564,66 @@
 >   (MPC 006 → png-baseline, MPC 009 → png-baseline-2) and report that only the photo area changed.
 > - Its own commit. Don't commit — I will.
 > </pasted_content id="91c8">
+
+## 2026-10-29
+
+**13:33 · claude**
+
+> <pasted_content id="91c8">
+> Committed and pushed. I checked the PNGs: all changes are inside the photo window, the white column is gone.
+> Both new PNGs are saved in png-baseline-3 — from now on compare MPC 006 and MPC 009 against png-baseline-3.
+> 
+> Next: R4 — the full landing page at "/". Plan first, no code until I approve.
+> 
+> Assets: src/assets/landing/sample-couple.jpg and src/assets/landing/sample-cats.jpg (my own illustrations, 1536×1024 JPEG).
+> Amit (my partner) agreed to his illustration being in this public repo. Check their file size; if they are large,
+> propose how to make them smaller (e.g. resized WebP) without a new runtime dependency.
+> 
+> Two sample cards, each a real card the app could make (must pass the current form validation):
+> - Card 1: name "Amit & Amit", Pokémon Squirtle (#7), image sample-couple.
+> - Card 2: name "Philip & Charlie", Pokémon Pikachu (#25), image sample-cats.
+> Propose the age, superpower and "about you" text for both (I'll approve or change them).
+> 
+> Page sections (English only, Sticker Scrapbook look from R3):
+> 1. Hero: the page-title h1 "Turn yourself into a Pokémon card", one short line, buttons "Create your card" (red, /create) and "Find a Pokémon" (yellow, /pokemon), and the two sample cards.
+> 2. How it works: 3 short steps (pick a Pokémon → add your photo and details → save and download a PNG).
+> 3. About me: a short paragraph that I'm Amit, I made this with my partner Amit and our cats Philip and Charlie in mind. Propose the text; I'll edit it.
+> 
+> Rules:
+> - The sample cards use the real PokeCard component (same look as the app). Real cards never tilt.
+> - Don't change PokeCard, any card rule, or anything that affects the PNG. I'll re-check MPC 006 and MPC 009.
+> - In the plan, say whether the sample cards need PokéAPI calls on the landing page or use fixed data, with options and your recommendation (consider loading, offline tests, and the console guard).
+> - Check how each 3:2 illustration is cropped in the card's photo window so both faces / both cats fit; propose a fix if not.
+> - Good alt text for both images. Layout works at 320px and on wide screens.
+> - Tests for the new page (headings, both links, both sample cards render with the right names).
+> - Class selectors only (indexCss.test.ts must still pass). No new dependencies.
+> 
+> List the files you'll change or add, the decisions I need to make (options + your recommendation), and the tests. You may add /dev/preview temporarily; delete it before I commit.
+> </pasted_content id="91c8">
+
+**13:45 · claude**
+
+> <pasted_content id="91c8">
+> Approved. Decisions:
+> D1: a (fixed data, generated once with the app's own code).
+> D2: a (800×533 JPEG q0.85). Yes, you may install Pillow in the scratchpad (nothing added to the project).
+> D3: a (optional photoAlt prop on PokeCard, default "Your photo"). Prove with the PNG check that nothing drawn changes.
+> D4: b (card numbers MPC 001 for Amit & Amit and MPC 002 for Philip & Charlie).
+> D5: a (side by side, also at 320px). If they're too small to read in the preview, I'll tell you.
+> D6: a (step stickers linking to /pokemon, /create, /my-cards; ±1° tilt only on the steps, never on cards).
+> 
+> Card texts:
+> - Amit & Amit: age 24, superpower "Endless Road Trips", about "Two Amits, one team. We never run out of snacks!"
+> - Philip & Charlie: age 9, superpower "Nap Anywhere", about "We knock things off tables and nap in the sun."
+> Alt texts:
+> - Couple: "Illustration of Amit and Amit sitting side by side in front of a green hedge"
+> - Cats: "Illustration of Philip and Charlie on a wooden table: Charlie, a cream kitten, rests its chin on its paws, and Philip, a gray tabby, has one leg hanging over the edge"
+> Hero line, How it works and About me texts: approved as you wrote them.
+> 
+> Go ahead. Add /dev/preview as planned; when done, tell me what to check. PNG check: MPC 006 and MPC 009 against png-baseline-3.
+> </pasted_content id="91c8">
+
+**13:56 · claude**
+
+> Looks good. PNG check: MPC 006 and MPC 009 are identical to png-baseline-3 (I checked).
+> Delete /dev/preview, confirm it's gone, and run test, build and lint. Don't commit.

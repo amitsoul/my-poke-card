@@ -136,6 +136,20 @@ describe('PokeCard', () => {
     expect(sticker).toHaveAttribute('draggable', 'false') // the browser's own "drag this image" is off
   })
 
+  it('the photo can get its own description (the landing page examples); otherwise it is "Your photo"', () => {
+    render(
+      <PokeCard
+        card={card}
+        pokemon={pikachu}
+        cardInfo={readyInfo}
+        onRetryCardInfo={vi.fn()}
+        photoAlt="Illustration of two cats on a table"
+      />,
+    )
+    expect(screen.getByRole('img', { name: 'Illustration of two cats on a table' })).toHaveClass('poke-card-photo')
+    expect(screen.queryByRole('img', { name: 'Your photo' })).toBeNull()
+  })
+
   // The sticker's place is on its wrapper (.poke-card-sticker): a <span> when fixed, a <button> when movable
   function stickerWrapper(): HTMLElement {
     const wrapper = screen.getByRole('img', { name: 'Pikachu' }).closest('.poke-card-sticker')

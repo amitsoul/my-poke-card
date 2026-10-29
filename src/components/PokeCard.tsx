@@ -28,6 +28,7 @@ interface PokeCardProps {
   children?: ReactNode // the buttons under the card (Save / Edit on the Create page)
   heading?: string // default "Your card"; My Cards uses e.g. "MPC 001 · Amit's Pikachu"
   focusOnMount?: boolean // default true; false in My Cards, where many cards appear at once
+  photoAlt?: string // default "Your photo"; the landing page's example cards describe their illustration
 }
 
 export const CARD_DESIGNER = 'Amit Soul'
@@ -42,6 +43,7 @@ export default function PokeCard({
   children,
   heading = 'Your card',
   focusOnMount = true,
+  photoAlt = 'Your photo',
 }: PokeCardProps) {
   const headingRef = useRef<HTMLHeadingElement>(null)
   const headingId = useId() // unique, because My Cards shows many cards on one page
@@ -90,7 +92,7 @@ export default function PokeCard({
 
             {/* The photo fills the window (cropped to fit); the sticker sits on top, at its position in % */}
             <div className="poke-card-window">
-              <img className="poke-card-photo" src={card.photo.dataUrl} alt="Your photo" />
+              <img className="poke-card-photo" src={card.photo.dataUrl} alt={photoAlt} />
               <CardSticker
                 src={pokemon.artworkUrl}
                 pokemonName={pokemonName}

@@ -1035,8 +1035,10 @@ body {
    Class selectors only (checked by src/indexCss.test.ts). Nothing here reaches the card: the only class
    that also lives inside the card is .button (the attacks' "Try again"), so its rules skip .poke-card-frame. */
 
-/* Page titles: a cream sticker label like the logo, tilted 1°. Long titles wrap inside the label. */
-.page-title {
+/* Page titles: a cream sticker label like the logo, tilted 1°. Long titles wrap inside the label.
+   Section titles (the landing page's h2) look the same, a bit smaller. */
+.page-title,
+.section-title {
   display: inline-block;
   box-sizing: border-box;
   max-width: 100%;
@@ -1052,6 +1054,10 @@ body {
   line-height: 1.15;
   overflow-wrap: break-word;
   transform: rotate(-1deg);
+}
+
+.section-title {
+  font-size: 1.5rem;
 }
 
 /* Buttons (outside the card): red, with a white sticker edge and a soft shadow */
@@ -1202,4 +1208,160 @@ body {
     right: 0;
     transform: scaleX(-1); /* the same dots, mirrored */
   }
+}
+
+/* ---------- Landing page "/" (task 12) ---------- */
+
+/* Hero: text, then the two example cards. Side by side from 900px. */
+.home-hero {
+  display: grid;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .home-hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 2.5rem;
+  }
+}
+
+.home-lead {
+  max-width: 34rem;
+  margin: 0 0 1.25rem;
+  font-size: 1.15rem;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* The two example cards: always side by side, also on a 320px phone (each about half the width) */
+.home-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 600px) {
+  .home-cards {
+    gap: 1.25rem;
+  }
+}
+
+/* The small label above each example card ("Example: Amit & Amit's Squirtle"); outside the card itself */
+.home-cards h2 {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+}
+
+.home-section {
+  margin-top: 3rem;
+}
+
+/* How it works: 3 white step stickers, tilted ±1° (decorative; the cards never tilt) */
+.home-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-step {
+  position: relative; /* the link's ::after covers the whole sticker */
+  padding: 1rem 1.25rem;
+  border: 4px solid #fff;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: var(--site-sticker-shadow);
+  transform: rotate(-1deg);
+}
+
+.home-step:nth-child(even) {
+  transform: rotate(1deg);
+}
+
+.home-step-number {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  margin-bottom: 0.5rem;
+  border-radius: 999px;
+  background: var(--site-red);
+  color: #fff;
+  font-weight: 700;
+}
+
+.home-step-link {
+  display: block;
+  color: inherit;
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* The whole sticker is clickable, but only the title is the link's name */
+.home-step-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+}
+
+.home-step:hover .home-step-link {
+  text-decoration: underline;
+}
+
+/* The focus ring goes around the whole sticker. A browser without :has() keeps the ring on the title. */
+.home-step-link:focus-visible {
+  outline: 3px solid var(--site-focus);
+  outline-offset: 2px;
+}
+
+@supports selector(:has(*)) {
+  .home-step:has(.home-step-link:focus-visible) {
+    outline: 3px solid var(--site-focus);
+    outline-offset: 2px;
+  }
+
+  .home-step-link:focus-visible {
+    outline: none;
+  }
+}
+
+.home-step-text {
+  margin: 0.25rem 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-step {
+    transition: box-shadow 0.15s ease;
+  }
+
+  .home-step:hover {
+    box-shadow: var(--site-sticker-shadow-raised);
+  }
+}
+
+/* About me: a white sticker panel */
+.home-about {
+  max-width: 42rem;
+  padding: 1.25rem 1.5rem;
+  border: 4px solid #fff;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: var(--site-sticker-shadow);
+}
+
+.home-about p {
+  margin: 0;
 }
