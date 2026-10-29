@@ -1627,3 +1627,41 @@
 
 > Looks good. PNG check: MPC 006 and MPC 009 are identical to png-baseline-3 (I checked).
 > Delete /dev/preview, confirm it's gone, and run test, build and lint. Don't commit.
+
+**14:01 · claude**
+
+> <pasted_content id="91c8">
+> R4 is pushed. Next: 12e — the README. Plan first, no code until I approve.
+> 
+> Screenshots (docs/screenshots/):
+> - Propose which screens to capture (e.g. landing page, Find a Pokémon list, details, Create card form, My Cards) and at what width (desktop + one phone).
+> - Privacy: the repo is public. Use only the two example cards (Amit & Amit, Philip & Charlie) or cards without real people's photos.
+>   Do NOT use my saved cards MPC 006 / MPC 009 or any photo of a real person other than the approved illustrations.
+> - Propose how to take them (e.g. headless Chrome like before) and keep them small (size per file).
+> 
+> README (English), propose the outline first. It must cover the lecturer's requirements:
+> what the app does, tech stack, how to install/run/test (npm install, npm run dev, npm test, npm run test:ui, npm run build),
+> routes, the components, the screenshots, and credits:
+> - "The logo's letters are drawn from Lilita One by Juan Montoreano, licensed under the SIL Open Font License 1.1 (src/assets/fonts/OFL-LilitaOne.txt). The card uses Barlow and Barlow Condensed (SIL OFL, src/assets/fonts/OFL.txt)."
+> - Data from PokéAPI; fan-made, not an official Pokémon product.
+> Plus a short "How the prompt log works" section (PROMPTS.md and the hook).
+> 
+> List the files, the decisions I need to make (options + your recommendation), and any test changes.
+> </pasted_content id="91c8">
+
+**15:19 · claude**
+
+> <pasted_content id="91c8">
+> Approved. Decisions:
+> D1: all 8 screenshots.
+> D2: a (WebP q80). Yes, Pillow in the scratchpad again.
+> D3: first screen only (desktop 1280×800, phone 390×844 at 2×).
+> D4: a (fresh, empty Chrome profile; create both cards through the real form with the two approved illustrations; delete the profile afterwards).
+> D5: include the real card PNG (losslessly optimized).
+> D6: a (no exact test counts in the README).
+> D7: a (static docs/logo.svg from the Logo.tsx paths).
+> D8: a (leave the grading note out).
+> Checklist: mark the 3 README rows ✅ in this commit.
+> 
+> Show me every screenshot before it goes into the repo. Then write the README, run the link check on it, and run test, build and lint. Don't commit.
+> </pasted_content id="91c8">

@@ -32,9 +32,9 @@
 | `@vitest/ui` with a `test:ui` script | ✅ | `"test:ui": "vitest --ui"` in `package.json`; checked in the browser, all green |
 | Own CSS | ✅ | `src/index.css` only, no UI library. The card uses container query units (design px × card width / 380) and self-hosted fonts (`src/assets/fonts`, SIL Open Font License). The site look "Sticker Scrapbook" (task 12): paper background, white sticker panels, red and yellow buttons, tilted page titles, one focus ring; class selectors only, so no rule reaches the card (checked by `src/indexCss.test.ts`) |
 | Works on narrow screens | ✅ / ⏳ | Checked: the list (responsive grid) and the Create card page with the card at 375px, 320px and on a real phone (the card shrinks as one piece; the sticker can be dragged with a finger). The details and 404 pages get their final phone/tablet check in task 12 |
-| README: what the app does | ⏳ | Task 12 — `README.md` is still the course template |
-| README: how to run the app and the tests | ⏳ | Task 12 — the commands exist (`npm run dev`, `npm test`, `npm run test:ui`) but the README doesn't explain them yet |
-| README: which API | ⏳ | Task 12 |
+| README: what the app does | ✅ | [README.md](../README.md): the pitch, "What it does", the pages and routes, and screenshots (desktop and phone, plus a real downloaded card PNG) |
+| README: how to run the app and the tests | ✅ | [README.md](../README.md) "Getting started" (Node.js 22.22+, `npm install`, `npm run dev`, `npm run dev -- --host` for a phone, build, preview, lint) and "Tests" (`npm test`, `npm run test:ui`, what is tested) |
+| README: which API | ✅ | [README.md](../README.md) "Credits": PokéAPI (no key needed) and its sprites repository for the artwork |
 | Gradual commits | ✅ | 19 commits so far (08/10–14/10), one per step |
 | `PRD.md` | ✅ | `PRD.md` (one page) |
 | `tasks.md`: up to 12 tasks, each with "Done when" | ✅ | `tasks.md` (12 tasks) |
