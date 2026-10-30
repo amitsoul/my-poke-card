@@ -4,14 +4,9 @@ import { useSearchParams } from 'react-router'
 import PokemonList from '../components/PokemonList.tsx'
 import SearchBar from '../components/SearchBar.tsx'
 import CardTypeFilter from '../components/CardTypeFilter.tsx'
-import type {
-  CardType,
-  PokemonListResponse,
-  PokemonSummary,
-  SpeciesCountResponse,
-  TypeResponse,
-} from '../types/pokemon.ts'
-import { API_URL, fetchJson, getArtworkUrl, getIdFromUrl } from '../utils/api.ts'
+import { usePokemonList } from '../hooks/usePokemonList.ts'
+import type { CardType, PokemonSummary, TypeResponse } from '../types/pokemon.ts'
+import { API_URL, fetchJson, getIdFromUrl } from '../utils/api.ts'
 import { CARD_TYPES, parseCardType } from '../utils/cardType.ts'
 import { filterPokemon, normalizeSearch } from '../utils/filterPokemon.ts'
 import { getPageTitle } from '../utils/text.ts'
@@ -31,12 +26,15 @@ interface PageState {
 
 // While a card type's ids are loading (or failed), no Pokémon matches it — same as before the move to utils
 const NO_IDS = new Set<number>()
+// While the list loads (or failed), there are no Pokémon to show
+const NO_POKEMON: PokemonSummary[] = []
 
 export default function PokemonListPage() {
-  const [pokemonList, setPokemonList] = useState<PokemonSummary[]>([])
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [hasError, setHasError] = useState<boolean>(false)
-  const [listRetryCount, setListRetryCount] = useState<number>(0)
+  // All species: 2 requests, then cached for the visit (shared with the Create page's Pokémon search)
+  const { state: listState, retry: handleListRetry } = usePokemonList()
+  const pokemonList = listState.status === 'ready' ? listState.list : NO_POKEMON
+  const isLoading = listState.status === 'loading'
+  const hasError = listState.status === 'error'
   const [cardTypeResult, setCardTypeResult] = useState<CardTypeResult | null>(null)
   const [cardTypeRetryCount, setCardTypeRetryCount] = useState<number>(0)
   const [page, setPage] = useState<PageState>({ filterKey: '', count: PAGE_SIZE })
@@ -102,52 +100,6 @@ export default function PokemonListPage() {
   function handleLoadMore() {
     setPage({ filterKey, count: visibleCount + PAGE_SIZE })
   }
-
-  // List "Try again": show loading, clear the error, and bump the counter so the list effect re-runs
-  function handleListRetry() {
-    setIsLoading(true)
-    setHasError(false)
-    setListRetryCount(listRetryCount + 1)
-  }
-
-  // Load the list when this page first appears (and again on "Try again").
-  // isLoading/hasError are already set (by the initial state or handleListRetry),
-  // so the effect only fetches and saves the result.
-  useEffect(() => {
-    // Becomes false if this run is replaced before the answer arrives
-    let isCurrent = true
-
-    async function loadPokemon() {
-      try {
-        // 1. How many species are there? (never hardcoded)
-        const speciesData = await fetchJson<SpeciesCountResponse>(`${API_URL}/pokemon-species?limit=1`)
-
-        // 2. Get that many Pokémon (name + url only)
-        const listData = await fetchJson<PokemonListResponse>(`${API_URL}/pokemon?limit=${speciesData.count}`)
-
-        // 3. Build our own objects and drop special forms (id 10001+)
-        const list: PokemonSummary[] = listData.results
-          .map((item) => {
-            const id = getIdFromUrl(item.url)
-            return { id, name: item.name, image: getArtworkUrl(id) }
-          })
-          .filter((pokemon) => pokemon.id < 10001)
-
-        if (isCurrent) setPokemonList(list)
-      } catch {
-        if (isCurrent) setHasError(true)
-      } finally {
-        if (isCurrent) setIsLoading(false)
-      }
-    }
-
-    loadPokemon()
-
-    // Cleanup: React calls this before the next run, so an old answer is ignored
-    return () => {
-      isCurrent = false
-    }
-  }, [listRetryCount])
 
   // Fetch the ids for the selected card type every time it changes (or "Try again" is clicked)
   useEffect(() => {

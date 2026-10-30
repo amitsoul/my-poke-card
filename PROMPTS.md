@@ -1838,3 +1838,48 @@
 **11:49 · claude**
 
 > phone-landing.webp approved. Copy the 7 screenshots into docs/screenshots/ and logo.svg into docs/logo.svg, apply the README credit and the checklist row, then run the link check, test, build and lint. Don't commit.
+
+**12:00 · claude**
+
+> <pasted_content id="91c8">
+> New change to the Create card page. Plan first, no code until I approve.
+> 
+> What I want:
+> - Clicking "Create card" in the menu (or any link to /create) opens the FULL form right away. It must not send the user back to choose a Pokémon first.
+> - Two ways to make a card:
+>   1. As today: pick a Pokémon in the list → "Create my card with <Pokémon>" → the form with that Pokémon chosen.
+>   2. New: on /create, the first field "Your favorite Pokémon" is a searchable dropdown: I type part of a name and pick a Pokémon from the matches.
+> - The same dropdown should also let me change the Pokémon on /create/:id (so "Change" no longer sends me back to the list). Changing the Pokémon must keep everything already typed in the form.
+> - Creating a card with no Pokémon chosen shows a clear error on that field and moves focus to it, like the other fields.
+> 
+> In the plan:
+> - How the dropdown gets the names (all species, same rule as the list: no forms 10001+), how many requests, loading and error states, and how it searches (contains, case-insensitive).
+> - Options for building it, with your recommendation, for example: (a) native <input> + <datalist>, (b) our own accessible combobox (ARIA combobox pattern, keyboard: arrows, Enter, Escape), with or without small images. Say how much code each is, how it works on iPhone Safari and with a screen reader, and how easy it is to explain in my defense.
+> - What happens to the URL when a Pokémon is picked on /create (e.g. replace to /create/:id) and how the typed values are kept.
+> - What happens to "Change" and its warning.
+> - Tests to add or change, and which docs change (PRD, CARD_SPEC, tasks.md "Changed in task 12", checklist, README if needed).
+> 
+> Rules: no new dependencies, English UI, class selectors only, works at 320px, the card and the PNG must not change (I'll check MPC 006 and MPC 009 against png-baseline-3).
+> List every decision I need to make with options and your recommendation.
+> </pasted_content id="91c8">
+
+**12:20 · claude**
+
+> <pasted_content id="91c8">
+> Approved. Decisions:
+> D1: c (our own combobox, WAI-ARIA pattern, with small sprites; alt="" on them).
+> D2: a (load the names when the Create page opens; cached for the visit).
+> D3: yes (one shared, cached loader; the list page uses it too).
+> D4: at most 10 matches, names starting with the text first, then by number.
+> D5: replace to /create/<id>.
+> D6: an exact name match is picked on leaving the field; otherwise "Choose a Pokémon from the list".
+> D7: remove "Change" and its warning.
+> D8: changing the Pokémon while the card is shown goes back to the form, values kept.
+> D9: reset the sticker to its starting place.
+> D10: one route /create/:id?.
+> D11: the two error texts as written.
+> D12: keep "Pokémon not found" for /create/99999.
+> D13: the Pokémon is the form's first field, inside CardForm.
+> 
+> Go ahead with C1 only. When it's ready, tell me what to check. Don't commit.
+> </pasted_content id="91c8">

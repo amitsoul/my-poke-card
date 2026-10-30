@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/vitest' // adds toBeInTheDocument, toHaveAttri
 import { cleanup } from '@testing-library/react'
 import { afterEach, beforeEach, vi } from 'vitest'
 import { clearMoveCache } from '../utils/moveApi.ts'
+import { clearPokemonListCache } from '../utils/pokemonListApi.ts'
 
 // ---------- No console errors or warnings ----------
 // Every console.error / console.warn in a test (from our code or from React, e.g. a missing "key")
@@ -55,8 +56,9 @@ afterEach(() => {
   vi.resetAllMocks()
   // Put back the real browser functions a test replaced (e.g. the fake fetch)
   vi.unstubAllGlobals()
-  // Forget the moves fetched in this test (the move cache lives in memory, across tests)
+  // Forget the moves and the Pokémon list fetched in this test (both caches live in memory, across tests)
   clearMoveCache()
+  clearPokemonListCache()
   // Empty the test browser's localStorage (saved cards, the card counter), so no test sees another's cards
   try {
     window.localStorage.clear()

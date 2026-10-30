@@ -51,3 +51,34 @@ export function stubPokeApi(data: FakeApiData): { requests: string[]; moveReques
   )
   return { requests, moveRequests: () => requests.filter((url) => url.includes('/move/')) }
 }
+
+// A fake for the list of all species (src/utils/pokemonListApi.ts): the species count, then /pokemon?limit=…
+// `forms` adds special forms (id 10001+) that the app must drop. `failures`: how many list loads fail first (500).
+export function stubPokemonList(
+  names: [id: number, name: string][],
+  options: { forms?: [id: number, name: string][]; failures?: number } = {},
+): { requests: string[] } {
+  const requests: string[] = []
+  let failuresLeft = options.failures ?? 0
+  const all = [...names, ...(options.forms ?? [])]
+  vi.stubGlobal(
+    'fetch',
+    vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input)
+      requests.push(url)
+      if (url.includes('/pokemon-species?limit=1')) {
+        if (failuresLeft > 0) {
+          failuresLeft -= 1
+          return new Response('Server error', { status: 500 })
+        }
+        return jsonResponse({ count: names.length })
+      }
+      if (url.includes('/pokemon?limit=')) {
+        const results = all.map(([id, name]) => ({ name, url: `https://pokeapi.co/api/v2/pokemon/${id}/` }))
+        return jsonResponse({ results })
+      }
+      return new Response('Not found', { status: 404 })
+    }),
+  )
+  return { requests }
+}
