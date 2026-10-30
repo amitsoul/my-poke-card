@@ -74,6 +74,7 @@
 
   /* The site look "Sticker Scrapbook" (task 12). Named --site-… so they never clash with the card's variables. */
   --site-paper: #fdf6ec;
+  --site-blue: #3f6e9e; /* the logo's blue; white text on it: 5.34:1, on the paper: 4.97:1 */
   --site-red: #c22c0a; /* white text on it: 5.74:1 */
   --site-red-hover: #a32509;
   --site-yellow: #eecb47; /* dark text #1e1b14 on it: 10.86:1 */
@@ -133,36 +134,58 @@ body {
   border-radius: 12px; /* the focus ring follows the logo's round shape */
 }
 
-/* 48px high (about 223px wide); the soft shadow under the sticker */
+/* The logo straight on the page: 36px high (about 197px wide), no shadow */
 .logo {
   display: block;
-  height: 48px;
+  height: 36px;
   width: auto;
-  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.25));
 }
 
-/* Nav menu: the current page's link is highlighted */
+/* Nav menu: the three links in one rounded blue bar; the current page is a yellow chip inside it */
 .navbar {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--site-blue);
 }
 
 .nav-link {
-  padding: 0.4rem 1rem;
+  padding: 0.45rem 1rem;
   border-radius: 999px;
-  color: inherit;
-  font-weight: 600;
+  color: #fff;
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
   text-decoration: none;
+  white-space: nowrap;
 }
 
+/* Darker on hover, so the white text gets even more contrast (not less) */
 .nav-link:hover {
-  background: rgba(227, 53, 13, 0.08);
+  background: rgba(0, 0, 0, 0.18);
 }
 
 .nav-link.active {
-  background: #e3350d;
-  color: white;
+  background: var(--site-yellow); /* dark text on it: 10.86:1; the chip against the bar: 3.37:1 */
+  color: var(--site-text-dark);
+}
+
+/* A two-color focus ring: white next to the link, dark outside it, so it shows on the blue bar (5.34:1),
+   on the yellow chip and on the paper (16.22:1) */
+.nav-link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 0;
+  box-shadow: 0 0 0 4px var(--site-focus);
+}
+
+/* A small phone: the bar still fits on one row (measured at 320px) */
+@media (max-width: 360px) {
+  .nav-link {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.95rem;
+  }
 }
 
 /* Site footer: small gray text under every page (#595959 is 7:1 on white) */
@@ -1086,21 +1109,18 @@ body {
   background: var(--site-yellow-hover);
 }
 
-/* Nav links, Type chips and the My Cards filter: white sticker pills; the current one is red */
-.nav-link,
+/* Type chips and the My Cards filter: white sticker pills; the selected one is red */
 .card-type-button {
   border: 2px solid #fff;
   background: #fff;
   box-shadow: var(--site-sticker-shadow);
 }
 
-.nav-link:hover,
 .card-type-button:hover {
   border-color: #fff;
   background: #fff1ec;
 }
 
-.nav-link.active,
 .card-type-button.selected {
   border-color: #fff;
   background: var(--site-red);
@@ -1159,7 +1179,6 @@ body {
 /* One clear focus ring for keyboard users (outside the card): dark, 3px, 2px away from the element,
    so it sits on the paper or a white panel (16:1 or more), never touching the red */
 .button:not(.poke-card-frame *):focus-visible,
-.nav-link:focus-visible,
 .logo-link:focus-visible,
 .card-type-button:focus-visible,
 .pokemon-card:focus-visible,

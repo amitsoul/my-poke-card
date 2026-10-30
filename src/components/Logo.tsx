@@ -1,4 +1,5 @@
-// The site logo: "My Poké Card" on one gently arched line, with a yellow star instead of the "o".
+// The site logo: "My Poké Card" on one gently arched line, with a yellow star instead of the "o",
+// straight on the page (no band behind it, no shadow).
 // Our own SVG (no image file), so it is sharp at every size and needs no font to load.
 //
 // How the paths were made: once, with a small Python script (fontTools, not part of this project), from
@@ -6,13 +7,11 @@
 // The script read each letter's outline from the font, placed the letters with the font's own widths and
 // kerning, bent the line along a circle (radius 15000 font units, so the ends tilt about 13°) and saved the
 // result as plain path data. The star is the Colorless star from TypeSymbol, put where the "o" would be.
-// The cream band follows the same circle. The font file itself isn't used by the app.
+// The logo doesn't need the font file itself.
 
-// The drawing's area: x from -200.6, y from -48, 401.2 wide, 86.4 high (all paths fit inside, see Logo.test.tsx)
-export const LOGO_VIEW_BOX = '-200.6 -48.0 401.2 86.4'
-
-// The cream band behind the letters: two arcs of the same circle with round ends
-export const BAND_PATH = 'M-172.9 -23.9A793.0 793.0 0 0 1 172.9 -23.9A29.0 29.0 0 0 1 160.3 32.7A735.0 735.0 0 0 0 -160.3 32.7A29.0 29.0 0 0 1 -172.9 -23.9Z'
+// The drawing's area, tight around the letters and the star: x from -152, y from -38, 304 wide, 55.5 high
+// (all paths fit inside, see Logo.test.tsx)
+export const LOGO_VIEW_BOX = '-152 -38 304 55.5'
 
 // The letters M, y, P, k, é, C, a, r, d (one path)
 export const LETTERS_PATH =
@@ -61,9 +60,7 @@ export const STAR_PATH = 'M-27.7 -28.2L-22.7 -18.4L-12.0 -17.6L-19.7 -10.0L-17.1
 export default function Logo() {
   return (
     <svg className="logo" viewBox={LOGO_VIEW_BOX} role="img" aria-label="My Poké Card" focusable="false">
-      {/* The sticker: a cream band with a white edge (the soft shadow comes from CSS, .logo) */}
-      <path d={BAND_PATH} fill="#FFF6DE" stroke="#fff" strokeWidth="7" strokeLinejoin="round" />
-      <path d={LETTERS_PATH} fill="#4A78A8" />
+      <path d={LETTERS_PATH} fill="#3F6E9E" />
       <path d={STAR_PATH} fill="#E9B949" stroke="#B8860B" strokeWidth="1.2" strokeLinejoin="round" />
     </svg>
   )

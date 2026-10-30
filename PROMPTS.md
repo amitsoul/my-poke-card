@@ -1720,3 +1720,55 @@
 > Run the link check, test, build and lint. Don't commit.
 > Suggested commit: "docs: README prompt-log section matches the actual log"
 > </pasted_content id="91c8">
+
+## 2026-10-30
+
+**10:38 · claude**
+
+> <pasted_content id="91c8">
+> New design round, approved from a mockup. Plan first, no code until I approve.
+> The approved mockup is in your scratchpad: design-v2/landing-mockups.html (open it in a browser; tabs "Your mix · desktop", "Your mix · phone", "Find a Pokémon page", "My Cards page", "Menu options" → N4). It is a reference only — don't copy it into the repo.
+> 
+> What changes (site look only; the card and the PNG must not change — compare MPC 006 and MPC 009 against png-baseline-3):
+> 1. Logo: remove the cream half-moon band and its white edge. Only the blue letters (#3F6E9E) and the yellow star, straight on the page. No shadow.
+> 2. Menu (N4): the three links inside ONE rounded bar in #3F6E9E with white text; the current page is a yellow (#EECB47) chip with dark text inside the bar. Replaces the white pills.
+> 3. Headings site-wide: no white sticker box, no tilt. Page titles and section titles in Lilita One, color #3F6E9E (4.97:1 on the paper).
+>    Lilita One must be self-hosted like Barlow (OFL already in src/assets/fonts/OFL-LilitaOne.txt). No external font request.
+> 4. Buttons fully round (999px). Filter chips (Types, All / Favorites): white, selected = #3F6E9E with white text. Delete in My Cards: quiet red text button (#C22C0A, underlined), not yellow. Download PNG stays yellow.
+> 5. List tiles, details panels, status/error panels: plain white, rounded corners, NO shadow and no border.
+> 6. Landing page (/):
+>    - Hero title in two lines: "Turn yourself into a" (Barlow Condensed 800, #3F6E9E, smaller) and "Pokémon card" (Lilita One, very large, #C22C0A) with a small yellow ★ (decorative, aria-hidden).
+>    - Remove the visible "Example: …" labels (keep each card's accessible name).
+>    - The two example cards fanned like a hand (back one about -12°, front about +8°, overlapping). On hover (desktop) they open a little more, only under prefers-reduced-motion: no-preference. These are landing-page decoration; the cards in Create and My Cards never tilt.
+>    - How it works: each step = number + title first, then the line of text, then a small picture (1: a mini search box with "pika" and Type chips; 2: a mini form with the couple illustration and "Amit & Amit", "24", "Endless Road Trips"; 3: a small card with a round download button and "PNG"). Pictures are decorative (aria-hidden). Propose how to build the mini pictures (plain HTML/CSS, which image for the small card).
+>    - About me: no pictures, no box. A big yellow “ quote mark, the same text, then a signature line "— Amit ★" in Lilita One.
+>    - Side decoration: replace the confetti dots with a few small faint yellow stars, only in the side margins on wide screens (as the dots are now), never behind text.
+> 
+> Rules: class selectors only (indexCss.test.ts), no new dependencies, English UI, focus ring stays visible on the blue bar and on every button, all text ≥ 4.5:1 (list any pair you're unsure of with its ratio), works at 320px.
+> 
+> Plan: split into small steps with a commit after each (e.g. V1 header: logo + menu · V2 headings, buttons, chips, Delete, panels across the site · V3 landing page). For each step: the files, the tests you'll add or change, and any decisions I need to make (options + your recommendation). You may add /dev/preview temporarily; delete it before each commit.
+> </pasted_content id="91c8">
+
+**10:48 · claude**
+
+> <pasted_content id="91c8">
+> Approved. Decisions:
+> D1: a (Barlow for body text; Barlow Condensed for the menu, buttons and step titles).
+> D2: a (round buttons with the darker bottom edge, no white border).
+> D3: a (two-color focus ring on the menu links: white inside, dark outside).
+> D4: a (add Barlow Condensed 800, self-hosted).
+> D5: a (keep the star's thin gold edge).
+> D6: a (favicon circle #3F6E9E).
+> D7: a (confirm box: plain white with a thin red border).
+> D8: a (2px blue ring on list-tile hover).
+> D9: a (the fan fits inside the screen at 320px).
+> D10: b (small WebP of Philip & Charlie's Pikachu, made in a fresh profile) and #7A5C00 for the number 3.
+> D11: a (leave the card headings).
+> 
+> Go ahead with V1 only. When it's ready, tell me what to check; I'll download MPC 006 and MPC 009 for the PNG check. Don't commit.
+> </pasted_content id="91c8">
+
+**10:55 · claude**
+
+> PNG check: MPC 006 and MPC 009 are identical to png-baseline-3 (I checked; both are in png-after).
+> V1 looks good. Delete /dev/preview, confirm it's gone, and run test, build and lint. Don't commit.

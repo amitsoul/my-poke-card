@@ -16,10 +16,10 @@ describe('Logo', () => {
     expect(screen.getByRole('img', { name: 'My Poké Card' })).toBeInTheDocument()
   })
 
-  it('draws the cream band, the blue letters and the yellow star', () => {
+  it('draws only the blue letters and the yellow star (no band behind them)', () => {
     const { container } = render(<Logo />)
     const fills = [...container.querySelectorAll('path')].map((path) => path.getAttribute('fill'))
-    expect(fills).toEqual(['#FFF6DE', '#4A78A8', '#E9B949'])
+    expect(fills).toEqual(['#3F6E9E', '#E9B949'])
   })
 
   // Like the Type symbols: the letters and the star use only straight lines and curves with absolute points,
