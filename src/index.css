@@ -1,4 +1,5 @@
-/* ---------- Fonts: self-hosted Barlow + Barlow Condensed (SIL Open Font License: src/assets/fonts/OFL.txt) ---------- */
+/* ---------- Fonts, all self-hosted (no outside requests): Barlow + Barlow Condensed (SIL Open Font License:
+   src/assets/fonts/OFL.txt) and Lilita One for the headings (SIL OFL: src/assets/fonts/OFL-LilitaOne.txt) ---------- */
 @font-face {
   font-family: 'Barlow';
   font-style: normal;
@@ -62,9 +63,23 @@
   font-display: swap;
   src: url('./assets/fonts/barlow-condensed-700.woff2') format('woff2');
 }
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('./assets/fonts/barlow-condensed-800.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Lilita One';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/lilita-one.woff2') format('woff2');
+}
 
 :root {
-  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  font-family: 'Barlow', system-ui, -apple-system, "Segoe UI", Arial, sans-serif; /* the card sets its own font */
   line-height: 1.5;
   /* Light only: every color in this file was chosen for a light background,
      so a phone or computer in dark mode still gets dark text on paper */
@@ -77,6 +92,7 @@
   --site-blue: #3f6e9e; /* the logo's blue; white text on it: 5.34:1, on the paper: 4.97:1 */
   --site-red: #c22c0a; /* white text on it: 5.74:1 */
   --site-red-hover: #a32509;
+  --site-red-edge: #8a1f07; /* the red button's darker bottom edge */
   --site-yellow: #eecb47; /* dark text #1e1b14 on it: 10.86:1 */
   --site-yellow-hover: #e3bc2c;
   --site-yellow-edge: #a8861c; /* 3.21:1 on the paper, so the yellow button's shape is clear */
@@ -395,9 +411,17 @@ body {
   border-radius: 12px;
 }
 
+/* The label sits inside the white panel (the panel has no border, so on its edge it would float half outside) */
 .favorite-field legend {
-  padding: 0 0.5rem;
+  float: left;
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0;
   font-weight: 600;
+}
+
+.favorite-field .favorite-pokemon {
+  clear: both;
 }
 
 /* Phone: image above the text. Wider screens: side by side. */
@@ -1053,132 +1077,132 @@ body {
 }
 
 
-/* ---------- Site look: "Sticker Scrapbook" (task 12) ----------
-   Warm paper, white "sticker" panels with a soft shadow, a red and a yellow button, tilted page titles.
+/* ---------- Site look (task 12, second design round) ----------
+   Warm paper, plain white panels, round buttons with a darker bottom edge, headings in Lilita One.
    Class selectors only (checked by src/indexCss.test.ts). Nothing here reaches the card: the only class
    that also lives inside the card is .button (the attacks' "Try again"), so its rules skip .poke-card-frame. */
 
-/* Page titles: a cream sticker label like the logo, tilted 1°. Long titles wrap inside the label.
-   Section titles (the landing page's h2) look the same, a bit smaller. */
+/* Page and section titles: Lilita One in the logo's blue (4.97:1 on the paper), no box, no tilt.
+   Lilita One has a single weight (400), so the browser never draws a fake bold of it. */
 .page-title,
 .section-title {
-  display: inline-block;
-  box-sizing: border-box;
-  max-width: 100%;
-  margin: 0 0 1.25rem;
-  padding: 0.2rem 0.9rem;
-  border: 3px solid #fff;
-  border-radius: 10px;
-  background: #fff6de;
-  box-shadow: var(--site-sticker-shadow);
-  font-family: 'Barlow Condensed', system-ui, sans-serif;
-  font-weight: 700;
-  font-size: 2rem;
-  line-height: 1.15;
+  margin: 0 0 1rem;
+  color: var(--site-blue);
+  font-family: 'Lilita One', 'Barlow Condensed', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 1.5rem + 2.5vw, 3.25rem);
+  line-height: 1.1;
   overflow-wrap: break-word;
-  transform: rotate(-1deg);
 }
 
 .section-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.8rem, 1.3rem + 2vw, 2.75rem);
 }
 
-/* Buttons (outside the card): red, with a white sticker edge and a soft shadow */
+/* Buttons (outside the card): fully round, no border, a darker bottom edge */
 .button:not(.poke-card-frame *) {
-  border: 3px solid #fff;
-  border-radius: 10px;
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 999px;
   background: var(--site-red);
-  box-shadow: var(--site-sticker-shadow);
+  box-shadow: 0 4px 0 var(--site-red-edge);
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .button:not(.poke-card-frame *):hover {
   background: var(--site-red-hover);
 }
 
-/* The secondary button: yellow with dark text, and a thin darker edge so its shape shows on the paper.
-   Task 11 had it outlined in red; the approved mockup (task 12) makes it yellow. */
+/* The secondary button: yellow with dark text (10.86:1); its darker bottom edge (3.21:1 on the paper) shows
+   its shape. Task 11 had it outlined in red; the approved mockups (task 12) make it yellow. */
 .button-secondary:not(.poke-card-frame *) {
   background: var(--site-yellow);
   color: var(--site-text-dark);
-  box-shadow:
-    0 0 0 1px var(--site-yellow-edge),
-    var(--site-sticker-shadow);
+  box-shadow: 0 4px 0 var(--site-yellow-edge);
 }
 
 .button-secondary:not(.poke-card-frame *):hover {
   background: var(--site-yellow-hover);
 }
 
-/* Type chips and the My Cards filter: white sticker pills; the selected one is red */
+/* A quiet text button in red, underlined: Delete in My Cards (5.35:1 on the paper).
+   The padding keeps it easy to tap (about 38px high). */
+.text-button {
+  padding: 0.5rem 0.25rem;
+  border: none;
+  background: none;
+  color: var(--site-red);
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.text-button:hover {
+  color: var(--site-red-hover);
+}
+
+/* Type chips and the My Cards filter: white; the selected one is blue with white text (5.34:1) */
 .card-type-button {
-  border: 2px solid #fff;
+  padding: 0.4rem 1rem;
+  border: none;
   background: #fff;
-  box-shadow: var(--site-sticker-shadow);
+  font-family: 'Barlow Condensed', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .card-type-button:hover {
-  border-color: #fff;
-  background: #fff1ec;
+  background: #e8eff6;
 }
 
 .card-type-button.selected {
-  border-color: #fff;
-  background: var(--site-red);
+  background: var(--site-blue);
   color: #fff;
 }
 
-/* Pokémon in the list: white stickers, never tilted (they show real Pokémon) */
+/* Pokémon in the list: plain white tiles (never tilted: they show real Pokémon); a blue ring on hover */
 .pokemon-card {
-  border: 4px solid #fff;
+  border: none;
+  border-radius: 16px;
   background: #fff;
-  box-shadow: var(--site-sticker-shadow);
 }
 
 .pokemon-card:hover {
-  border-color: #fff;
-  box-shadow: var(--site-sticker-shadow-raised);
+  box-shadow: inset 0 0 0 2px var(--site-blue);
 }
 
-/* Panels: white stickers */
+/* Panels: plain white, rounded, no border and no shadow */
 .status,
 .pokemon-details,
 .pokemon-battle,
 .favorite-field,
 .card-form,
 .inline-confirm {
-  border: 4px solid #fff;
-  border-radius: 14px;
+  border: none;
+  border-radius: 16px;
   background: #fff;
-  box-shadow: var(--site-sticker-shadow);
+  box-shadow: none;
 }
 
 .card-form {
   padding: 1rem;
 }
 
-/* The "are you sure?" box keeps a red edge, so it still reads as a warning */
+/* The "are you sure?" box keeps a thin red edge, so it still reads as a warning */
 .inline-confirm {
-  border-color: var(--site-red);
-}
-
-/* A small lift on hover — only for people who haven't asked for less motion */
-@media (prefers-reduced-motion: no-preference) {
-  .button:not(.poke-card-frame *),
-  .pokemon-card {
-    transition:
-      transform 0.15s ease,
-      box-shadow 0.15s ease;
-  }
-
-  .button:not(.poke-card-frame *):hover,
-  .pokemon-card:hover {
-    transform: translateY(-2px);
-  }
+  border: 2px solid var(--site-red);
 }
 
 /* One clear focus ring for keyboard users (outside the card): dark, 3px, 2px away from the element,
-   so it sits on the paper or a white panel (16:1 or more), never touching the red */
+   so it sits on the paper or a white panel (16:1 or more). The menu links have their own two-color ring. */
 .button:not(.poke-card-frame *):focus-visible,
+.text-button:focus-visible,
 .logo-link:focus-visible,
 .card-type-button:focus-visible,
 .pokemon-card:focus-visible,
@@ -1192,8 +1216,8 @@ body {
   outline-offset: 2px;
 }
 
-/* Confetti: a few faint dots in the Type colors, only in the empty side margins of a wide window
-   (the content is at most 1200px wide), so they are never behind text. Max 8% strength. */
+/* Side decoration: a few small, faint yellow stars, only in the empty side margins of a wide window
+   (the content is at most 1200px wide), so they are never behind text */
 @media (min-width: 1280px) {
   #root::before,
   #root::after {
@@ -1204,19 +1228,20 @@ body {
     z-index: -1;
     width: calc((100vw - 1200px) / 2 - 1rem);
     pointer-events: none;
-    background-image:
-      radial-gradient(circle, rgba(210, 70, 30, 0.08) 0 6px, transparent 7px),
-      radial-gradient(circle, rgba(42, 120, 196, 0.08) 0 5px, transparent 6px),
-      radial-gradient(circle, rgba(166, 124, 0, 0.08) 0 7px, transparent 8px),
-      radial-gradient(circle, rgba(62, 142, 58, 0.08) 0 5px, transparent 6px),
-      radial-gradient(circle, rgba(142, 75, 168, 0.08) 0 6px, transparent 7px);
-    background-size: 180px 240px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 4.2L19.5 11.6L27.5 12.5L21.5 18L23.2 26L16 21.9L8.8 26L10.5 18L4.5 12.5L12.5 11.6Z' fill='%23E9B949' fill-opacity='0.5'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 4.2L19.5 11.6L27.5 12.5L21.5 18L23.2 26L16 21.9L8.8 26L10.5 18L4.5 12.5L12.5 11.6Z' fill='%23E9B949' fill-opacity='0.5'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 4.2L19.5 11.6L27.5 12.5L21.5 18L23.2 26L16 21.9L8.8 26L10.5 18L4.5 12.5L12.5 11.6Z' fill='%23E9B949' fill-opacity='0.5'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 4.2L19.5 11.6L27.5 12.5L21.5 18L23.2 26L16 21.9L8.8 26L10.5 18L4.5 12.5L12.5 11.6Z' fill='%23E9B949' fill-opacity='0.5'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 4.2L19.5 11.6L27.5 12.5L21.5 18L23.2 26L16 21.9L8.8 26L10.5 18L4.5 12.5L12.5 11.6Z' fill='%23E9B949' fill-opacity='0.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size:
+      14px 14px,
+      10px 10px,
+      18px 18px,
+      12px 12px,
+      16px 16px;
     background-position:
-      20px 30px,
-      110px 90px,
-      50px 150px,
-      140px 200px,
-      80px 230px;
+      30% 12%,
+      70% 33%,
+      40% 55%,
+      75% 74%,
+      25% 92%;
   }
 
   #root::before {
@@ -1225,7 +1250,7 @@ body {
 
   #root::after {
     right: 0;
-    transform: scaleX(-1); /* the same dots, mirrored */
+    transform: scaleX(-1); /* the same stars, mirrored */
   }
 }
 

@@ -46,7 +46,7 @@ export default function SavedCardItem({ saved, onToggleFavorite, onDelete }: Sav
       <DownloadPngButton fileName={getPngFileName(saved.card.name, saved.pokemon.name, saved.number)} />
       <button
         type="button"
-        className="button button-secondary"
+        className="text-button" // a quiet red text button: Download PNG stays the main action
         ref={deleteButtonRef}
         onClick={() => setIsConfirmingDelete(true)}
       >

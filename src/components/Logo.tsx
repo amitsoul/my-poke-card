@@ -7,7 +7,7 @@
 // The script read each letter's outline from the font, placed the letters with the font's own widths and
 // kerning, bent the line along a circle (radius 15000 font units, so the ends tilt about 13°) and saved the
 // result as plain path data. The star is the Colorless star from TypeSymbol, put where the "o" would be.
-// The logo doesn't need the font file itself.
+// The logo doesn't need the font file itself; the page and section titles use it as a font (index.css).
 
 // The drawing's area, tight around the letters and the star: x from -152, y from -38, 304 wide, 55.5 high
 // (all paths fit inside, see Logo.test.tsx)
