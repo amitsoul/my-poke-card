@@ -147,7 +147,7 @@ docs/           requirements checklist, logo, screenshots
 
 ## Credits
 
-- The logo's letters are drawn from **Lilita One** by Juan Montoreano, licensed under the SIL Open Font License 1.1 (`src/assets/fonts/OFL-LilitaOne.txt`). The card uses **Barlow** and **Barlow Condensed** (SIL OFL, `src/assets/fonts/OFL.txt`).
+- The logo's letters are drawn from **Lilita One** by Juan Montoreano, and the page and section titles use it as a self-hosted font; it is licensed under the SIL Open Font License 1.1 (`src/assets/fonts/OFL-LilitaOne.txt`). The site's text and the card use **Barlow** and **Barlow Condensed** (SIL OFL, `src/assets/fonts/OFL.txt`). All fonts are self-hosted: no requests to outside font services.
 - Pokémon data from [PokéAPI](https://pokeapi.co); official artwork from the [PokéAPI sprites repository](https://github.com/PokeAPI/sprites).
 - The two example illustrations are our own and are published with permission.
 - Pokémon and Pokémon character names are trademarks of Nintendo, Game Freak and The Pokémon Company. This is a fan-made, non-commercial student project and not an official Pokémon product.

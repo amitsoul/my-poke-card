@@ -1289,7 +1289,9 @@ body {
   display: block;
   color: var(--site-red); /* 5.35:1 on the paper */
   font-family: 'Lilita One', 'Barlow Condensed', system-ui, sans-serif;
-  font-size: clamp(3rem, 1.8rem + 5vw, 6rem);
+  /* "Pokémon card ★" is 6.52 em wide (measured), so up to 15.3% of the column it fits on one line:
+     14.8cqw keeps it on one line wherever the column allows; below 3rem (a phone) it wraps */
+  font-size: clamp(3rem, 14.8cqw, 6rem);
   font-weight: 400;
 }
 
@@ -1300,6 +1302,11 @@ body {
   margin-left: 0.08em;
   vertical-align: top;
   color: var(--site-star);
+}
+
+/* The text column is a size container: the big title line below is sized from its width (cqw) */
+.home-hero-text {
+  container-type: inline-size;
 }
 
 .home-lead {

@@ -1809,3 +1809,32 @@
 
 > The yellow 3 looks good. PNG check: MPC 006 and MPC 009 are identical to png-baseline-3 (I checked; both are in png-after, downloaded after the V3 changes; the color change doesn't touch the card).
 > Delete /dev/preview, confirm it's gone, and run test, build and lint. Don't commit.
+
+**11:33 · claude**
+
+> <pasted_content id="91c8">
+> V3 is committed and pushed. Go ahead with V4 (the docs): new README screenshots taken the same way as before
+> (a fresh, empty Chrome profile, only the two approved illustrations, profile deleted afterwards), docs/logo.svg without the band,
+> the README credit for Lilita One as a font, and the checklist's "Own CSS" row.
+> Show me every screenshot before anything goes into the repo. Don't commit.
+> </pasted_content id="91c8">
+
+**11:38 · claude**
+
+> Screenshots approved, with one fix first: on the desktop landing page "Pokémon card" breaks into two lines ("Pokémon" / "card ★").
+> In the approved mockup it's one line. Lower the hero title's maximum size so "Pokémon card ★" stays on one line at 1280px (and still wraps cleanly at 320px).
+> Then retake only landing.webp the same way and show it to me. Keep everything else staged as it is. Don't commit.
+
+**11:45 · claude**
+
+> The new landing.webp is approved (one line looks better). Yes, retake phone-landing.webp the same way (fresh profile, deleted afterwards) and show it to me.
+> I'm downloading MPC 006 and MPC 009 for the PNG check now.
+> After I approve phone-landing.webp: copy the screenshots and logo.svg into the repo, apply the two text changes, run the link check, test, build and lint. Don't commit.
+
+**11:47 · claude**
+
+> PNG check after the title fix: MPC 006 and MPC 009 are identical to png-baseline-3 (I checked; both are in png-after).
+
+**11:49 · claude**
+
+> phone-landing.webp approved. Copy the 7 screenshots into docs/screenshots/ and logo.svg into docs/logo.svg, apply the README credit and the checklist row, then run the link check, test, build and lint. Don't commit.
