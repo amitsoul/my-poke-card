@@ -1792,3 +1792,20 @@
 
 > PNG check: MPC 006 and MPC 009 are identical to png-baseline-3 (I checked; both are in png-after).
 > V2 looks good. Run test, build and lint once more. Don't commit.
+
+**11:16 · claude**
+
+> V2 is committed and pushed. Go ahead with V3 (the landing page), with the decisions I already approved.
+> For the step-3 picture (D10b), make the small WebP from a real download of Philip & Charlie's Pikachu in a fresh, empty Chrome profile, and delete that profile afterwards.
+> When it's ready, tell me what to check; I'll download MPC 006 and MPC 009 for the PNG check. You may add /dev/preview; delete it before I commit. Don't commit.
+
+**11:28 · claude**
+
+> One change in V3: the step-3 number in "How it works" should be exactly the same yellow as the big quote mark in About me (the same color variable), with no outline.
+> I know yellow on the paper is about 1.47:1; that's my choice. The steps are an ordered list (<ol>), so the order is still clear to screen readers. Add a one-line comment in the CSS saying it was my choice.
+> Keep everything else as it is. Tell me when it's done so I can look again.
+
+**11:31 · claude**
+
+> The yellow 3 looks good. PNG check: MPC 006 and MPC 009 are identical to png-baseline-3 (I checked; both are in png-after, downloaded after the V3 changes; the color change doesn't touch the card).
+> Delete /dev/preview, confirm it's gone, and run test, build and lint. Don't commit.

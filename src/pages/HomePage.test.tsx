@@ -55,6 +55,32 @@ describe('HomePage', () => {
     expect(document.body).toHaveFocus()
   })
 
+  it('the title reads as one sentence; its star is decoration', () => {
+    renderPage()
+    const title = screen.getByRole('heading', { level: 1 })
+    // The name is the whole sentence: the two visual lines join, and the star adds nothing
+    expect(title).toHaveAccessibleName('Turn yourself into a Pokémon card')
+    expect(title.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
+  })
+
+  it("the small pictures in How it works are decoration, hidden from screen readers (only the steps' text is read)", () => {
+    renderPage()
+    const section = screen.getByRole('region', { name: 'How it works' })
+    // Nothing in the pictures is exposed: no images, and the fake "pika" search and fields aren't read
+    expect(within(section).queryAllByRole('img')).toEqual([])
+    for (const picture of section.querySelectorAll('.home-step-picture')) {
+      expect(picture).toHaveAttribute('aria-hidden', 'true')
+    }
+  })
+
+  it('About me ends with the signature "— Amit"; the big quote mark and the star are decoration', () => {
+    renderPage()
+    const about = within(screen.getByRole('region', { name: 'About me' }))
+    expect(about.getByText(/^Hi, I'm Amit\./)).toBeInTheDocument()
+    expect(about.getByText('— Amit')).toBeInTheDocument()
+    expect(about.getByText('“')).toHaveAttribute('aria-hidden', 'true')
+  })
+
   it('"How it works" has 3 steps in order, each a link to its page', () => {
     renderPage()
     // The section is labelled by its heading, so it is a region named "How it works"
