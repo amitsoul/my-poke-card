@@ -36,9 +36,13 @@ describe('App layout', () => {
     expect(within(main).getByRole('link', { name: 'Find a Pokémon' })).toHaveAttribute('href', '/pokemon')
   })
 
-  it('"/create" without a Pokémon links to the list at "/pokemon"', () => {
+  it('"/create" opens the full form right away, the Pokémon search first', () => {
+    // The list of names never answers here: the form is there before any data
+    vi.stubGlobal('fetch', vi.fn(() => new Promise<Response>(() => {})))
     renderApp('/create')
-    expect(screen.getByRole('link', { name: 'Go to the Pokémon list' })).toHaveAttribute('href', '/pokemon')
+    expect(document.title).toBe('Create card · My Poké Card')
+    expect(screen.getByRole('combobox', { name: 'Your favorite Pokémon' })).toHaveValue('')
+    expect(screen.getByRole('button', { name: 'Create my card' })).toBeInTheDocument()
   })
 
   it('the tab title on the list page ("/pokemon") and on the 404 page', () => {

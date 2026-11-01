@@ -26,6 +26,12 @@ interface FakeApiData {
   moves?: MoveResponse[]
   species?: SpeciesResponse
   failingMoves?: string[] // these moves answer with a server error (500)
+  names?: [id: number, name: string][] // the list of all species, for the Create page's Pokémon search
+}
+
+// A /pokemon?limit=… answer: each name with its url (the id is read from the url)
+function listResponse(names: [id: number, name: string][]) {
+  return { results: names.map(([id, name]) => ({ name, url: `https://pokeapi.co/api/v2/pokemon/${id}/` })) }
 }
 
 // Replaces fetch for this test (src/test/setup.ts puts the real one back afterwards)
@@ -36,6 +42,10 @@ export function stubPokeApi(data: FakeApiData): { requests: string[]; moveReques
     vi.fn(async (input: RequestInfo | URL) => {
       const url = String(input)
       requests.push(url)
+      if (data.names !== undefined) {
+        if (url.includes('/pokemon-species?limit=1')) return jsonResponse({ count: data.names.length })
+        if (url.includes('/pokemon?limit=')) return jsonResponse(listResponse(data.names))
+      }
       const moveName = url.match(/\/move\/([^/]+)$/)?.[1]
       if (moveName !== undefined) {
         if (data.failingMoves?.includes(moveName)) return new Response('Server error', { status: 500 })
@@ -73,10 +83,7 @@ export function stubPokemonList(
         }
         return jsonResponse({ count: names.length })
       }
-      if (url.includes('/pokemon?limit=')) {
-        const results = all.map(([id, name]) => ({ name, url: `https://pokeapi.co/api/v2/pokemon/${id}/` }))
-        return jsonResponse({ results })
-      }
+      if (url.includes('/pokemon?limit=')) return jsonResponse(listResponse(all))
       return new Response('Not found', { status: 404 })
     }),
   )

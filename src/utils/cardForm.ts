@@ -11,8 +11,8 @@ export interface PhotoFile {
   size: number
 }
 
-export type CardFormField = 'name' | 'age' | 'photo' | 'superpower' | 'aboutYou'
-export type CardTextField = Exclude<CardFormField, 'photo'>
+export type CardFormField = 'pokemon' | 'name' | 'age' | 'photo' | 'superpower' | 'aboutYou'
+export type CardTextField = Exclude<CardFormField, 'pokemon' | 'photo'>
 
 // What the user typed (before cleaning)
 export interface CardFormValues {
@@ -59,7 +59,7 @@ export const PHOTO_MAX_BYTES = 10 * 1024 * 1024 // 10 MB
 const PHOTO_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 // The order of the fields on the form — used to find the first invalid one
-const FIELD_ORDER: CardFormField[] = ['name', 'age', 'photo', 'superpower', 'aboutYou']
+const FIELD_ORDER: CardFormField[] = ['pokemon', 'name', 'age', 'photo', 'superpower', 'aboutYou']
 const TEXT_FIELD_ORDER: CardTextField[] = ['name', 'age', 'superpower', 'aboutYou']
 
 // Letters with ONE space, hyphen or apostrophe between them, or " & " (with a space on each side) for two names
@@ -85,6 +85,14 @@ function trimAndJoinSpaces(text: string): string {
 
 function fail<T>(error: string): ValidationResult<T> {
   return { ok: false, error }
+}
+
+// "Your favorite Pokémon": a Pokémon must be picked from the list. Nothing typed → "choose one"; typed but not
+// picked (e.g. "pika") → "choose it from the list".
+export function validatePokemon(pokemonId: number | null, typedText: string): ValidationResult<number> {
+  if (pokemonId !== null) return { ok: true, value: pokemonId }
+  if (typedText.trim() === '') return fail('Please choose your favorite Pokémon')
+  return fail('Choose a Pokémon from the list')
 }
 
 export function validateName(raw: string): ValidationResult<string> {
@@ -157,7 +165,7 @@ export function validateTextFields(values: CardTextValues): {
   return { errors, firstInvalidField, data }
 }
 
-// The first field with an error, in form order (name, age, photo, superpower, about you)
+// The first field with an error, in form order (Pokémon, name, age, photo, superpower, about you)
 export function getFirstInvalidField(errors: Partial<Record<CardFormField, string>>): CardFormField | null {
   return FIELD_ORDER.find((field) => errors[field] !== undefined) ?? null
 }

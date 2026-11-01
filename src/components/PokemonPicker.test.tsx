@@ -19,7 +19,7 @@ const NAMES: [number, string][] = [
 // The picker with its own "picked" state, like the form will keep it; onSelect and onBlur are spies
 function renderPicker(options: { selected?: PokemonSummary; error?: string } = {}) {
   const onSelect = vi.fn<(pokemon: PokemonSummary | null) => void>()
-  const onBlur = vi.fn<() => void>()
+  const onBlur = vi.fn<(picked: PokemonSummary | null) => void>()
   function Harness() {
     const [selected, setSelected] = useState<PokemonSummary | null>(options.selected ?? null)
     return (
@@ -134,7 +134,7 @@ describe('PokemonPicker', () => {
     expect(input).toHaveValue('Pikachux')
   })
 
-  it('leaving the field with an exact name picks it; with part of a name it picks nothing; onBlur is called', async () => {
+  it('leaving the field with an exact name picks it; with part of a name it picks nothing; onBlur gets the pick', async () => {
     stubPokemonList(NAMES)
     const { user, input, onSelect, onBlur } = renderPicker()
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(''))
@@ -143,13 +143,14 @@ describe('PokemonPicker', () => {
     await user.tab()
     expect(onSelect).toHaveBeenLastCalledWith(expect.objectContaining({ id: 25 }))
     expect(input).toHaveValue('Pikachu')
-    expect(onBlur).toHaveBeenCalled()
+    expect(onBlur).toHaveBeenLastCalledWith(expect.objectContaining({ id: 25 }))
 
     await user.clear(input)
     await user.type(input, 'pika')
     await user.tab()
     expect(onSelect).toHaveBeenLastCalledWith(null)
     expect(input).toHaveValue('pika')
+    expect(onBlur).toHaveBeenLastCalledWith(null)
   })
 
   it("shows the form's error, connected to the field", () => {

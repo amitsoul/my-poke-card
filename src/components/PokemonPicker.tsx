@@ -18,7 +18,9 @@ interface PokemonPickerProps {
   onSelect: (pokemon: PokemonSummary | null) => void // null: the text was changed, so nothing is picked any more
   onTextChange?: (text: string) => void // the typed text (the form uses it to choose its error message)
   error: string | undefined // shown only when the form decides to show it
-  onBlur?: () => void // called after leaving the field (and after an exact name was picked)
+  // Called after leaving the field, with the Pokémon picked by then (an exact name counts) — the `selected` prop
+  // still has the old value at that moment, so the form checks this one
+  onBlur?: (picked: PokemonSummary | null) => void
   inputRef?: Ref<HTMLInputElement> // lets the form move focus here
 }
 
@@ -96,11 +98,12 @@ export default function PokemonPicker({
   function handleBlur() {
     setIsOpen(false)
     setActiveIndex(-1)
+    let picked = selected
     if (selected === null) {
-      const exact = findExactPokemon(list, text)
-      if (exact !== null) pick(exact)
+      picked = findExactPokemon(list, text)
+      if (picked !== null) pick(picked)
     }
-    onBlur?.()
+    onBlur?.(picked)
   }
 
   // What the live region says: loading, a load error, or how many matches there are (for screen readers)

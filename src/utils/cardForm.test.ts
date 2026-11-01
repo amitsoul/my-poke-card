@@ -6,6 +6,7 @@ import {
   validateCardForm,
   validateName,
   validatePhoto,
+  validatePokemon,
   validateSuperpower,
   validateTextFields,
   type CardFormValues,
@@ -250,10 +251,29 @@ describe('validateTextFields', () => {
 })
 
 describe('getFirstInvalidField', () => {
-  it('follows the form order: name, age, photo, superpower, about you', () => {
+  it('follows the form order: Pokémon, name, age, photo, superpower, about you', () => {
     expect(getFirstInvalidField({ aboutYou: 'x', photo: 'x', superpower: 'x' })).toBe('photo')
     expect(getFirstInvalidField({ aboutYou: 'x', age: 'x' })).toBe('age')
     expect(getFirstInvalidField({})).toBeNull()
+  })
+
+  it('puts the Pokémon first: it is the first field on the form', () => {
+    expect(getFirstInvalidField({ name: 'x', pokemon: 'x' })).toBe('pokemon')
+  })
+})
+
+describe('validatePokemon', () => {
+  it('is valid once a Pokémon is picked (whatever the text says)', () => {
+    expect(validatePokemon(25, 'Pikachu')).toEqual({ ok: true, value: 25 })
+  })
+
+  it('nothing typed → "Please choose your favorite Pokémon" (only spaces count as nothing)', () => {
+    expect(validatePokemon(null, '')).toEqual({ ok: false, error: 'Please choose your favorite Pokémon' })
+    expect(validatePokemon(null, '   ')).toEqual({ ok: false, error: 'Please choose your favorite Pokémon' })
+  })
+
+  it('typed but not picked → "Choose a Pokémon from the list"', () => {
+    expect(validatePokemon(null, 'pika')).toEqual({ ok: false, error: 'Choose a Pokémon from the list' })
   })
 })
 

@@ -18,8 +18,8 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/pokemon" element={<PokemonListPage />} />
           <Route path="/pokemon/:id" element={<PokemonDetailsPage />} />
-          <Route path="/create" element={<CreateCardPage />} />
-          <Route path="/create/:id" element={<CreateCardPage />} />
+          {/* One route for both, so picking a Pokémon (/create → /create/25) keeps the same page and its form */}
+          <Route path="/create/:id?" element={<CreateCardPage />} />
           <Route path="/my-cards" element={<MyCardsPage />} />
           {/* "*" = any URL that no other route matches */}
           <Route path="*" element={<NotFoundPage />} />

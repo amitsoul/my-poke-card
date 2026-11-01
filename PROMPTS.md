@@ -1897,3 +1897,18 @@
 > Claude checked the picker in the built-in browser with the real PokéAPI: typing, arrows with wrap, Enter, Escape, mouse click, un-pick on typing, the exact-name pick on Tab, both error texts, "No Pokémon found", the 320px box, a clean console. All good.
 > Space vs hyphen: make both pages treat a space like a hyphen (so "mr mime" finds Mr-Mime), in the shared search rule, with tests.
 > Then delete /dev/preview, confirm it's gone, and run test, build and lint. Don't commit.
+
+**14:36 · claude**
+
+> C2 is committed and pushed ("mr mime" on the list page shows Mr-Mime — checked).
+> Go ahead with C3: wire the picker into the Create page with the decisions I already approved (D5–D13).
+> Add /dev/preview only if it helps; when it's ready, tell me what to check. I'll download MPC 006 and MPC 009 for the PNG check. Don't commit.
+
+**14:55 · claude**
+
+> <pasted_content id="91c8">
+> Claude checked C3 in the built-in browser with the real PokéAPI: full form on /create, error + focus with no Pokémon, keyboard and mouse picks with values kept, un-pick, change above the card (all values and the photo kept, sticker reset), Back skips the picks, 320px. All good.
+> The menu link starting a fresh form: keep it as it is.
+> The console showed a Vite reload error for FavoritePokemonField.tsx (from the rename while the dev server ran). Confirm nothing in src/ still imports it.
+> Run test, build and lint once more. Don't commit.
+> </pasted_content id="91c8">

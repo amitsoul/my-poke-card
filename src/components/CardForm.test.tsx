@@ -1,8 +1,11 @@
 // The Create card form on its own: errors, focus, counter and photo.
-// The page around it (warning, Edit, reset) is tested in CreateCardPage.test.tsx.
-import { render, screen } from '@testing-library/react'
+// The page around it (the URL, Edit, changing the Pokémon) is tested in CreateCardPage.test.tsx.
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { useState } from 'react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { stubPokemonList } from '../test/fakeApi.ts'
+import type { PokemonSummary } from '../types/pokemon.ts'
 import { resizePhoto } from '../utils/photo.ts'
 import CardForm from './CardForm.tsx'
 
@@ -26,11 +29,45 @@ function promiseWeFinishLater() {
   return { promise, finish }
 }
 
-function renderForm() {
+// FAKE #2 — the list of Pokémon names for the "Your favorite Pokémon" search
+beforeEach(() => {
+  stubPokemonList([
+    [25, 'pikachu'],
+    [26, 'raichu'],
+  ])
+})
+
+const PIKACHU: PokemonSummary = { id: 25, name: 'pikachu', image: '' }
+
+// The form with the page's part played by a tiny stand-in: it keeps the chosen Pokémon
+function renderForm(options: { pokemon?: PokemonSummary } = {}) {
   const onSubmit = vi.fn()
-  const onDirtyChange = vi.fn()
-  render(<CardForm onSubmit={onSubmit} onDirtyChange={onDirtyChange} />)
-  return { onSubmit, onDirtyChange, user: userEvent.setup() }
+  const onPokemonSelect = vi.fn<(pokemon: PokemonSummary | null) => void>()
+  function Page() {
+    const [pokemon, setPokemon] = useState<PokemonSummary | null>(options.pokemon ?? null)
+    return (
+      <CardForm
+        pokemon={pokemon}
+        onPokemonSelect={(picked) => {
+          setPokemon(picked)
+          onPokemonSelect(picked)
+        }}
+        onSubmit={onSubmit}
+      />
+    )
+  }
+  render(<Page />)
+  return {
+    onSubmit,
+    onPokemonSelect,
+    user: userEvent.setup(),
+    pokemonField: screen.getByRole('combobox', { name: 'Your favorite Pokémon' }),
+  }
+}
+
+// The Pokémon names load in the background; some tests need them first
+async function waitForNames() {
+  await waitFor(() => expect(screen.queryByText('Loading Pokémon names...')).toBeNull())
 }
 
 describe('CardForm', () => {
@@ -62,12 +99,13 @@ describe('CardForm', () => {
     expect(screen.getByText('Age must be 1–120')).toBeInTheDocument()
   })
 
-  it('on submit with an empty form: shows all 5 errors and focuses Your name, connected to its error', async () => {
-    const { user, onSubmit } = renderForm()
+  it('on submit with an empty form: shows all 6 errors and focuses the Pokémon field (the 1st), connected to its error', async () => {
+    const { user, onSubmit, pokemonField } = renderForm()
 
     await user.click(screen.getByRole('button', { name: 'Create my card' }))
 
     for (const error of [
+      'Please choose your favorite Pokémon',
       'Please enter your name',
       'Please enter your age',
       'Please upload an image',
@@ -76,31 +114,68 @@ describe('CardForm', () => {
     ]) {
       expect(screen.getByText(error)).toBeInTheDocument()
     }
-    const name = screen.getByLabelText('Your name')
-    expect(name).toHaveFocus()
-    expect(name).toHaveAttribute('aria-invalid', 'true')
+    expect(pokemonField).toHaveFocus()
+    expect(pokemonField).toHaveAttribute('aria-invalid', 'true')
     // aria-describedby points to the error, so a screen reader reads it with the field
-    expect(name).toHaveAccessibleDescription('Please enter your name')
+    expect(pokemonField).toHaveAccessibleDescription(expect.stringContaining('Please choose your favorite Pokémon'))
+    expect(screen.getByLabelText('Your name')).toHaveAccessibleDescription('Please enter your name')
     expect(onSubmit).not.toHaveBeenCalled()
   })
 
   it('shows the error BEFORE moving focus, so a screen reader reads the field together with its error', async () => {
-    const { user } = renderForm()
-    const name = screen.getByLabelText('Your name')
+    const { user, pokemonField } = renderForm()
     // Record what the field's description is at the exact moment it receives focus
     let descriptionWhenFocused = ''
-    name.addEventListener('focus', () => {
-      const errorId = name.getAttribute('aria-describedby') ?? ''
-      descriptionWhenFocused = document.getElementById(errorId)?.textContent ?? ''
+    pokemonField.addEventListener('focus', () => {
+      const ids = (pokemonField.getAttribute('aria-describedby') ?? '').split(' ')
+      descriptionWhenFocused = ids.map((id) => document.getElementById(id)?.textContent ?? '').join(' ')
     })
 
     await user.click(screen.getByRole('button', { name: 'Create my card' }))
 
-    expect(descriptionWhenFocused).toBe('Please enter your name')
+    expect(descriptionWhenFocused).toContain('Please choose your favorite Pokémon')
   })
 
-  it('on submit with name and age filled: focuses Photo (the 3rd field), connected to its error', async () => {
-    const { user } = renderForm()
+  it('with a Pokémon chosen, the focus goes to the first other wrong field: Your name', async () => {
+    const { user } = renderForm({ pokemon: PIKACHU })
+
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+
+    expect(screen.queryByText('Please choose your favorite Pokémon')).toBeNull()
+    expect(screen.getByLabelText('Your name')).toHaveFocus()
+  })
+
+  it('the Pokémon field: typed but not picked → "Choose a Pokémon from the list"; picking hides the error', async () => {
+    const { user, pokemonField, onPokemonSelect } = renderForm()
+    await waitForNames()
+    await user.type(pokemonField, 'pika')
+
+    await user.click(screen.getByRole('button', { name: 'Create my card' }))
+    expect(screen.getByText('Choose a Pokémon from the list')).toBeInTheDocument()
+    expect(pokemonField).toHaveFocus()
+
+    await user.type(pokemonField, 'c') // "pikac": the list opens again
+    await user.click(screen.getByRole('option', { name: 'Pikachu' }))
+    expect(onPokemonSelect).toHaveBeenLastCalledWith(expect.objectContaining({ id: 25 }))
+    expect(screen.queryByText('Choose a Pokémon from the list')).toBeNull()
+  })
+
+  it('the Pokémon field: leaving it empty shows "Please choose…"; an exact name typed is picked, with no error', async () => {
+    const { user, pokemonField } = renderForm()
+    await waitForNames()
+    pokemonField.focus()
+    await user.tab()
+    expect(screen.getByText('Please choose your favorite Pokémon')).toBeInTheDocument()
+
+    await user.type(pokemonField, 'raichu')
+    await user.tab()
+    expect(pokemonField).toHaveValue('Raichu')
+    expect(screen.queryByText('Please choose your favorite Pokémon')).toBeNull()
+    expect(screen.queryByText('Choose a Pokémon from the list')).toBeNull()
+  })
+
+  it('on submit with the Pokémon, name and age filled: focuses Photo (the 4th field), connected to its error', async () => {
+    const { user } = renderForm({ pokemon: PIKACHU })
     await user.type(screen.getByLabelText('Your name'), 'Amit')
     await user.type(screen.getByLabelText('Age (HP)'), '30')
 
@@ -122,27 +197,13 @@ describe('CardForm', () => {
     expect(aboutYou).toHaveAttribute('maxLength', '80')
   })
 
-  it('tells the page whether the form has values (only spaces count as empty)', async () => {
-    const { user, onDirtyChange } = renderForm()
-    const name = screen.getByLabelText('Your name')
-
-    await user.type(name, 'A')
-    expect(onDirtyChange).toHaveBeenLastCalledWith(true)
-
-    await user.clear(name)
-    expect(onDirtyChange).toHaveBeenLastCalledWith(false)
-
-    await user.type(name, '   ')
-    expect(onDirtyChange).toHaveBeenLastCalledWith(false)
-  })
-
   it('on submit while the photo is preparing: asks to wait', async () => {
     const resize = promiseWeFinishLater()
     vi.mocked(resizePhoto).mockReturnValue(resize.promise) // the fake resize doesn't answer yet
     const { user } = renderForm()
 
     await user.upload(screen.getByLabelText('Photo'), pngFile())
-    expect(screen.getByRole('status')).toHaveTextContent('Preparing your photo...')
+    expect(screen.getByText('Preparing your photo...')).toHaveAttribute('role', 'status')
     await user.click(screen.getByRole('button', { name: 'Create my card' }))
 
     expect(screen.getByText('Please wait until your photo is ready')).toBeInTheDocument()
@@ -161,7 +222,7 @@ describe('CardForm', () => {
 
   it('on a valid submit: calls onSubmit once, with the cleaned answers and the photo', async () => {
     vi.mocked(resizePhoto).mockResolvedValue(SMALL_JPEG)
-    const { user, onSubmit } = renderForm()
+    const { user, onSubmit } = renderForm({ pokemon: PIKACHU })
 
     await user.type(screen.getByLabelText('Your name'), '  Amit ')
     await user.type(screen.getByLabelText('Age (HP)'), '030')

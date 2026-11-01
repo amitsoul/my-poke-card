@@ -1,7 +1,9 @@
-// The Create card form: Your name, Age (HP), Photo, Superpower, About you.
+// The Create card form: Your favorite Pokémon, Your name, Age (HP), Photo, Superpower, About you.
 // It owns what the user types/chooses and which errors are shown; the page only hears about it through callbacks.
-import { useRef, useState, type FormEvent } from 'react'
+// The chosen Pokémon is the exception: the page keeps it (the URL follows it), the form only checks it.
+import { useRef, useState, type FormEvent, type ReactNode, type RefObject } from 'react'
 import { flushSync } from 'react-dom'
+import type { PokemonSummary } from '../types/pokemon.ts'
 import {
   ABOUT_YOU_MAX,
   getFirstInvalidField,
@@ -9,6 +11,7 @@ import {
   validateAge,
   validateCardForm,
   validateName,
+  validatePokemon,
   validateSuperpower,
   validateTextFields,
   type CardFormData,
@@ -21,10 +24,14 @@ import {
 import { PHOTO_WAIT_ERROR, preparePhoto, resizePhoto, type PhotoState } from '../utils/photo.ts'
 import FormField from './FormField.tsx'
 import PhotoField from './PhotoField.tsx'
+import PokemonPicker from './PokemonPicker.tsx'
 
 interface CardFormProps {
   initialValues?: CardFormDraft // for "Edit": start with the previous answers and photo
-  onDirtyChange: (hasValues: boolean) => void // tells the page whether a field has a value (for the "Change" warning)
+  pokemon: PokemonSummary | null // the chosen Pokémon (the page keeps it)
+  onPokemonSelect: (pokemon: PokemonSummary | null) => void // picked one, or null: the text was changed
+  pokemonPreview?: ReactNode // shown under the Pokémon field: its image, name and Type
+  pokemonInputRef?: RefObject<HTMLInputElement | null> // lets the page move focus to the Pokémon field
   onSubmit: (card: CardFormData) => void // called ONLY when everything is valid, with the cleaned answers
 }
 
@@ -38,12 +45,14 @@ const VALIDATORS: Record<CardTextField, (raw: string) => ValidationResult<unknow
   aboutYou: validateAboutYou,
 }
 
-// A text field with only spaces counts as empty; a photo counts as soon as one was chosen
-function hasAnyValue(values: CardTextValues, photo: PhotoState): boolean {
-  return photo.status !== 'empty' || Object.values(values).some((value) => value.trim() !== '')
-}
-
-export default function CardForm({ initialValues = EMPTY_DRAFT, onDirtyChange, onSubmit }: CardFormProps) {
+export default function CardForm({
+  initialValues = EMPTY_DRAFT,
+  pokemon,
+  onPokemonSelect,
+  pokemonPreview,
+  pokemonInputRef,
+  onSubmit,
+}: CardFormProps) {
   const { photo: initialPhoto, ...initialText } = initialValues
   const [values, setValues] = useState<CardTextValues>(initialText)
   const [photo, setPhoto] = useState<PhotoState>(
@@ -55,18 +64,15 @@ export default function CardForm({ initialValues = EMPTY_DRAFT, onDirtyChange, o
   const inputs = useRef<Partial<Record<CardFormField, HTMLInputElement | null>>>({})
   // Counts photo choices: a slow resize of an OLD choice must not replace a newer one
   const photoRequest = useRef(0)
-  // The latest typed answers, for code that runs after an await (where `values` would be from before it)
-  const latestValues = useRef<CardTextValues>(initialText)
+  // What is typed in the Pokémon field — only to choose the error ("choose one" or "choose it from the list")
+  const [pokemonText, setPokemonText] = useState('')
 
   function handleChange(field: CardTextField, value: string) {
-    const nextValues = { ...values, [field]: value }
-    setValues(nextValues)
-    latestValues.current = nextValues
+    setValues({ ...values, [field]: value })
     // While typing, a shown error disappears as soon as the value is valid — but a new error never appears
     if (shownErrors[field] !== undefined && VALIDATORS[field](value).ok) {
       setShownErrors((errors) => ({ ...errors, [field]: undefined }))
     }
-    onDirtyChange(hasAnyValue(nextValues, photo))
   }
 
   // Leaving a field: show its error if it's wrong, hide it if it's fine
@@ -75,13 +81,24 @@ export default function CardForm({ initialValues = EMPTY_DRAFT, onDirtyChange, o
     setShownErrors((errors) => ({ ...errors, [field]: result.ok ? undefined : result.error }))
   }
 
+  // Picking a Pokémon hides its error right away; un-picking (typing) never shows a new one
+  function handlePokemonSelect(picked: PokemonSummary | null) {
+    if (picked !== null) setShownErrors((errors) => ({ ...errors, pokemon: undefined }))
+    onPokemonSelect(picked)
+  }
+
+  // Leaving the Pokémon field: the picker tells us what is picked by then (an exact name counts)
+  function handlePokemonBlur(picked: PokemonSummary | null) {
+    const result = validatePokemon(picked === null ? null : picked.id, pokemonText)
+    setShownErrors((errors) => ({ ...errors, pokemon: result.ok ? undefined : result.error }))
+  }
+
   // A new photo replaces the old one. Checked (type, size) BEFORE resizing, inside preparePhoto.
   async function handlePhotoSelect(file: File) {
     photoRequest.current += 1
     const request = photoRequest.current
     setPhoto({ status: 'preparing' })
     setShownErrors((errors) => ({ ...errors, photo: undefined }))
-    onDirtyChange(true)
 
     const result = await preparePhoto(file, resizePhoto)
     if (request !== photoRequest.current) return // the user chose another photo (or removed it) meanwhile
@@ -90,15 +107,12 @@ export default function CardForm({ initialValues = EMPTY_DRAFT, onDirtyChange, o
     setPhoto(nextPhoto)
     // Choosing a file is a finished action, so a wrong file shows its error right away
     setShownErrors((errors) => ({ ...errors, photo: result.ok ? undefined : result.error }))
-    onDirtyChange(hasAnyValue(latestValues.current, nextPhoto))
   }
 
   function handlePhotoRemove() {
     photoRequest.current += 1 // a resize still running for the removed photo is ignored
-    const nextPhoto: PhotoState = { status: 'empty' }
-    setPhoto(nextPhoto)
+    setPhoto({ status: 'empty' })
     setShownErrors((errors) => ({ ...errors, photo: undefined })) // no error yet — it comes on submit
-    onDirtyChange(hasAnyValue(values, nextPhoto))
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -106,6 +120,8 @@ export default function CardForm({ initialValues = EMPTY_DRAFT, onDirtyChange, o
     const readyPhoto = photo.status === 'ready' ? photo.photo : null
     const errors = { ...validateCardForm({ ...values, photo: readyPhoto }).errors }
     if (photo.status === 'preparing') errors.photo = PHOTO_WAIT_ERROR // not "Please upload an image": they did
+    const pokemonResult = validatePokemon(pokemon === null ? null : pokemon.id, pokemonText)
+    if (!pokemonResult.ok) errors.pokemon = pokemonResult.error
 
     // With problems: show ALL errors, then move focus to the first invalid field.
     // flushSync makes React put the errors on the screen RIGHT NOW (normally it waits until this function ends).
@@ -118,12 +134,13 @@ export default function CardForm({ initialValues = EMPTY_DRAFT, onDirtyChange, o
     }
 
     const text = validateTextFields(values).data
-    if (text !== null && readyPhoto !== null) onSubmit({ ...text, photo: readyPhoto })
+    if (text !== null && readyPhoto !== null && pokemon !== null) onSubmit({ ...text, photo: readyPhoto })
   }
 
   function saveInput(field: CardFormField) {
     return (input: HTMLInputElement | null) => {
       inputs.current[field] = input
+      if (field === 'pokemon' && pokemonInputRef !== undefined) pokemonInputRef.current = input
     }
   }
 
@@ -140,6 +157,16 @@ export default function CardForm({ initialValues = EMPTY_DRAFT, onDirtyChange, o
 
   return (
     <form className="card-form" noValidate onSubmit={handleSubmit}>
+      <PokemonPicker
+        label="Your favorite Pokémon"
+        selected={pokemon}
+        onSelect={handlePokemonSelect}
+        onTextChange={setPokemonText}
+        error={shownErrors.pokemon}
+        onBlur={handlePokemonBlur}
+        inputRef={saveInput('pokemon')}
+      />
+      {pokemonPreview}
       <FormField label="Your name" autoComplete="given-name" {...fieldProps('name')} />
       <FormField label="Age (HP)" inputMode="numeric" autoComplete="off" {...fieldProps('age')} />
       <PhotoField
