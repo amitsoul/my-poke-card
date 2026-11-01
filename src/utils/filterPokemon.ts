@@ -1,9 +1,10 @@
 // Search + card type filter for the Pokémon list. Plain functions, so they can be tested without React.
 import type { PokemonSummary } from '../types/pokemon.ts'
 
-// "  PIKA " → "pika": the form we compare names with (PokéAPI names are lowercase)
+// "  PIKA " → "pika", "Mr Mime" → "mr-mime": the form we compare names with. PokéAPI names are lowercase and
+// use a hyphen where people type a space, so a space (or several) inside the text counts as a hyphen.
 export function normalizeSearch(searchText: string): string {
-  return searchText.trim().toLowerCase()
+  return searchText.trim().toLowerCase().replace(/\s+/g, '-')
 }
 
 // Keeps the Pokémon whose name contains the search text AND (if cardTypeIds is a Set) whose id is in it.

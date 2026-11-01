@@ -1253,6 +1253,62 @@ body {
   }
 }
 
+/* ---------- The Pokémon search on the Create page (PokemonPicker) ---------- */
+
+/* The list of matches opens right under the field, over what follows */
+.picker-box {
+  position: relative;
+}
+
+.picker-list {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 4px);
+  right: 0;
+  left: 0;
+  max-height: 22rem;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.25rem;
+  border: 1px solid #767676; /* the field edge's gray: 4.23:1 on the paper */
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(30, 27, 20, 0.18);
+  list-style: none;
+}
+
+.picker-option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.picker-option img {
+  flex: none;
+  width: 40px;
+  height: 40px;
+}
+
+.picker-option:hover {
+  background: #e8eff6;
+}
+
+/* The match ↓/↑ moved to: blue with white text (5.34:1) */
+.picker-option.active {
+  background: var(--site-blue);
+  color: #fff;
+}
+
+/* Loading / error / "No Pokémon found" under the field; takes no space when empty */
+.picker-status {
+  margin: 0;
+  color: #595959;
+  font-size: 0.875rem;
+}
+
 /* ---------- Landing page "/" (task 12, second design round) ---------- */
 
 /* Hero: text, then the two example cards. Side by side from 900px. */

@@ -10,6 +10,13 @@ export function getArtworkUrl(id: number): string {
   return `${ARTWORK_URL}/${id}.png`
 }
 
+const SPRITE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon'
+
+// 25 → Pikachu's small game sprite (96 × 96, a few KB): for the Pokémon search's list, where the artwork would be too big
+export function getSpriteUrl(id: number): string {
+  return `${SPRITE_URL}/${id}.png`
+}
+
 // "https://pokeapi.co/api/v2/pokemon/25/" → 25 (the last part of a PokéAPI link)
 export function getIdFromUrl(url: string): number {
   const parts = url.split('/').filter((part) => part !== '')

@@ -1883,3 +1883,17 @@
 > 
 > Go ahead with C1 only. When it's ready, tell me what to check. Don't commit.
 > </pasted_content id="91c8">
+
+**12:31 · claude**
+
+> C1 is committed and pushed (checked in the browser: list, Load more, search, Fire filter; going My Cards → Find a Pokémon made no new requests).
+> Go ahead with C2 (the PokemonPicker combobox on its own, not wired in yet).
+> Add /dev/preview so I can try it by hand (mouse, keyboard, 320px). Don't commit.
+
+## 2026-11-01
+
+**14:31 · claude**
+
+> Claude checked the picker in the built-in browser with the real PokéAPI: typing, arrows with wrap, Enter, Escape, mouse click, un-pick on typing, the exact-name pick on Tab, both error texts, "No Pokémon found", the 320px box, a clean console. All good.
+> Space vs hyphen: make both pages treat a space like a hyphen (so "mr mime" finds Mr-Mime), in the shared search rule, with tests.
+> Then delete /dev/preview, confirm it's gone, and run test, build and lint. Don't commit.
