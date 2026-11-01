@@ -1912,3 +1912,25 @@
 > The console showed a Vite reload error for FavoritePokemonField.tsx (from the rename while the dev server ran). Confirm nothing in src/ still imports it.
 > Run test, build and lint once more. Don't commit.
 > </pasted_content id="91c8">
+
+**14:59 · claude**
+
+> <pasted_content id="91c8">
+> C3 is committed and pushed (PNG check: MPC 006 and MPC 009 identical to png-baseline-3).
+> Go ahead with C4 (the docs): PRD /create line, CARD_SPEC "Your favorite Pokémon" row and the old Change-warning line, tasks.md task 8 "Changed in task 12" line, checklist rows (pages, components +PokemonPicker, props, test counts), README (/create route and components table).
+> Also check whether any README screenshot shows the old /create screen; if so, tell me before retaking it.
+> Show me the text changes before applying them. Don't commit.
+> </pasted_content id="91c8">
+
+**15:04 · claude**
+
+> <pasted_content id="91c8">
+> All the C4 text changes are approved as shown.
+> The three extra items: yes to all (README features line, README folder tree with usePokemonList, task 12's Done line).
+> phone-card.webp: yes, retake it the same way (fresh, empty Chrome profile, only the approved Philip & Charlie illustration, same size and scroll, profile deleted afterwards). Stage it and show it to me before it goes into docs/screenshots/.
+> Then apply the text changes, run the link check, test, build and lint. Don't commit.
+> </pasted_content id="91c8">
+
+**15:10 · claude**
+
+> phone-card.webp approved. Copy it over docs/screenshots/phone-card.webp, run the link check, test, build and lint once more. Don't commit.

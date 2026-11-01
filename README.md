@@ -33,7 +33,7 @@ The two example cards use our own illustrations, published with permission.
 
 - **Find a Pokémon:** every species from PokéAPI, 50 at a time with *Load more*, with search by name and a filter by Type. Search and filter are kept in the URL.
 - **Details:** official artwork, number, Type, weight, two attacks with their cost, and Weakness / Resistance / Retreat.
-- **Create card:** choose your favorite Pokémon, then fill in your name, age (the card's HP), a photo, a superpower and a line about you. Every field is checked as you go. The card shows your photo with the Pokémon as a sticker you can drag (mouse, finger or arrow keys).
+- **Create card:** search for your favorite Pokémon and pick it, then fill in your name, age (the card's HP), a photo, a superpower and a line about you. Every field is checked as you go. The card shows your photo with the Pokémon as a sticker you can drag (mouse, finger or arrow keys).
 - **Save and My Cards:** cards are saved in the browser (localStorage) with a number that is never reused (MPC 001, MPC 002, …). Mark favorites with a heart, filter All / Favorites, delete with a confirm.
 - **Download PNG:** every saved card can be downloaded as a 760 × 1064 PNG.
 
@@ -46,8 +46,8 @@ The card's rules (Types, Weakness and Resistance, attacks, units, design) are in
 | `/` | Landing page: what the app does, two example cards, how it works, about me |
 | `/pokemon` | Find a Pokémon: the list with search (`?q=`) and Type filter (`?type=`) |
 | `/pokemon/:id` | Details of one Pokémon (the id is read with `useParams`) |
-| `/create` | Create card, before a Pokémon is chosen |
-| `/create/:id` | Create card with that Pokémon |
+| `/create` | Create card: the full form, with the Pokémon search empty |
+| `/create/:id` | Create card with that Pokémon chosen (the URL follows the search) |
 | `/my-cards` | My Cards (`?show=favorites` for favorites only) |
 | anything else | 404 page |
 
@@ -102,7 +102,7 @@ npm run test:ui   # the Vitest UI
 src/
   pages/        the 6 pages (one per route)
   components/   the 23 components
-  hooks/        usePokemonDetails, usePokemonCardInfo
+  hooks/        usePokemonDetails, usePokemonCardInfo, usePokemonList
   utils/        the logic (no React), each with its tests
   data/         the landing page's two example cards
   types/        types for the PokéAPI data
@@ -124,9 +124,10 @@ docs/           requirements checklist, logo, screenshots
 | `AttacksBlock`, `AttackList` | The attacks (with loading and error) and their rows |
 | `WeaknessRow` | Weakness, Resistance and Retreat |
 | `TypeSymbol` | Our own SVG symbol for each of the 10 Types |
-| `FavoritePokemonField` | The chosen Pokémon on the Create page, with *Change* |
+| `PokemonPicker` | "Your favorite Pokémon": search and pick a Pokémon (the WAI-ARIA combobox pattern) |
+| `PokemonPreview` | The chosen Pokémon's image, name and Type under the search |
 | `CardForm`, `FormField`, `PhotoField` | The Create form, one text field, the photo field |
-| `InlineConfirm` | The "are you sure?" box (change Pokémon, delete a card) |
+| `InlineConfirm` | The "are you sure?" box (delete a card) |
 | `PokeCard` | The card itself |
 | `CardSticker` | The Pokémon sticker on the photo (draggable before saving) |
 | `SavedNotice` | "Saved as MPC 00X ✓" |

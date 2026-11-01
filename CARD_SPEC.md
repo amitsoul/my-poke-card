@@ -15,13 +15,13 @@
 - **Bottom line:** "Card design: Amit Soul" · card number "MPC 001" · "Fan-made · Not an official Pokémon card".
 
 ## Form fields (Create card page)
-Filled on `/create/:id` after a Pokémon is chosen. All fields are required and English only. Checked by `src/utils/cardForm.ts`.
+Filled on `/create` or `/create/:id`. All fields are required and English only. Checked by `src/utils/cardForm.ts`.
 
 **Cleaning before the check (every text field):** spaces at the start and end are ignored, and a field with only spaces counts as empty. In Your name and Superpower, two or more spaces in a row become one ("Mary  Ann" → "Mary Ann"). The curly apostrophe `’` (iPhone "smart punctuation") counts as `'`.
 
 | Field | Rule | Empty | Wrong | On the card |
 |---|---|---|---|---|
-| Your favorite Pokémon | Chosen via list → details → "Create my card with <Pokémon>"; shown with image, name, Type and a "Change" button | — | — | Artwork, name, Type, attacks… |
+| Your favorite Pokémon | Picked from the search under the field (up to 10 matches: names starting with the text first, then by number; "contains", any case, a space counts as a hyphen), or comes from the details page's "Create my card with <Pokémon>" (`/create/25`). Leaving the field with an exact name ("pikachu") picks it. Shown with image, name and Type | Please choose your favorite Pokémon | Choose a Pokémon from the list | Artwork, name, Type, attacks… |
 | Your name | 2–16 characters: English letters A–Z, with ONE space, hyphen or apostrophe between letters, or " & " (a space on each side) between two names; starts and ends with a letter (Mary-Ann, O'Neil, Mary Ann, Philip & Charlie ok; "--", "-Amit", "Mary--Ann", "Amit&Amit", "& Amit" wrong). 16 because the longest names fit next to the HP on one line; only with a 12-letter Pokémon do the longest wrap to 2 lines (see Card design) | Please enter your name | Use English letters only (2–16) | "<Name>'s <Pokémon>" (e.g. "Amit's Pikachu") |
 | Age (HP) | Digits only, whole number 1–120; a leading zero is fine ("025" → 25); "25.5", "1e2", "-5" are wrong | Please enter your age | Age must be 1–120 | HP |
 | Photo | JPG, PNG or WebP (not GIF or HEIC), at most 10 MB — checked on the ORIGINAL file before it is loaded or resized. Then resized to 400px wide (same shape, never made bigger, no height limit), white background (a transparent PNG doesn't turn black), saved as a JPEG data URL, quality 0.85 (≈ 55–80 KB). Choosing a new photo replaces the old one; a wrong new file removes the old one. Not cropped here — the card crops it with CSS `object-fit: cover` (task 10) | Please upload an image | Wrong type: Please upload a JPG, PNG or WebP image · Too big: Image must be under 10 MB · Broken file: We couldn't read this image. Please try another one. · Submit while preparing: Please wait until your photo is ready | Illustration |
@@ -29,9 +29,10 @@ Filled on `/create/:id` after a Pokémon is chosen. All fields are required and 
 | About you | Up to 80 characters (counted after trimming): English letters, the letter é/É (as in "Pokémon"), numbers, spaces and exactly this punctuation: `. , ! ? ' -`. The input stops at 80 characters; the counter shows the typed length, e.g. "12 / 80" | Please write something about you | English only, up to 80 characters | Flavor text |
 
 - Errors appear when leaving a field (blur) or on submit, not while typing.
-- "Create my card" is always enabled. Clicking it with problems shows ALL field errors and moves focus to the first invalid field (form order: name, age, photo, superpower, about you).
+- "Create my card" is always enabled. Clicking it with problems shows ALL field errors and moves focus to the first invalid field (form order: Pokémon, name, age, photo, superpower, about you).
 - Photo: the button "Choose a photo" (then "Choose another photo") opens the phone's camera or gallery; the hint "JPG, PNG or WebP, up to 10 MB" is always shown; while resizing: "Preparing your photo..."; a wrong file shows its error right away; "Remove photo" removes it without an error (the error comes on submit). Sideways phone photos are turned upright by the browser (EXIF).
-- "Change" (favorite Pokémon) warns that the answers will be cleared only if at least one field has a value; with an empty form it changes without a warning.
+- Changing the Pokémon never clears the answers, so there is no warning. Typing over the chosen name un-picks it (the URL goes back to `/create`). Above a shown card, a new pick goes back to the form with every answer and the photo kept, and the sticker starts at its usual place.
+- A link to `/create` while on the Create page (e.g. "Create card" in the menu) starts a fresh, empty form.
 
 ## Rules
 
