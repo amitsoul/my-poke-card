@@ -1934,3 +1934,41 @@
 **15:10 · claude**
 
 > phone-card.webp approved. Copy it over docs/screenshots/phone-card.webp, run the link check, test, build and lint once more. Don't commit.
+
+
+---
+
+## My notes — a summary written at the end of the project
+
+I didn't add a note after each task while working, so this is one summary, written when the project was done, looking back. Claude Code wrote the code; a second Claude chat reviewed each push with me (pulled the repo, ran the tests, build and lint). I approved every plan and every option before any code was written, and I checked every step in the browser before committing.
+
+**Tasks 1–4 · list, details, fetch, search and filter**
+Checked: the list loads all species 50 at a time; "Load more"; the details on click; with the network off I get an error and Try again, not a white screen; "pika" finds Pikachu before "Load more"; "Psychic" also shows Gengar and Clefairy.
+I decided: to use the 10 Types of today's Pokémon card game instead of the 18 game types, with Fairy shown as Psychic.
+
+**Task 5 · TypeScript** — Checked: `npm run build` passes and there is no `any` anywhere.
+
+**Task 6 · Routing** — Checked: `/pokemon/25` works when opened directly and after a refresh, Back returns to the list, the active menu link is highlighted, `/abc` shows the 404 page.
+
+**Task 7 · Tests** — Checked: `npm test` and `npm run test:ui` (all green in the Vitest UI).
+
+**Task 8 · Create card page**
+I decided the form's rules: English only, age 1–120 as the card's HP, a photo, a superpower and a line about me, with an error on each field when I leave it.
+
+**Task 9 · Card data**
+I researched how real cards work (Weakness, Resistance, retreat, attack cost) and decided on the rules in CARD_SPEC.md. I dropped my idea of picking the "strongest attack" after the data showed that Pokémon from the same family would still get the same two attacks.
+
+**Task 10 · Card design**
+I made a mockup of the "Classic" look myself (with a design tool, as a reference only). Checked on my real phone. I found that some Type symbols were clipped and that cards of different Pokémon looked almost the same; both were fixed in task 12.
+
+**Task 11 · Save, download, My Cards, favorites**
+I decided that a card number is never reused (delete MPC 002 → the next card is still MPC 004), and added favorites with a heart. Checked: the PNG downloads correctly on desktop and on my iPhone in Safari.
+
+**Task 12 · polish and redesign**
+- I chose the design direction ("Sticker Scrapbook") and the logo after about ten rounds of options, then later asked for a cleaner look: no white frames, a logo without its band, a blue menu bar.
+- The two example cards on the landing page use illustrations I made of my partner Amit and me, and of our cats Philip and Charlie. Amit agreed to his illustration being in this public repo.
+- I found these problems myself while checking: the "y" of "Ivysaur" was cut off on the card, and a thin white strip appeared next to the photo in the PNG. Both were fixed and checked.
+- I asked for names like "Amit & Amit" (up to 16 characters).
+- My idea: the Create page opens the full form right away, with a searchable list to pick the Pokémon, instead of sending you back to the list.
+- After every change near the card, I downloaded two saved cards and compared the PNGs pixel by pixel with the approved versions, so the card never changed by accident.
+- Decisions I made knowing their cost: the example cards use fixed data so the landing page loads at once without the network; the "3" in "How it works" uses the same light yellow as the quote mark.
